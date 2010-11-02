@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Debug" />
+	<File name="GameApp.cpp" open="1" top="1" tabpos="1">
+		<Cursor position="7531" topLine="331" />
+	</File>
+	<File name="GameApp.h" open="1" top="0" tabpos="6">
+		<Cursor position="428" topLine="12" />
+	</File>
+	<File name="GameContext.cpp" open="1" top="0" tabpos="2">
+		<Cursor position="4961" topLine="150" />
+	</File>
+	<File name="GameContext.h" open="1" top="0" tabpos="7">
+		<Cursor position="328" topLine="0" />
+	</File>
+	<File name="GameSprite.cpp" open="1" top="0" tabpos="3">
+		<Cursor position="0" topLine="0" />
+	</File>
+	<File name="GameSprite.h" open="1" top="0" tabpos="8">
+		<Cursor position="0" topLine="0" />
+	</File>
+	<File name="GameTexture.cpp" open="1" top="0" tabpos="4">
+		<Cursor position="1004" topLine="0" />
+	</File>
+	<File name="GameTexture.h" open="1" top="0" tabpos="9">
+		<Cursor position="1084" topLine="0" />
+	</File>
+	<File name="main.cpp" open="1" top="0" tabpos="5">
+		<Cursor position="0" topLine="0" />
+	</File>
+</CodeBlocks_layout_file>
