@@ -1,2 +1,0 @@
-i586-mingw32msvc-g++ *.cpp *.h -o t.exe -I/opt/SDL-1.2.13/include `/opt/SDL-1.2.13/bin/i586-mingw32msvc-sdl-config --cflags --libs` -lSDL_image -lopengl32 -lglu32
-
