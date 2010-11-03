@@ -45,7 +45,7 @@ class GameContext
         // Drawing functions
         void DrawBackground(void);
         void DrawPlayer(GameSprite player);
-        void DrawPlayer(GameTexture playerTexture, GameSprite playerSprite, int x, int y);
+        void DrawPlayer(GameTexture playerTexture, int x, int y);
 };
 
 typedef GameContext* GameContextPtr;

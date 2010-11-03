@@ -19,15 +19,6 @@ class GameApp
         GameSprite  playerX;
         GameSprite  playerY;
         int ResW, ResH;
-        int GameBoard[8];
-
-    private:
-        enum
-        {
-            BOARD_CELL_EMPTY,
-            BOARD_CELL_PLAYERX,
-            BOARD_CELL_PLAYERY
-        };
 
     public:
         // Constructor and destructor
@@ -46,12 +37,6 @@ class GameApp
 
         int GetResH(void);
         void SetResH(int theResH);
-
-        int GetGameBoardCellStatus(int CellNumber);
-        void SetGameBoardCellStatus(int CellNumber, int CellStatus);
-
-        // GameBoard Functions
-        void ResetGame(void);
 
         // Initialization functions
         void InitApp(void);

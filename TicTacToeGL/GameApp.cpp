@@ -390,9 +390,9 @@ void GameApp::RenderFrame(void)
     //context.DrawPlayer(context.GetPlayerYSpriteStorage(), playerY, 200, 0);
 
     for(int x = 0; x < 9; x++) {
-        if(GetGameBoardCellStatus(x) == BOARD_CELL_PLAYERX) context.DrawPlayer(context.GetPlayerXSpriteStorage(), playerX, (x % 3 * 200), (x / 3 * 200));
+        if(GetGameBoardCellStatus(x) == BOARD_CELL_PLAYERX) context.DrawPlayer(context.GetPlayerXSpriteStorage(), (x % 3 * 200), (x / 3 * 200));
         else
-        if(GetGameBoardCellStatus(x) == BOARD_CELL_PLAYERY) context.DrawPlayer(context.GetPlayerYSpriteStorage(), playerY, (x % 3 * 200), (x / 3 * 200));
+        if(GetGameBoardCellStatus(x) == BOARD_CELL_PLAYERY) context.DrawPlayer(context.GetPlayerYSpriteStorage(), (x % 3 * 200), (x / 3 * 200));
 
     }
 

@@ -191,7 +191,7 @@ void GameContext::DrawPlayer(GameSprite player)
 
 }
 
-void GameContext::DrawPlayer(GameTexture playerTexture, GameSprite playerSprite, int x, int y)
+void GameContext::DrawPlayer(GameTexture playerTexture, int x, int y)
 {
     glPushMatrix();
     GLfloat textureLeft = 0.0f;
