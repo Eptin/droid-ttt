@@ -10,16 +10,37 @@
     #include "GameSprite.h"
 #endif
 
+#ifndef GAME_BOARD
+    #include "GameBoard.h"
+#endif
+
 class GameApp
 {
     protected:
         SDL_TimerID timer;
-        bool done;
+        bool        done;
         GameContext context;
-        GameSprite  playerX;
-        GameSprite  playerY;
-        int ResW, ResH;
+        int         ResW;
+        int         ResH;
+        int         CurrentPlayer;
+        int         GameStatus;
+        int         TurnsLeft;
+        bool        GameOver;
+        GameBoard   TicTacToeBoard;
+        GameTexture CurrentPlayerStorage;
 
+
+    public:
+        enum {
+            PLAYER_X,
+            PLAYER_Y
+        };
+        enum {
+            GAME_NOT_OVER,
+            GAMEOVER_X_WINS,
+            GAMEOVER_Y_WINS,
+            GAMEOVER_TIE
+        };
     public:
         // Constructor and destructor
         GameApp (void);
@@ -29,8 +50,8 @@ class GameApp
         GameContext GetContext(void);
         void SetContext(GameContext theContext);
 
-        GameSprite GetPlayerX(void);
-        void SetPlayerX(GameSprite thePlayer);
+//        GameSprite GetPlayerX(void);
+//        void SetPlayerX(GameSprite thePlayer);
 
         int GetResW(void);
         void SetResW(int theResW);
@@ -57,6 +78,10 @@ class GameApp
 
         // Game related functions
         void GameLoop(void);
+        bool PlayerTakesTurn(int GameBoardCell);
+        void SwitchPlayers(void);
+        void ResetGame(void);
+        void CheckForWinner(void);
         void RenderFrame(void);
 
 };

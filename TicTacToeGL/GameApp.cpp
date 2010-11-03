@@ -24,15 +24,15 @@ void GameApp::SetContext(GameContext theContext)
     context = theContext;
 }
 
-GameSprite GameApp::GetPlayerX(void)
-{
-    return playerX;
-}
-
-void GameApp::SetPlayerX(GameSprite thePlayer)
-{
-    playerX = thePlayer;
-}
+//GameSprite GameApp::GetPlayerX(void)
+//{
+//    return playerX;
+//}
+//
+//void GameApp::SetPlayerX(GameSprite thePlayer)
+//{
+//    playerX = thePlayer;
+//}
 
 
 int GameApp::GetResW(void)
@@ -55,27 +55,6 @@ void GameApp::SetResH(int theResH)
     ResH = theResH;
 }
 
-int GameApp::GetGameBoardCellStatus(int CellNumber)
-{
-    return GameBoard[CellNumber];
-}
-
-void GameApp::SetGameBoardCellStatus(int CellNumber, int CellStatus)
-{
-
-    GameBoard[CellNumber] = CellStatus;
-
-}
-
-// GameBoard Functions
-void GameApp::ResetGame()
-{
-    for(int x = 0; x < 9; x++) SetGameBoardCellStatus(x, BOARD_CELL_EMPTY);
-    //SetGameBoardCellStatus(0, BOARD_CELL_PLAYERX);
-    //SetGameBoardCellStatus(2, BOARD_CELL_PLAYERX);
-    //SetGameBoardCellStatus(7, BOARD_CELL_PLAYERY);
-}
-
 // Initialization functions
 void GameApp::InitApp(void)
 {
@@ -88,9 +67,9 @@ void GameApp::InitApp(void)
     InstallTimer();
 
     //player1 = new GameSprite;
-    playerX.SetWorldX(0);
-    playerX.SetWorldY(0);
-    playerX.SetOrientation(0.0);
+//    playerX.SetWorldX(0);
+//    playerX.SetWorldY(0);
+//    playerX.SetOrientation(0.0);
 
 }
 
@@ -201,12 +180,16 @@ void GameApp::InitializeDrawContext(Uint16 width, Uint16 height)
 
     context.SetPlayerYSpriteStorage(playerYTextureMap);
 
+    CurrentPlayerStorage = context.GetPlayerXSpriteStorage();
+
     // Set the size of the context.
     context.SetWidth(width);
     context.SetHeight(height);
 
+    // ShortCut
 //    gluOrtho2D(0.0, width, 0.0, height);
 
+    // The Long way...
     glViewport(0, 0, width, height);
 
     glMatrixMode(GL_PROJECTION);
@@ -305,23 +288,23 @@ void GameApp::HandleKeyPress(SDL_Event* event)
 {
     switch(event->key.keysym.sym) {
         case SDLK_LEFT:
-            playerX.MoveLeft(MOVEMENT_DISTANCE);
-            playerX.SetOrientation(90.0f);
+//            playerX.MoveLeft(MOVEMENT_DISTANCE);
+//            playerX.SetOrientation(90.0f);
             break;
 
         case SDLK_RIGHT:
-            playerX.MoveRight(MOVEMENT_DISTANCE);
-            playerX.SetOrientation(270.0f);
+//            playerX.MoveRight(MOVEMENT_DISTANCE);
+//            playerX.SetOrientation(270.0f);
             break;
 
         case SDLK_UP:
-            playerX.MoveUp(MOVEMENT_DISTANCE);
-            playerX.SetOrientation(0.0f);
+//            playerX.MoveUp(MOVEMENT_DISTANCE);
+//            playerX.SetOrientation(0.0f);
             break;
 
         case SDLK_DOWN:
-            playerX.MoveDown(MOVEMENT_DISTANCE);
-            playerX.SetOrientation(180.0f);
+//            playerX.MoveDown(MOVEMENT_DISTANCE);
+//            playerX.SetOrientation(180.0f);
             break;
 
         default:
@@ -338,18 +321,18 @@ void GameApp::HandleMouseMovement(SDL_Event* event)
 
     // Move left
     if (xMovement < 0) {
-        newOrientation = playerX.GetOrientation() + ROTATION_AMOUNT;
-        if (newOrientation >= 360.0)
-            newOrientation = 0.0f;
-        playerX.SetOrientation(newOrientation);
+//        newOrientation = playerX.GetOrientation() + ROTATION_AMOUNT;
+//        if (newOrientation >= 360.0)
+//            newOrientation = 0.0f;
+//        playerX.SetOrientation(newOrientation);
     }
 
     // Move right
     if (xMovement > 0) {
-        newOrientation = playerX.GetOrientation() - ROTATION_AMOUNT;
-        if (newOrientation <= 0.0)
-            newOrientation = 360.0f;
-        playerX.SetOrientation(newOrientation);
+//        newOrientation = playerX.GetOrientation() - ROTATION_AMOUNT;
+//        if (newOrientation <= 0.0)
+//            newOrientation = 360.0f;
+//        playerX.SetOrientation(newOrientation);
     }
 }
 
@@ -358,16 +341,16 @@ void GameApp::HandleMouseLeftClick(int x, int y)
     int TranslatedX = (x / 200) * 200;
     int TranslatedY = 400 - (y / 200) * 200;
 
-    int GameBoardLocation = (x / 200) + (6 - (y / 200 * 3));
-//    printf("Board Location: %d\n", GameBoardLocation);
+    int GameBoardCell = (x / 200) + (6 - (y / 200 * 3));
+
+
+    if(PlayerTakesTurn(GameBoardCell) == true) SwitchPlayers();
+    CheckForWinner();
+
+//    printf("Board Location: %d\n", GameBoardCell);
 //    printf("x: %d\n", (x / 200));
 //    printf("y: %d\n", 6 - (y / 200 * 3));
 
-
-    if(GetGameBoardCellStatus(GameBoardLocation) == BOARD_CELL_EMPTY) SetGameBoardCellStatus(GameBoardLocation, BOARD_CELL_PLAYERX);
-    //playerX.SetWorldX(TranslatedX);
-    //playerX.SetWorldY(TranslatedY);
-    //playerX.SetWorldY(39);
 }
 
 // Game related functions
@@ -376,25 +359,72 @@ void GameApp::GameLoop(void)
     RenderFrame();
 }
 
+bool GameApp::PlayerTakesTurn(int GameBoardCell)
+{
+//    printf("Cell %d: %d\n", GameBoardCell, TicTacToeBoard.GetCellStatus(GameBoardCell));
+    if(TicTacToeBoard.GetCellStatus(GameBoardCell) == TicTacToeBoard.BOARD_CELL_EMPTY) {
+        TicTacToeBoard.SetCellStatus(GameBoardCell, CurrentPlayer + 1);
+        --TurnsLeft;
+        // Turn was accepted
+        return true;
+    }
+    // Turn was rejected
+    return false;
+}
+
+void GameApp::SwitchPlayers(void)
+{
+//    printf("Player was: %d\n", CurrentPlayer);
+    if(CurrentPlayer == PLAYER_X) {
+        CurrentPlayer = PLAYER_Y;
+        CurrentPlayerStorage = context.GetPlayerYSpriteStorage();
+    }
+    else {
+        CurrentPlayer = PLAYER_X;
+        CurrentPlayerStorage = context.GetPlayerXSpriteStorage();
+    }
+//    printf("Player is: %d\n", CurrentPlayer);
+
+}
+
+void GameApp::ResetGame(void)
+{
+    TicTacToeBoard.ResetBoard();
+    TurnsLeft = 9;
+    CurrentPlayer = PLAYER_X;
+    GameStatus = GAME_NOT_OVER;
+    GameOver = false;
+}
+
+void GameApp::CheckForWinner(void)
+{
+    // Check All Rows for a winner...
+
+//    if(TicTacToeBoard.GetCellStatus[x] ==
+//
+//
+//    if(TurnsLeft == 0) GameStatus = GAMEOVER_TIE;
+//    printf("Turns Left: %d\n", TurnsLeft);
+//    printf("Game Status: %d\n", GameStatus);
+}
+
 void GameApp::RenderFrame(void)
 {
     //glClear(GL_COLOR_BUFFER_BIT);
     context.DrawBackground();
-//    playerX.SetWorldX(0);
-//    playerX.SetWorldY(0);
-//    context.DrawPlayer(playerX);
-//    playerX.SetWorldX(200);
-//    playerX.SetWorldY(200);
 
-    //context.DrawPlayer(context.GetPlayerXSpriteStorage(), playerX, 0, 0);
-    //context.DrawPlayer(context.GetPlayerYSpriteStorage(), playerY, 200, 0);
 
     for(int x = 0; x < 9; x++) {
-        if(GetGameBoardCellStatus(x) == BOARD_CELL_PLAYERX) context.DrawPlayer(context.GetPlayerXSpriteStorage(), (x % 3 * 200), (x / 3 * 200));
+        if(TicTacToeBoard.GetCellStatus(x) == TicTacToeBoard.BOARD_CELL_PLAYERX) context.DrawPlayer(context.GetPlayerXSpriteStorage(), (x % 3 * 200), (x / 3 * 200));
         else
-        if(GetGameBoardCellStatus(x) == BOARD_CELL_PLAYERY) context.DrawPlayer(context.GetPlayerYSpriteStorage(), (x % 3 * 200), (x / 3 * 200));
+        if(TicTacToeBoard.GetCellStatus(x) == TicTacToeBoard.BOARD_CELL_PLAYERY) context.DrawPlayer(context.GetPlayerYSpriteStorage(), (x % 3 * 200), (x / 3 * 200));
+
+//        printf("CELL %d: %d\n", x, TicTacToeBoard.GetCellStatus(x));
 
     }
+
+
+
 
     SDL_GL_SwapBuffers();
 }
