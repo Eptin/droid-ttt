@@ -9,13 +9,21 @@
 			<Target title="Debug">
 				<Option platforms="Unix;" />
 				<Option output="bin/Debug/TicTacToeGL" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="./Resources" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-Wall" />
 					<Add option="-g" />
+					<Add option="`sdl-config --cflags --libs`" />
 				</Compiler>
+				<Linker>
+					<Add library="GL" />
+					<Add library="IL" />
+					<Add library="SDL_image" />
+					<Add library="GLU" />
+				</Linker>
 			</Target>
 			<Target title="Release">
 				<Option output="bin/Release/TicTacToe" prefix_auto="1" extension_auto="1" />
@@ -27,71 +35,85 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
+					<Add library="GL" />
+					<Add library="IL" />
+					<Add library="SDL_image" />
+					<Add library="GLU" />
 				</Linker>
 			</Target>
 			<Target title="Dist_LINUX">
-				<Option output="TicTacToeGL" prefix_auto="1" extension_auto="1" />
+				<Option platforms="Unix;" />
+				<Option output="bin/DIST/LINUX/TicTacToeGL" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="./Resources" />
+				<Option object_output="obj/DIST_LINUX" />
 				<Option type="0" />
 				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="`sdl-config --cflags --libs`" />
+				</Compiler>
+				<Linker>
+					<Add library="GL" />
+					<Add library="IL" />
+					<Add library="SDL_image" />
+					<Add library="GLU" />
+				</Linker>
+				<ExtraCommands>
+					<Add after="rm -rf ./bin/DIST/LINUX/gfx" />
+					<Add after="mkdir ./bin/DIST/LINUX/gfx" />
+					<Add after="cp -rfv ./Resources/gfx/*.png ./bin/DIST/LINUX/gfx" />
+					<Mode after="always" />
+				</ExtraCommands>
+			</Target>
+			<Target title="DIST_WIN32">
+				<Option platforms="Unix;" />
+				<Option output="bin/DIST/WIN32/TicTacToeGL" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="./Resources" />
+				<Option object_output="obj/DIST_WIN32" />
+				<Option type="0" />
+				<Option compiler="mingw32_compiler" />
+				<Option projectCompilerOptionsRelation="1" />
+				<Option projectLinkerOptionsRelation="1" />
+				<Option projectIncludeDirsRelation="1" />
+				<Compiler>
+					<Add option="-Wall" />
+					<Add option="-g" />
+					<Add option="-I/opt/SDL-1.2.13/include" />
+					<Add option="`/opt/SDL-1.2.13/bin/i586-mingw32msvc-sdl-config --cflags`" />
+				</Compiler>
+				<Linker>
+					<Add option="`/opt/SDL-1.2.13/bin/i586-mingw32msvc-sdl-config --libs`" />
+					<Add option="-lSDL_image" />
+				</Linker>
+				<ExtraCommands>
+					<Add after="rm -rf ./bin/DIST/WIN32/gfx" />
+					<Add after="mkdir ./bin/DIST/WIN32/gfx" />
+					<Add after="cp -rfv ./Resources/gfx/*.png ./bin/DIST/WIN32/gfx" />
+					<Add after="rm -rf ./bin/DIST/WIN32/*.dll" />
+					<Add after="cp -rfv ./Resources/DLLs/* ./bin/DIST/WIN32" />
+				</ExtraCommands>
 			</Target>
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="-g" />
-			<Add option="`sdl-config --cflags --libs`" />
 		</Compiler>
-		<Linker>
-			<Add library="GL" />
-			<Add library="IL" />
-			<Add library="SDL_image" />
-			<Add library="GLU" />
-		</Linker>
-		<Unit filename="GameApp.cpp">
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="GameApp.h">
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="GameApp.cpp" />
+		<Unit filename="GameApp.h" />
 		<Unit filename="GameBoard.cpp" />
 		<Unit filename="GameBoard.h" />
-		<Unit filename="GameContext.cpp">
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="GameContext.h">
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="GameSprite.cpp">
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="GameSprite.h">
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="GameTexture.cpp">
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="GameTexture.h">
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="gfx/grid.png">
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="gfx/x.png">
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
-		<Unit filename="main.cpp">
-			<Option target="Debug" />
-			<Option target="Release" />
-		</Unit>
+		<Unit filename="GameContext.cpp" />
+		<Unit filename="GameContext.h" />
+		<Unit filename="GameSprite.cpp" />
+		<Unit filename="GameSprite.h" />
+		<Unit filename="GameTexture.cpp" />
+		<Unit filename="GameTexture.h" />
+		<Unit filename="Resources/gfx/grid.png" />
+		<Unit filename="Resources/gfx/owins.png" />
+		<Unit filename="Resources/gfx/tie.png" />
+		<Unit filename="Resources/gfx/x.png" />
+		<Unit filename="Resources/gfx/xwins.png" />
+		<Unit filename="Resources/gfx/y.png" />
+		<Unit filename="main.cpp" />
 		<Extensions>
 			<envvars />
 			<code_completion />

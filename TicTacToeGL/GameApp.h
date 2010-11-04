@@ -33,12 +33,12 @@ class GameApp
     public:
         enum {
             PLAYER_X,
-            PLAYER_Y
+            PLAYER_O
         };
         enum {
             GAME_NOT_OVER,
             GAMEOVER_X_WINS,
-            GAMEOVER_Y_WINS,
+            GAMEOVER_O_WINS,
             GAMEOVER_TIE
         };
     public:
@@ -80,8 +80,8 @@ class GameApp
         void GameLoop(void);
         bool PlayerTakesTurn(int GameBoardCell);
         void SwitchPlayers(void);
+        int CheckForWinner(void);
         void ResetGame(void);
-        void CheckForWinner(void);
         void RenderFrame(void);
 
 };

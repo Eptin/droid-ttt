@@ -15,8 +15,12 @@ class GameContext
 {
     protected:
         GameTexture background;
-        GameTexture playerXSpriteStorage;
-        GameTexture playerYSpriteStorage;
+        GameTexture PlayerXTexture;
+        GameTexture PlayerOTexture;
+
+        GameTexture XWinsScreen;
+        GameTexture OWinsScreen;
+        GameTexture TieScreen;
 
         Uint16 width;
         Uint16 height;
@@ -30,11 +34,20 @@ class GameContext
         GameTexture GetBackground(void);
         void SetBackground(GameTexture theBackground);
 
-        GameTexture GetPlayerXSpriteStorage(void);
-        void SetPlayerXSpriteStorage(GameTexture theStorage);
+        GameTexture GetPlayerXTexture(void);
+        void SetPlayerXTexture(GameTexture theStorage);
 
-        GameTexture GetPlayerYSpriteStorage(void);
-        void SetPlayerYSpriteStorage(GameTexture theStorage);
+        GameTexture GetPlayerOTexture(void);
+        void SetPlayerOTexture(GameTexture theStorage);
+
+        GameTexture GetXWinsScreen(void);
+        void SetXWinsScreen(GameTexture theStorage);
+
+        GameTexture GetOWinsScreen(void);
+        void SetOWinsScreen(GameTexture theStorage);
+
+        GameTexture GetTieScreen(void);
+        void SetTieScreen(GameTexture theStorage);
 
         Uint16 GetWidth(void);
         void SetWidth(Uint16 theWidth);
@@ -44,8 +57,7 @@ class GameContext
 
         // Drawing functions
         void DrawBackground(void);
-        void DrawPlayer(GameSprite player);
-        void DrawPlayer(GameTexture playerTexture, int x, int y);
+        void DrawTexture(GameTexture theTexture, int x, int y);
 };
 
 typedef GameContext* GameContextPtr;

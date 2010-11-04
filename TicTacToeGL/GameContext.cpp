@@ -23,25 +23,56 @@ void GameContext::SetBackground(GameTexture theBackground)
     background = theBackground;
 }
 
-GameTexture GameContext::GetPlayerXSpriteStorage(void)
+GameTexture GameContext::GetPlayerXTexture(void)
 {
-    return playerXSpriteStorage;
+    return PlayerXTexture;
 }
 
-void GameContext::SetPlayerXSpriteStorage(GameTexture theStorage)
+void GameContext::SetPlayerXTexture(GameTexture theStorage)
 {
-    playerXSpriteStorage = theStorage;
+    PlayerXTexture = theStorage;
 }
 
-GameTexture GameContext::GetPlayerYSpriteStorage(void)
+GameTexture GameContext::GetPlayerOTexture(void)
 {
-    return playerYSpriteStorage;
+    return PlayerOTexture;
 }
 
-void GameContext::SetPlayerYSpriteStorage(GameTexture theStorage)
+void GameContext::SetPlayerOTexture(GameTexture theStorage)
 {
-    playerYSpriteStorage = theStorage;
+    PlayerOTexture = theStorage;
 }
+
+GameTexture GameContext::GetXWinsScreen(void)
+{
+    return XWinsScreen;
+}
+
+void GameContext::SetXWinsScreen(GameTexture theStorage)
+{
+    XWinsScreen = theStorage;
+}
+
+GameTexture GameContext::GetOWinsScreen(void)
+{
+    return OWinsScreen;
+}
+
+void GameContext::SetOWinsScreen(GameTexture theStorage)
+{
+    OWinsScreen = theStorage;
+}
+
+GameTexture GameContext::GetTieScreen(void)
+{
+    return TieScreen;
+}
+
+void GameContext::SetTieScreen(GameTexture theStorage)
+{
+    TieScreen = theStorage;
+}
+
 
 Uint16 GameContext::GetWidth(void)
 {
@@ -76,8 +107,8 @@ void GameContext::DrawBackground(void)
     // Have the background cover the entire viewport.
     GLfloat left = 0.0f;
     GLfloat right = width;
-    GLfloat top = height;
     GLfloat bottom = 0.0f;
+    GLfloat top = height;
 
     // Set up the drawing of the tile
     glEnable(GL_TEXTURE_2D);
@@ -107,7 +138,7 @@ void GameContext::DrawBackground(void)
 
 }
 
-void GameContext::DrawPlayer(GameSprite player)
+void GameContext::DrawTexture(GameTexture theTexture, int x, int y)
 {
     glPushMatrix();
     GLfloat textureLeft = 0.0f;
@@ -115,99 +146,10 @@ void GameContext::DrawPlayer(GameSprite player)
     GLfloat textureTop = 1.0f;
     GLfloat textureBottom = 0.0f;
 
-//    GLfloat left = player.GetWorldX();
-//    GLfloat right = left + 64.0f;
-//    GLfloat top = player.GetWorldY();
-//    GLfloat bottom = top - 64.0f;
-    GLfloat left = player.GetWorldX();
-    GLfloat right = left + playerXSpriteStorage.GetWidth();
-    GLfloat bottom = player.GetWorldY();
-    GLfloat top = bottom + playerXSpriteStorage.GetHeight();
-
-
-    //GLfloat textureColor[] = {1.0, 1.0, 1.0, 1.0};
-
-    // Set up the drawing of the player.
-    glEnable(GL_TEXTURE_2D);
-
-    // Tell OpenGL not to draw transparent pixels
-    glAlphaFunc(GL_GREATER, 0);
-    //glAlphaFunc(GL_LESS, 1);
-    glEnable(GL_ALPHA_TEST);
-
-    //glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, textureColor);
-    //glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_BLEND);
-    glBindTexture(GL_TEXTURE_2D, playerXSpriteStorage.GetTextureName());
-
-    // Set up the rotation
-    //glMatrixMode(GL_TEXTURE);
-    glMatrixMode(GL_TEXTURE);
-    glPushMatrix();
-    glLoadIdentity();
-
-    // Tell OpenGL to rotate around the center of the texture.
-//    glTranslatef(0.5, 0.5, 0.5);
-//    glRotatef(player.GetOrientation(), 0.0, 0.0, 1.0);
-//    glTranslatef(-0.5, -0.5, -0.5);
-
-    // Draw the sprite
-    glBegin(GL_QUADS);
-
-//    // Lower left corner
-//    glTexCoord2f(textureLeft, textureBottom);
-//    glVertex3f(left, bottom, 0.0);
-//
-//    // Lower right corner
-//    glTexCoord2f(textureRight, textureBottom);
-//    glVertex3f(right, bottom, 0.0);
-//
-//    // Upper right corner
-//    glTexCoord2f(textureRight, textureTop);
-//    glVertex3f(right, top, 0.0);
-//
-//    // Upper left corner
-//    glTexCoord2f(textureLeft, textureTop);
-//    glVertex3f(left, top, 0.0);
-
-// Lower left corner
-    glTexCoord2f(textureLeft, textureBottom);
-    glVertex3f(left, bottom, 0.0);
-
-    // Lower right corner
-    glTexCoord2f(textureRight, textureBottom);
-    glVertex3f(right, bottom, 0.0);
-
-    // Upper right corner
-    glTexCoord2f(textureRight, textureTop);
-    glVertex3f(right, top, 0.0);
-
-    // Upper left corner
-    glTexCoord2f(textureLeft, textureTop);
-    glVertex3f(left, top, 0.0);
-
-    glEnd();
-
-    glPopMatrix();
-
-}
-
-void GameContext::DrawPlayer(GameTexture playerTexture, int x, int y)
-{
-    glPushMatrix();
-    GLfloat textureLeft = 0.0f;
-    GLfloat textureRight = 1.0f;
-    GLfloat textureTop = 1.0f;
-    GLfloat textureBottom = 0.0f;
-
-//    GLfloat left = player.GetWorldX();
-//    GLfloat right = left + 64.0f;
-//    GLfloat top = player.GetWorldY();
-//    GLfloat bottom = top - 64.0f;
     GLfloat left = x;
-
-    GLfloat right = left + playerTexture.GetWidth();
+    GLfloat right = left + theTexture.GetWidth();
     GLfloat bottom = y;
-    GLfloat top = bottom + playerTexture.GetHeight();
+    GLfloat top = bottom + theTexture.GetHeight();
 
 
     //GLfloat textureColor[] = {1.0, 1.0, 1.0, 1.0};
@@ -222,7 +164,7 @@ void GameContext::DrawPlayer(GameTexture playerTexture, int x, int y)
 
     //glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, textureColor);
     //glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_BLEND);
-    glBindTexture(GL_TEXTURE_2D, playerTexture.GetTextureName());
+    glBindTexture(GL_TEXTURE_2D, theTexture.GetTextureName());
 
     // Set up the rotation
     //glMatrixMode(GL_TEXTURE);

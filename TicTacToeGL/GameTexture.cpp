@@ -123,3 +123,8 @@ void GameTexture::Create(void)
 
 }
 
+void GameTexture::Delete(void)
+{
+    glDeleteTextures(1, &textureName);
+}
+

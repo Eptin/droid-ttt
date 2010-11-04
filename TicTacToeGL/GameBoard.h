@@ -8,7 +8,7 @@ class GameBoard
         enum {
             BOARD_CELL_EMPTY,
             BOARD_CELL_PLAYERX,
-            BOARD_CELL_PLAYERY
+            BOARD_CELL_PLAYERO
         };
     public:
         // Constructor and destructor

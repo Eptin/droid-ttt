@@ -26,12 +26,12 @@ void GameApp::SetContext(GameContext theContext)
 
 //GameSprite GameApp::GetPlayerX(void)
 //{
-//    return playerX;
+//    return PlayerX;
 //}
 //
 //void GameApp::SetPlayerX(GameSprite thePlayer)
 //{
-//    playerX = thePlayer;
+//    PlayerX = thePlayer;
 //}
 
 
@@ -59,17 +59,18 @@ void GameApp::SetResH(int theResH)
 void GameApp::InitApp(void)
 {
 
-    ResetGame();
+
     ResW = 600;
     ResH = 600;
     InitializeSDL();
     InitializeDrawContext(ResW, ResH);
+    ResetGame();
     InstallTimer();
 
     //player1 = new GameSprite;
-//    playerX.SetWorldX(0);
-//    playerX.SetWorldY(0);
-//    playerX.SetOrientation(0.0);
+//    PlayerX.SetWorldX(0);
+//    PlayerX.SetWorldY(0);
+//    PlayerX.SetOrientation(0.0);
 
 }
 
@@ -130,57 +131,140 @@ void GameApp::InitializeDrawContext(Uint16 width, Uint16 height)
 
     context.SetBackground(textureMap);
 
+
     // Create the sprite storage texture map.
-    GameTexture playerXTextureMap;// = new GameTexture;
+    GameTexture PlayerXTextureMap;// = new GameTexture;
 
-    playerXTextureMap.SetInternalFormat(GL_RGBA8);
+    PlayerXTextureMap.SetInternalFormat(GL_RGBA8);
 
-    playerXTextureMap.SetFormat(GL_RGBA);
+    PlayerXTextureMap.SetFormat(GL_RGBA);
 
     // The texture was created on a big endian computer so reverse
     // the byte order on a little endian computer.
     #if __BIG_ENDIAN__
-        playerXTextureMap.SetType(GL_UNSIGNED_INT_8_8_8_8);
+        PlayerXTextureMap.SetType(GL_UNSIGNED_INT_8_8_8_8);
     #else
-        playerXTextureMap.SetType(GL_UNSIGNED_INT_8_8_8_8_REV);
+        PlayerXTextureMap.SetType(GL_UNSIGNED_INT_8_8_8_8_REV);
     #endif
 
     // Look in the application bundle for the player ship texture file on Mac OS X.
     // Look in the directory where the executable file resides on other operating systems.
     #if __MACOSX__
-        playerXTextureMap.Load("SDLAnimation.app/Contents/Resources/PlayerShip.png");
+        PlayerXTextureMap.Load("SDLAnimation.app/Contents/Resources/PlayerShip.png");
     #else
-        playerXTextureMap.Load("gfx/x.png");
+        PlayerXTextureMap.Load("gfx/x.png");
     #endif
 
-    context.SetPlayerXSpriteStorage(playerXTextureMap);
+    context.SetPlayerXTexture(PlayerXTextureMap);
+
 
     // Create the sprite storage texture map.
-    GameTexture playerYTextureMap;// = new GameTexture;
+    GameTexture PlayerOTextureMap;// = new GameTexture;
 
-    playerYTextureMap.SetInternalFormat(GL_RGBA8);
+    PlayerOTextureMap.SetInternalFormat(GL_RGBA8);
 
-    playerYTextureMap.SetFormat(GL_RGBA);
+    PlayerOTextureMap.SetFormat(GL_RGBA);
 
     // The texture was created on a big endian computer so reverse
     // the byte order on a little endian computer.
     #if __BIG_ENDIAN__
-        playerYTextureMap.SetType(GL_UNSIGNED_INT_8_8_8_8);
+        PlayerOTextureMap.SetType(GL_UNSIGNED_INT_8_8_8_8);
     #else
-        playerYTextureMap.SetType(GL_UNSIGNED_INT_8_8_8_8_REV);
+        PlayerOTextureMap.SetType(GL_UNSIGNED_INT_8_8_8_8_REV);
     #endif
 
     // Look in the application bundle for the player ship texture file on Mac OS X.
     // Look in the directory where the executable file resides on other operating systems.
     #if __MACOSX__
-        playerYTextureMap.Load("SDLAnimation.app/Contents/Resources/PlayerShip.png");
+        PlayerOTextureMap.Load("SDLAnimation.app/Contents/Resources/PlayerShip.png");
     #else
-        playerYTextureMap.Load("gfx/y.png");
+        PlayerOTextureMap.Load("gfx/y.png");
     #endif
 
-    context.SetPlayerYSpriteStorage(playerYTextureMap);
+    context.SetPlayerOTexture(PlayerOTextureMap);
 
-    CurrentPlayerStorage = context.GetPlayerXSpriteStorage();
+
+    // Create the sprite storage texture map.
+    GameTexture XWinsTextureMap;// = new GameTexture;
+
+    XWinsTextureMap.SetInternalFormat(GL_RGBA8);
+
+    XWinsTextureMap.SetFormat(GL_RGBA);
+
+    // The texture was created on a big endian computer so reverse
+    // the byte order on a little endian computer.
+    #if __BIG_ENDIAN__
+        XWinsTextureMap.SetType(GL_UNSIGNED_INT_8_8_8_8);
+    #else
+        XWinsTextureMap.SetType(GL_UNSIGNED_INT_8_8_8_8_REV);
+    #endif
+
+    // Look in the application bundle for the player ship texture file on Mac OS X.
+    // Look in the directory where the executable file resides on other operating systems.
+    #if __MACOSX__
+        XWinsTextureMap.Load("SDLAnimation.app/Contents/Resources/PlayerShip.png");
+    #else
+        XWinsTextureMap.Load("gfx/xwins.png");
+    #endif
+
+    context.SetXWinsScreen(XWinsTextureMap);
+
+
+    // Create the sprite storage texture map.
+    GameTexture YWinsTextureMap;// = new GameTexture;
+
+    YWinsTextureMap.SetInternalFormat(GL_RGBA8);
+
+    YWinsTextureMap.SetFormat(GL_RGBA);
+
+    // The texture was created on a big endian computer so reverse
+    // the byte order on a little endian computer.
+    #if __BIG_ENDIAN__
+        YWinsTextureMap.SetType(GL_UNSIGNED_INT_8_8_8_8);
+    #else
+        YWinsTextureMap.SetType(GL_UNSIGNED_INT_8_8_8_8_REV);
+    #endif
+
+    // Look in the application bundle for the player ship texture file on Mac OS X.
+    // Look in the directory where the executable file resides on other operating systems.
+    #if __MACOSX__
+        YWinsTextureMap.Load("SDLAnimation.app/Contents/Resources/PlayerShip.png");
+    #else
+        YWinsTextureMap.Load("gfx/owins.png");
+    #endif
+
+    context.SetOWinsScreen(YWinsTextureMap);
+
+
+    // Create the sprite storage texture map.
+    GameTexture TieTextureMap;// = new GameTexture;
+
+    TieTextureMap.SetInternalFormat(GL_RGBA8);
+
+    TieTextureMap.SetFormat(GL_RGBA);
+
+    // The texture was created on a big endian computer so reverse
+    // the byte order on a little endian computer.
+    #if __BIG_ENDIAN__
+        TieTextureMap.SetType(GL_UNSIGNED_INT_8_8_8_8);
+    #else
+        TieTextureMap.SetType(GL_UNSIGNED_INT_8_8_8_8_REV);
+    #endif
+
+    // Look in the application bundle for the player ship texture file on Mac OS X.
+    // Look in the directory where the executable file resides on other operating systems.
+    #if __MACOSX__
+        TieTextureMap.Load("SDLAnimation.app/Contents/Resources/PlayerShip.png");
+    #else
+        TieTextureMap.Load("gfx/tie.png");
+    #endif
+
+    context.SetTieScreen(TieTextureMap);
+
+
+
+
+    CurrentPlayerStorage = context.GetPlayerXTexture();
 
     // Set the size of the context.
     context.SetWidth(width);
@@ -233,6 +317,11 @@ void GameApp::Cleanup(void)
 {
     SDL_bool success;
     success = SDL_RemoveTimer(timer);
+
+    CurrentPlayerStorage.Delete();
+    context.GetPlayerXTexture().Delete();
+    context.GetPlayerOTexture().Delete();
+    context.GetBackground().Delete();
 
     SDL_Quit();
 }
@@ -288,23 +377,23 @@ void GameApp::HandleKeyPress(SDL_Event* event)
 {
     switch(event->key.keysym.sym) {
         case SDLK_LEFT:
-//            playerX.MoveLeft(MOVEMENT_DISTANCE);
-//            playerX.SetOrientation(90.0f);
+//            PlayerX.MoveLeft(MOVEMENT_DISTANCE);
+//            PlayerX.SetOrientation(90.0f);
             break;
 
         case SDLK_RIGHT:
-//            playerX.MoveRight(MOVEMENT_DISTANCE);
-//            playerX.SetOrientation(270.0f);
+//            PlayerX.MoveRight(MOVEMENT_DISTANCE);
+//            PlayerX.SetOrientation(270.0f);
             break;
 
         case SDLK_UP:
-//            playerX.MoveUp(MOVEMENT_DISTANCE);
-//            playerX.SetOrientation(0.0f);
+//            PlayerX.MoveUp(MOVEMENT_DISTANCE);
+//            PlayerX.SetOrientation(0.0f);
             break;
 
         case SDLK_DOWN:
-//            playerX.MoveDown(MOVEMENT_DISTANCE);
-//            playerX.SetOrientation(180.0f);
+//            PlayerX.MoveDown(MOVEMENT_DISTANCE);
+//            PlayerX.SetOrientation(180.0f);
             break;
 
         default:
@@ -321,18 +410,18 @@ void GameApp::HandleMouseMovement(SDL_Event* event)
 
     // Move left
     if (xMovement < 0) {
-//        newOrientation = playerX.GetOrientation() + ROTATION_AMOUNT;
+//        newOrientation = PlayerX.GetOrientation() + ROTATION_AMOUNT;
 //        if (newOrientation >= 360.0)
 //            newOrientation = 0.0f;
-//        playerX.SetOrientation(newOrientation);
+//        PlayerX.SetOrientation(newOrientation);
     }
 
     // Move right
     if (xMovement > 0) {
-//        newOrientation = playerX.GetOrientation() - ROTATION_AMOUNT;
+//        newOrientation = PlayerX.GetOrientation() - ROTATION_AMOUNT;
 //        if (newOrientation <= 0.0)
 //            newOrientation = 360.0f;
-//        playerX.SetOrientation(newOrientation);
+//        PlayerX.SetOrientation(newOrientation);
     }
 }
 
@@ -343,9 +432,24 @@ void GameApp::HandleMouseLeftClick(int x, int y)
 
     int GameBoardCell = (x / 200) + (6 - (y / 200 * 3));
 
-
     if(PlayerTakesTurn(GameBoardCell) == true) SwitchPlayers();
-    CheckForWinner();
+
+    switch(GameStatus = CheckForWinner())
+    {
+        case GAMEOVER_X_WINS:
+//                    printf("PLAYER X WINS!!\n");
+                    break;
+
+        case GAMEOVER_O_WINS:
+//                    printf("PLAYER O WINS!!\n");
+                    break;
+
+        case GAMEOVER_TIE:
+//                    printf("ITS A TIE!!\n");
+                    break;
+        default:
+                    break;
+    }
 
 //    printf("Board Location: %d\n", GameBoardCell);
 //    printf("x: %d\n", (x / 200));
@@ -376,12 +480,12 @@ void GameApp::SwitchPlayers(void)
 {
 //    printf("Player was: %d\n", CurrentPlayer);
     if(CurrentPlayer == PLAYER_X) {
-        CurrentPlayer = PLAYER_Y;
-        CurrentPlayerStorage = context.GetPlayerYSpriteStorage();
+        CurrentPlayer = PLAYER_O;
+        CurrentPlayerStorage = context.GetPlayerOTexture();
     }
     else {
         CurrentPlayer = PLAYER_X;
-        CurrentPlayerStorage = context.GetPlayerXSpriteStorage();
+        CurrentPlayerStorage = context.GetPlayerXTexture();
     }
 //    printf("Player is: %d\n", CurrentPlayer);
 
@@ -396,34 +500,110 @@ void GameApp::ResetGame(void)
     GameOver = false;
 }
 
-void GameApp::CheckForWinner(void)
+int GameApp::CheckForWinner(void)
 {
     // Check All Rows for a winner...
+    //int Cell0, Cell1, Cell2;
+    for(int x = 0; x < 3; x++){
+//        if(TicTacToeBoard.GetCellStatus(x * 3) == TicTacToeBoard.BOARD_CELL_EMPTY
+//           && TicTacToeBoard.GetCellStatus(x * 3 + 1) != TicTacToeBoard.BOARD_CELL_EMPTY
+//           && TicTacToeBoard.GetCellStatus(x * 3 + 2) != TicTacToeBoard.BOARD_CELL_EMPTY)
+//            {
+                // Check Row X for Player X
+                if(TicTacToeBoard.GetCellStatus(x * 3) == TicTacToeBoard.BOARD_CELL_PLAYERX
+                   && TicTacToeBoard.GetCellStatus(x * 3 + 1) == TicTacToeBoard.BOARD_CELL_PLAYERX
+                    && TicTacToeBoard.GetCellStatus(x * 3 + 2) == TicTacToeBoard.BOARD_CELL_PLAYERX)
+                        return GAMEOVER_X_WINS;
 
-//    if(TicTacToeBoard.GetCellStatus[x] ==
-//
-//
-//    if(TurnsLeft == 0) GameStatus = GAMEOVER_TIE;
+                // Check Column X for PLayer X
+                if(TicTacToeBoard.GetCellStatus(x) == TicTacToeBoard.BOARD_CELL_PLAYERX
+                   && TicTacToeBoard.GetCellStatus(x + 3) == TicTacToeBoard.BOARD_CELL_PLAYERX
+                    && TicTacToeBoard.GetCellStatus(x + 6) == TicTacToeBoard.BOARD_CELL_PLAYERX)
+                        return GAMEOVER_X_WINS;
+
+                // Check Row X for PLayer O
+                if(TicTacToeBoard.GetCellStatus(x * 3) == TicTacToeBoard.BOARD_CELL_PLAYERO
+                   && TicTacToeBoard.GetCellStatus(x * 3 + 1) == TicTacToeBoard.BOARD_CELL_PLAYERO
+                    && TicTacToeBoard.GetCellStatus(x * 3 + 2) == TicTacToeBoard.BOARD_CELL_PLAYERO)
+                        return GAMEOVER_O_WINS;
+
+                // Check Column X for Player O
+                if(TicTacToeBoard.GetCellStatus(x) == TicTacToeBoard.BOARD_CELL_PLAYERO
+                   && TicTacToeBoard.GetCellStatus(x + 3) == TicTacToeBoard.BOARD_CELL_PLAYERO
+                    && TicTacToeBoard.GetCellStatus(x + 6) == TicTacToeBoard.BOARD_CELL_PLAYERO)
+                        return GAMEOVER_O_WINS;
+
+
+//            }
+    }
+    // Check Diagonals for X
+    if(TicTacToeBoard.GetCellStatus(0) == TicTacToeBoard.BOARD_CELL_PLAYERX
+       && TicTacToeBoard.GetCellStatus(4) == TicTacToeBoard.BOARD_CELL_PLAYERX
+        && TicTacToeBoard.GetCellStatus(8) == TicTacToeBoard.BOARD_CELL_PLAYERX)
+            return GAMEOVER_X_WINS;
+
+    if(TicTacToeBoard.GetCellStatus(6) == TicTacToeBoard.BOARD_CELL_PLAYERX
+       && TicTacToeBoard.GetCellStatus(4) == TicTacToeBoard.BOARD_CELL_PLAYERX
+        && TicTacToeBoard.GetCellStatus(2) == TicTacToeBoard.BOARD_CELL_PLAYERX)
+            return GAMEOVER_X_WINS;
+
+    // Check Diagonals for Y
+    if(TicTacToeBoard.GetCellStatus(0) == TicTacToeBoard.BOARD_CELL_PLAYERO
+       && TicTacToeBoard.GetCellStatus(4) == TicTacToeBoard.BOARD_CELL_PLAYERO
+        && TicTacToeBoard.GetCellStatus(8) == TicTacToeBoard.BOARD_CELL_PLAYERO)
+            return GAMEOVER_O_WINS;
+
+    if(TicTacToeBoard.GetCellStatus(6) == TicTacToeBoard.BOARD_CELL_PLAYERO
+       && TicTacToeBoard.GetCellStatus(4) == TicTacToeBoard.BOARD_CELL_PLAYERO
+        && TicTacToeBoard.GetCellStatus(2) == TicTacToeBoard.BOARD_CELL_PLAYERO)
+            return GAMEOVER_O_WINS;
+
+
 //    printf("Turns Left: %d\n", TurnsLeft);
 //    printf("Game Status: %d\n", GameStatus);
+
+    // If theres no more turns, and no winner... then its a TIE!!
+    if(TurnsLeft == 0) return GAMEOVER_TIE;
+
+    // If nothing else, the game isn't over!
+    return GAME_NOT_OVER;
 }
 
 void GameApp::RenderFrame(void)
 {
     //glClear(GL_COLOR_BUFFER_BIT);
-    context.DrawBackground();
 
-
-    for(int x = 0; x < 9; x++) {
-        if(TicTacToeBoard.GetCellStatus(x) == TicTacToeBoard.BOARD_CELL_PLAYERX) context.DrawPlayer(context.GetPlayerXSpriteStorage(), (x % 3 * 200), (x / 3 * 200));
-        else
-        if(TicTacToeBoard.GetCellStatus(x) == TicTacToeBoard.BOARD_CELL_PLAYERY) context.DrawPlayer(context.GetPlayerYSpriteStorage(), (x % 3 * 200), (x / 3 * 200));
-
-//        printf("CELL %d: %d\n", x, TicTacToeBoard.GetCellStatus(x));
-
+    if(GameStatus == GAME_NOT_OVER)
+    {
+        context.DrawBackground();
+        for(int x = 0; x < 9; x++)
+        {
+            if(TicTacToeBoard.GetCellStatus(x) == TicTacToeBoard.BOARD_CELL_PLAYERX) context.DrawTexture(context.GetPlayerXTexture(), (x % 3 * 200), (x / 3 * 200));
+            else
+            if(TicTacToeBoard.GetCellStatus(x) == TicTacToeBoard.BOARD_CELL_PLAYERO) context.DrawTexture(context.GetPlayerOTexture(), (x % 3 * 200), (x / 3 * 200));
+        }
     }
-
-
+    if(GameStatus == GAMEOVER_X_WINS)
+    {
+        context.DrawTexture(context.GetXWinsScreen(), 0, 0);
+        SDL_GL_SwapBuffers();
+        SDL_Delay(3000);
+        ResetGame();
+    }
+    if(GameStatus == GAMEOVER_O_WINS)
+    {
+        context.DrawTexture(context.GetOWinsScreen(), 0, 0);
+        SDL_GL_SwapBuffers();
+        SDL_Delay(3000);
+        ResetGame();
+    }
+    if(GameStatus == GAMEOVER_TIE)
+    {
+        context.DrawTexture(context.GetTieScreen(), 0, 0);
+        SDL_GL_SwapBuffers();
+        SDL_Delay(3000);
+        ResetGame();
+    }
 
 
     SDL_GL_SwapBuffers();

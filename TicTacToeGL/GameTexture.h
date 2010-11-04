@@ -48,6 +48,7 @@ class GameTexture
         void Load(char* filename);
         void ReadFromFile(char* filename);
         void Create(void);
+        void Delete(void);
 
 };
 
