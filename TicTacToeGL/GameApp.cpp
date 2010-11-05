@@ -62,6 +62,7 @@ void GameApp::InitApp(void)
 
     ResW = 600;
     ResH = 600;
+    ilInit();
     InitializeSDL();
     InitializeDrawContext(ResW, ResH);
     ResetGame();

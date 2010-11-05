@@ -106,9 +106,11 @@ void GameContext::DrawBackground(void)
 
     // Have the background cover the entire viewport.
     GLfloat left = 0.0f;
-    GLfloat right = width;
+//    GLfloat right = width;
+    GLfloat right = background.GetWidth();
     GLfloat bottom = 0.0f;
-    GLfloat top = height;
+    //GLfloat top = height;
+    GLfloat top = background.GetHeight();
 
     // Set up the drawing of the tile
     glEnable(GL_TEXTURE_2D);

@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1288847914 source:/home/corey/Documents/Programming/Projects/TicTacToeGL_SVN/GameApp.cpp
+1288917918 source:/home/corey/Documents/Programming/Projects/TicTacToeGL_SVN/GameApp.cpp
 	"GameApp.h"
 
 1288847206 /home/corey/Documents/Programming/Projects/TicTacToeGL_SVN/GameApp.h
@@ -214,20 +214,20 @@
 	"GameTexture.h"
 	"GameSprite.h"
 
-1288843541 /home/corey/Documents/Programming/Projects/TicTacToeGL_SVN/GameTexture.h
+1288927940 /home/corey/Documents/Programming/Projects/TicTacToeGL_SVN/GameTexture.h
 	"SDL.h"
-	"SDL_opengl.h"
-	"SDL_image.h"
+	"IL/il.h"
+	"IL/ilu.h"
 
 1288741671 /home/corey/Documents/Programming/Projects/TicTacToeGL_SVN/GameSprite.h
 
-1288847622 source:/home/corey/Documents/Programming/Projects/TicTacToeGL_SVN/GameContext.cpp
+1288919915 source:/home/corey/Documents/Programming/Projects/TicTacToeGL_SVN/GameContext.cpp
 	"GameContext.h"
 
 1288741671 source:/home/corey/Documents/Programming/Projects/TicTacToeGL_SVN/GameSprite.cpp
 	"GameSprite.h"
 
-1288843575 source:/home/corey/Documents/Programming/Projects/TicTacToeGL_SVN/GameTexture.cpp
+1288917889 source:/home/corey/Documents/Programming/Projects/TicTacToeGL_SVN/GameTexture.cpp
 	"GameTexture.h"
 
 1288741671 source:/home/corey/Documents/Programming/Projects/TicTacToeGL_SVN/main.cpp

@@ -1,6 +1,9 @@
 #include "SDL.h"
-#include "SDL_opengl.h"
-#include "SDL_image.h"
+//#include "SDL_opengl.h"
+//#include "SDL_image.h"
+#include "GL/gl.h"
+#include "IL/il.h"
+#include "IL/ilu.h"
 
 #define GAME_TEXTURE
 
@@ -17,6 +20,8 @@ class GameTexture
         GLenum type;
 
     GLuint textureName;
+    ILubyte * textureBytes;
+
     SDL_Surface* image;
 
     public:
