@@ -106,6 +106,12 @@ void GameTexture::ReadFromFile(char* filename)
         textureBytes = ilGetData();
         SetWidth(ilGetInteger(IL_IMAGE_WIDTH));
         SetHeight(ilGetInteger(IL_IMAGE_HEIGHT));
+        if(ilGetInteger(IL_IMAGE_ORIGIN) == IL_ORIGIN_UPPER_LEFT)
+        {
+            printf("Flipping image with filename: %s\n", filename);
+            iluFlipImage();
+
+        }
     }
 
 }
@@ -127,11 +133,13 @@ void GameTexture::Create(void)
 //    glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format,
 //                 type, image->pixels);
 //    error = glGetError();
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    //glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glGenTextures(1, &textureName);
     glBindTexture(GL_TEXTURE_2D, textureName);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 

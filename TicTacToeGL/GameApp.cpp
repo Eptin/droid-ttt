@@ -179,7 +179,7 @@ void GameApp::InitializeDrawContext(Uint16 width, Uint16 height)
     #if __MACOSX__
         PlayerOTextureMap.Load("SDLAnimation.app/Contents/Resources/PlayerShip.png");
     #else
-        PlayerOTextureMap.Load("gfx/y.png");
+        PlayerOTextureMap.Load("gfx/o.png");
     #endif
 
     context.SetPlayerOTexture(PlayerOTextureMap);
@@ -281,7 +281,11 @@ void GameApp::InitializeDrawContext(Uint16 width, Uint16 height)
 
     glLoadIdentity();
 
+    // Use this one to use the Bottom Left Origin
     glOrtho(0, width, 0, height, 1, -1);
+
+    // Use this one to match the way SDL maps screen, with top left origin
+    //glOrtho(0, width, height, 0, 1, -1);
 
     glMatrixMode(GL_MODELVIEW);
 

@@ -1,12 +1,7 @@
 #include "SDL.h"
-#include "SDL_opengl.h"
 
 #ifndef GAME_TEXTURE
     #include "GameTexture.h"
-#endif
-
-#ifndef GAME_SPRITE
-    #include "GameSprite.h"
 #endif
 
 #define GAME_CONTEXT
