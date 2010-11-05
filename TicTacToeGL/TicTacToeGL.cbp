@@ -18,28 +18,6 @@
 					<Add option="-g" />
 					<Add option="`sdl-config --cflags --libs`" />
 				</Compiler>
-				<Linker>
-					<Add library="GL" />
-					<Add library="IL" />
-					<Add library="SDL_image" />
-					<Add library="GLU" />
-				</Linker>
-			</Target>
-			<Target title="Release">
-				<Option output="bin/Release/TicTacToe" prefix_auto="1" extension_auto="1" />
-				<Option object_output="obj/Release/" />
-				<Option type="1" />
-				<Option compiler="gcc" />
-				<Compiler>
-					<Add option="-O2" />
-				</Compiler>
-				<Linker>
-					<Add option="-s" />
-					<Add library="GL" />
-					<Add library="IL" />
-					<Add library="SDL_image" />
-					<Add library="GLU" />
-				</Linker>
 			</Target>
 			<Target title="Dist_LINUX">
 				<Option platforms="Unix;" />
@@ -51,12 +29,6 @@
 				<Compiler>
 					<Add option="`sdl-config --cflags --libs`" />
 				</Compiler>
-				<Linker>
-					<Add library="GL" />
-					<Add library="IL" />
-					<Add library="SDL_image" />
-					<Add library="GLU" />
-				</Linker>
 				<ExtraCommands>
 					<Add after="rm -rf ./bin/DIST/LINUX/gfx" />
 					<Add after="mkdir ./bin/DIST/LINUX/gfx" />
@@ -66,11 +38,12 @@
 			</Target>
 			<Target title="DIST_WIN32">
 				<Option platforms="Unix;" />
-				<Option output="bin/DIST/WIN32/TicTacToeGL" prefix_auto="1" extension_auto="1" />
-				<Option working_dir="./Resources" />
+				<Option output="bin/DIST/WIN32/TicTacToeGL.exe" prefix_auto="1" extension_auto="0" />
+				<Option working_dir="bin/DIST/WIN32" />
 				<Option object_output="obj/DIST_WIN32" />
-				<Option type="0" />
+				<Option type="1" />
 				<Option compiler="mingw32_compiler" />
+				<Option use_console_runner="0" />
 				<Option projectCompilerOptionsRelation="1" />
 				<Option projectLinkerOptionsRelation="1" />
 				<Option projectIncludeDirsRelation="1" />
@@ -83,6 +56,7 @@
 				<Linker>
 					<Add option="`/opt/SDL-1.2.13/bin/i586-mingw32msvc-sdl-config --libs`" />
 					<Add option="-lSDL_image" />
+					<Add option="-ldevil" />
 				</Linker>
 				<ExtraCommands>
 					<Add after="rm -rf ./bin/DIST/WIN32/gfx" />
@@ -90,29 +64,30 @@
 					<Add after="cp -rfv ./Resources/gfx/*.png ./bin/DIST/WIN32/gfx" />
 					<Add after="rm -rf ./bin/DIST/WIN32/*.dll" />
 					<Add after="cp -rfv ./Resources/DLLs/* ./bin/DIST/WIN32" />
+					<Mode after="always" />
 				</ExtraCommands>
 			</Target>
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="-g" />
+			<Add option="`sdl-config --cflags --libs`" />
 		</Compiler>
+		<Linker>
+			<Add library="SDL" />
+			<Add library="IL" />
+			<Add library="ILU" />
+			<Add library="GL" />
+			<Add library="GLU" />
+		</Linker>
 		<Unit filename="GameApp.cpp" />
 		<Unit filename="GameApp.h" />
 		<Unit filename="GameBoard.cpp" />
 		<Unit filename="GameBoard.h" />
 		<Unit filename="GameContext.cpp" />
 		<Unit filename="GameContext.h" />
-		<Unit filename="GameSprite.cpp" />
-		<Unit filename="GameSprite.h" />
 		<Unit filename="GameTexture.cpp" />
 		<Unit filename="GameTexture.h" />
-		<Unit filename="Resources/gfx/grid.png" />
-		<Unit filename="Resources/gfx/owins.png" />
-		<Unit filename="Resources/gfx/tie.png" />
-		<Unit filename="Resources/gfx/x.png" />
-		<Unit filename="Resources/gfx/xwins.png" />
-		<Unit filename="Resources/gfx/y.png" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<envvars />
