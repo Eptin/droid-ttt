@@ -1,5 +1,8 @@
 #include "SDL.h"
+//#include "SDL_opengl.h"
 #include "GL/gl.h"
+#include "GL/glext.h"
+#include "GL/glu.h"
 #include "IL/il.h"
 #include "IL/ilu.h"
 

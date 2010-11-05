@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1288930849 source:/home/corey/Documents/Programming/Projects/TicTacToeGL_SVN/GameApp.cpp
+1288985804 source:/home/corey/Documents/Programming/Projects/TicTacToeGL_SVN/GameApp.cpp
 	"GameApp.h"
 
 1288930374 /home/corey/Documents/Programming/Projects/TicTacToeGL_SVN/GameApp.h
@@ -209,9 +209,11 @@
 	"SDL.h"
 	"GameTexture.h"
 
-1288930335 /home/corey/Documents/Programming/Projects/TicTacToeGL_SVN/GameTexture.h
+1288985748 /home/corey/Documents/Programming/Projects/TicTacToeGL_SVN/GameTexture.h
 	"SDL.h"
 	"GL/gl.h"
+	"GL/glext.h"
+	"GL/glu.h"
 	"IL/il.h"
 	"IL/ilu.h"
 
