@@ -23,7 +23,7 @@
 				<Option platforms="Unix;" />
 				<Option output="bin/DIST/LINUX/TicTacToeGL" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="./Resources" />
-				<Option object_output="obj/DIST_LINUX" />
+				<Option object_output="obj/DIST" />
 				<Option type="0" />
 				<Option compiler="gcc" />
 				<Compiler>
@@ -40,7 +40,7 @@
 				<Option platforms="Unix;" />
 				<Option output="bin/DIST/WIN32/TicTacToeGL.exe" prefix_auto="1" extension_auto="0" />
 				<Option working_dir="bin/DIST/WIN32" />
-				<Option object_output="obj/DIST_WIN32" />
+				<Option object_output="obj/DIST" />
 				<Option type="1" />
 				<Option compiler="mingw32_compiler" />
 				<Option use_console_runner="0" />
@@ -55,15 +55,23 @@
 				</Compiler>
 				<Linker>
 					<Add option="`/opt/SDL-1.2.13/bin/i586-mingw32msvc-sdl-config --libs`" />
-					<Add option="-lSDL_image" />
+					<Add option="-lopengl32" />
+					<Add option="-glu32" />
 					<Add option="-ldevil" />
+					<Add option="-lilu" />
+					<Add option="-lilut" />
 				</Linker>
 				<ExtraCommands>
-					<Add after="rm -rf ./bin/DIST/WIN32/gfx" />
-					<Add after="mkdir ./bin/DIST/WIN32/gfx" />
+					<Add after="# Clean and recopy stuff" />
+					<Add after="rm -rfv ./bin/DIST/WIN32/gfx" />
+					<Add after="mkdir -v ./bin/DIST/WIN32/gfx" />
 					<Add after="cp -rfv ./Resources/gfx/*.png ./bin/DIST/WIN32/gfx" />
-					<Add after="rm -rf ./bin/DIST/WIN32/*.dll" />
+					<Add after="rm -rfv ./bin/DIST/WIN32/*.dll" />
 					<Add after="cp -rfv ./Resources/DLLs/* ./bin/DIST/WIN32" />
+					<Add after="rm -rfv /Share/Development/TTT32" />
+					<Add after="mkdir -pv /Share/Development/TTT32" />
+					<Add after="cp -rv ./bin/DIST/WIN32/* /Share/Development/TTT32" />
+					<Add after="chmod -R 777 /Share/Development/" />
 					<Mode after="always" />
 				</ExtraCommands>
 			</Target>

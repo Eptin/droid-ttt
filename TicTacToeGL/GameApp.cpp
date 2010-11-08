@@ -4,12 +4,13 @@
 GameApp::GameApp(void)
 {
     done = false;
+    printf("GameApp constructed...\n");
 }
 
 // Destructor
 GameApp::~GameApp(void)
 {
-
+    printf("GameApp Destructed...\n");
 }
 
 
@@ -58,8 +59,12 @@ void GameApp::SetResH(int theResH)
 // Initialization functions
 void GameApp::InitApp(void)
 {
-
-
+    #ifndef GL_ARB_texture_non_power_of_two
+        printf("DOES NOT SUPPORT NON POWER OF TWO!!\n");
+    #else
+        printf("DOES SUPPORT NON POWER OF TWO!!\n");
+    #endif
+    printf("InitApp...\n");
     ResW = 600;
     ResH = 600;
     ilInit();
@@ -72,7 +77,7 @@ void GameApp::InitApp(void)
 //    PlayerX.SetWorldX(0);
 //    PlayerX.SetWorldY(0);
 //    PlayerX.SetOrientation(0.0);
-
+    //context.DrawTexture(context.GetBackground(),0 , 0);
 }
 
 void GameApp::InitializeSDL(void)
@@ -577,10 +582,13 @@ int GameApp::CheckForWinner(void)
 void GameApp::RenderFrame(void)
 {
     //glClear(GL_COLOR_BUFFER_BIT);
+    //context.DrawBackground();
+    //context.DrawTexture(context.GetBackground(),0 , 0);
 
     if(GameStatus == GAME_NOT_OVER)
     {
         context.DrawBackground();
+        //context.DrawTexture(context.GetBackground(),0 , 0);
         for(int x = 0; x < 9; x++)
         {
             if(TicTacToeBoard.GetCellStatus(x) == TicTacToeBoard.BOARD_CELL_PLAYERX) context.DrawTexture(context.GetPlayerXTexture(), (x % 3 * 200), (x / 3 * 200));
@@ -612,4 +620,14 @@ void GameApp::RenderFrame(void)
 
 
     SDL_GL_SwapBuffers();
+//    ILenum Error;
+//    while ((Error = ilGetError()) != IL_NO_ERROR) {
+//        printf("%d: %s/n", Error, iluErrorString(Error));
+//    }
+//
+//    GLenum glError;
+//    while ((glError = glGetError()) != GL_NO_ERROR) {
+//        printf("%d: %s\n", glError, gluErrorString(glError));
+//    }
+
 }

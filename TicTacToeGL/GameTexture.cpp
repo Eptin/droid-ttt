@@ -144,8 +144,10 @@ void GameTexture::Create(void)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
     GLenum error;
-    glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format,
-                 type, textureBytes);
+//    glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format,
+//                 type, textureBytes);
+    glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, textureBytes);
     error = glGetError();
 
 }

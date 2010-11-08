@@ -142,7 +142,7 @@ void GameContext::DrawBackground(void)
 
 void GameContext::DrawTexture(GameTexture theTexture, int x, int y)
 {
-    glPushMatrix();
+    //glPushMatrix();
     GLfloat textureLeft = 0.0f;
     GLfloat textureRight = 1.0f;
     GLfloat textureTop = 1.0f;
@@ -170,8 +170,8 @@ void GameContext::DrawTexture(GameTexture theTexture, int x, int y)
 
     // Set up the rotation
     //glMatrixMode(GL_TEXTURE);
-    glMatrixMode(GL_TEXTURE);
-    glPushMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    //glPushMatrix();
     glLoadIdentity();
 
     // Tell OpenGL to rotate around the center of the texture.
@@ -216,6 +216,6 @@ void GameContext::DrawTexture(GameTexture theTexture, int x, int y)
 
     glEnd();
 
-    glPopMatrix();
+    //glPopMatrix();
 
 }
