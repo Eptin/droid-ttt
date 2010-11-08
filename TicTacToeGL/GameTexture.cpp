@@ -91,16 +91,6 @@ void GameTexture::Load(char* filename)
 
 void GameTexture::ReadFromFile(char* filename)
 {
-//    SDL_RWops* textureFile;
-//
-//    // Read texture file
-//    textureFile = SDL_RWFromFile(filename, "rb");
-//
-//    // Load the image
-//    image = IMG_Load_RW(textureFile, kAutoCloseFile);
-//
-//    SetWidth(image->w);
-//    SetHeight(image->h);
     if(ilLoadImage(filename))
     {
         textureBytes = ilGetData();
@@ -121,33 +111,21 @@ void GameTexture::Create(void)
 {
     // Creates the texture from the file we loaded earlier.
 
-//    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-//    glGenTextures(1, &textureName);
-//    glBindTexture(GL_TEXTURE_2D, textureName);
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-//
-//    GLenum error;
-//    glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format,
-//                 type, image->pixels);
-//    error = glGetError();
     //glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glGenTextures(1, &textureName);
     glBindTexture(GL_TEXTURE_2D, textureName);
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+//    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
     GLenum error;
-//    glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format,
-//                 type, textureBytes);
-    glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA,
-                 GL_UNSIGNED_BYTE, textureBytes);
+    glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format,
+                 type, textureBytes);
+//    glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA,
+//                 GL_UNSIGNED_BYTE, textureBytes);
     error = glGetError();
 
 }
