@@ -53,7 +53,7 @@ public class DroidTTT extends Activity {
 	}
 
 	View.OnTouchListener mTouchListener = new OnTouchListener() {
-		@Override
+//		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			float rawX = event.getRawX();
 			float rawY = event.getRawY();
