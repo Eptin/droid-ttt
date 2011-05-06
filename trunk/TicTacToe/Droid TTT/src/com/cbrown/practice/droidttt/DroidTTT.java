@@ -18,8 +18,6 @@ public class DroidTTT extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.my_layout);
 
-		setContentView(R.layout.my_layout);
-
 		canvasView = (CanvasView) findViewById(R.id.cavasView);
 		canvasView.setOnTouchListener(mTouchListener);
 
@@ -53,17 +51,19 @@ public class DroidTTT extends Activity {
 	}
 
 	View.OnTouchListener mTouchListener = new OnTouchListener() {
-//		@Override
+		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			float rawX = event.getRawX();
-			float rawY = event.getRawY();
+			int rawX = (int) event.getRawX();
+			int rawY = (int) event.getRawY();
+			
+			int pixelFactor = 160;
 
-			// int translatedX = (int) rawX / 160 * 160;
-			// int translatedY = (int) rawY / 160 * 160;
+			int xTranslated = (rawX <= (pixelFactor * 3)?  rawX / 160 : 9);
+			int yTranslated = rawY / 160 * 3;
 
 			int currentGameStatus = ticTacToeBoard
 					.getGameStatusAndCheckForWinner();
-			int gameBoardCell = (int) rawX / 160 + (int) rawY / 160 * 3;
+			int gameBoardCell = xTranslated + yTranslated;
 
 			// Toast.makeText(v.getContext(), "X: " +
 			// rawX + " Y: " + rawY, Toast.LENGTH_LONG).show();
