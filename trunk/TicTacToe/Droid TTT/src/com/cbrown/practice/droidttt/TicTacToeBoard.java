@@ -8,7 +8,6 @@ public class TicTacToeBoard {
 	private Bitmap mPlayerOBitmap;
 
 	private int[] mGameBoardCells = new int[9];
-	// private int mGameStatus;
 	private int mCurrentPlayer;
 
 	public void setmBoardBitmap(Bitmap mBoardBitmap) {
@@ -120,9 +119,6 @@ public class TicTacToeBoard {
 		for (int x = 0; x < getmGameBoardCells().length; x++) {
 			getmGameBoardCells()[x] = CellStatus.EMPTY;
 		}
-
-		// Set the Game Status to GAME_IN_PLAY
-		// mGameStatus = GameStatus.GAME_IN_PLAY;
 
 		// Set the first player to Player X;
 		mCurrentPlayer = CellStatus.PLAYER_X;

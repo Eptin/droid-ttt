@@ -68,37 +68,16 @@ public class CanvasView extends View {
 		return mGameBoardCells;
 	}
 
-	public void loadBitmaps() {
-		sBitmapOptions.inPreferredConfig = Bitmap.Config.ARGB_8888;
-
-		// setFocusable(true);
-		Resources r = this.getContext().getResources();
-
-		Drawable backgroundTile = r.getDrawable(R.drawable.new_grid);
-		Bitmap backgroundBitmap = Bitmap.createBitmap(480, 800,
-				Bitmap.Config.ARGB_8888);
-		Canvas canvas = new Canvas(backgroundBitmap);
-		backgroundTile.setBounds(0, 0, 480, 800);
-		backgroundTile.draw(canvas);
-		setmBackgroundBitmap(backgroundBitmap);
-
-		Drawable playerOTile = r.getDrawable(R.drawable.android);
-		Bitmap playerOBitmap = Bitmap.createBitmap(120, 120,
-				Bitmap.Config.ARGB_8888);
-		Canvas playerOCanvas = new Canvas(playerOBitmap);
-		playerOTile.setBounds(0, 0, 120, 120);
-		playerOTile.draw(playerOCanvas);
-		setmPlayerOBitmap(playerOBitmap);
-
-	}
-
 	@Override
 	public void onDraw(Canvas canvas) {
 		// super.onDraw(canvas);
 
-		// // Draw the background
+		// Draw the background
 		canvas.drawBitmap(mBackgroundBitmap, 0, 0, null);
 
+		// Cycle through the TicTacToe board and draw any X's or O's as necessary
+		// Todo: set the padding as a variable
+		// 		 set the pixelFactor as a variable
 		for (int x = 0; x < mGameBoardCells.length; x++) {
 			if (mGameBoardCells[x] == TicTacToeBoard.CellStatus.PLAYER_O)
 				canvas.drawBitmap(mPlayerOBitmap, (x % 3 * 160 + 20),
@@ -108,14 +87,6 @@ public class CanvasView extends View {
 						(x / 3 * 160 + 20), null);
 		}
 
-		// // Draw player O
-		// canvas.drawBitmap(playerO, 20, 20, null);
-		// canvas.drawBitmap(playerO, 180, 180, null);
-		// canvas.drawBitmap(playerO, 340, 340, null);
-		//
-		// canvas.drawBitmap(playerX, 340, 20, null);
-		//
-		// //this.invalidate();
 	}
 
 	protected Bitmap loadBitmap(Context context, int resourceId) {

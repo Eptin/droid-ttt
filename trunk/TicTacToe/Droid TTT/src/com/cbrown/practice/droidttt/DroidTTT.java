@@ -58,8 +58,8 @@ public class DroidTTT extends Activity {
 			
 			int pixelFactor = 160;
 
-			int xTranslated = (rawX <= (pixelFactor * 3)?  rawX / 160 : 9);
-			int yTranslated = rawY / 160 * 3;
+			int xTranslated = rawX / pixelFactor;
+			int yTranslated = rawY / pixelFactor * 3;
 
 			int currentGameStatus = ticTacToeBoard
 					.getGameStatusAndCheckForWinner();
@@ -76,18 +76,11 @@ public class DroidTTT extends Activity {
 			// "\nBameboard Contrib from Y: " + (int) rawY / 160 * 3 +
 			// "\nGameboard cell: " + gameBoardCell, Toast.LENGTH_LONG).show();
 
+			
 			// Pre-turn Check
-			// if (currentGameStatus == TicTacToeBoard.GameStatus.GAME_IN_PLAY)
-			// if (gameBoardCell < 9) {
-			// ticTacToeBoard.consumeTurn(gameBoardCell);
-			// //canvasView.invalidate();
-			// currentGameStatus =
-			// ticTacToeBoard.getGameStatusAndCheckForWinner();
-			// }
-
 			switch (currentGameStatus) {
 			case TicTacToeBoard.GameStatus.GAME_IN_PLAY:
-				if (gameBoardCell < 9) {
+				if (xTranslated < 3) {
 					ticTacToeBoard.consumeTurn(gameBoardCell);
 					currentGameStatus = ticTacToeBoard
 							.getGameStatusAndCheckForWinner();
@@ -118,7 +111,6 @@ public class DroidTTT extends Activity {
 				break;
 			default:
 				break;
-
 			}
 
 			canvasView.invalidate();
