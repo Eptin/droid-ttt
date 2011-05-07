@@ -49,6 +49,26 @@ public class DroidTTT extends Activity {
 		//
 
 	}
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onRestoreInstanceState(android.os.Bundle)
+	 */
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onRestoreInstanceState(savedInstanceState);
+	}
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onSaveInstanceState(android.os.Bundle)
+	 */
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		// TODO Auto-generated method stub
+		outState.putIntArray("gameBoardCells", ticTacToeBoard.getmGameBoardCells());
+		super.onSaveInstanceState(outState);
+	}
+	
 
 	View.OnTouchListener mTouchListener = new OnTouchListener() {
 		@Override
@@ -80,6 +100,7 @@ public class DroidTTT extends Activity {
 			// Pre-turn Check
 			switch (currentGameStatus) {
 			case TicTacToeBoard.GameStatus.GAME_IN_PLAY:
+				// Out of bounds check
 				if (xTranslated < 3 && yTranslated <= 6) {
 					ticTacToeBoard.consumeTurn(gameBoardCell);
 					currentGameStatus = ticTacToeBoard
