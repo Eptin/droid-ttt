@@ -80,7 +80,7 @@ public class DroidTTT extends Activity {
 			// Pre-turn Check
 			switch (currentGameStatus) {
 			case TicTacToeBoard.GameStatus.GAME_IN_PLAY:
-				if (xTranslated < 3) {
+				if (xTranslated < 3 && yTranslated <= 6) {
 					ticTacToeBoard.consumeTurn(gameBoardCell);
 					currentGameStatus = ticTacToeBoard
 							.getGameStatusAndCheckForWinner();
