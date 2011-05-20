@@ -3,7 +3,7 @@
 	android:layout_height="match_parent">
 	
 	<com.cbrown.practice.droidttt.CanvasView
-	 android:id="@+id/cavasView"
+	 android:id="@+id/canvasView"
 		android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tileSize="24"

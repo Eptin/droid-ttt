@@ -18,7 +18,8 @@ public class CanvasView extends View {
 	private Bitmap mPlayerXBitmap;
 
 	private static BitmapFactory.Options sBitmapOptions = new BitmapFactory.Options();
-
+	private int mPixelFactor;
+	
 	public CanvasView(Context context) {
 		super(context);
 		// TODO Auto-generated constructor stub
@@ -66,6 +67,14 @@ public class CanvasView extends View {
 		return mGameBoardCells;
 	}
 
+	public void setPixelFactor(int pixelFactor) {
+		this.mPixelFactor = pixelFactor;
+	}
+
+	public int getPixelFactor() {
+		return mPixelFactor;
+	}
+
 	@Override
 	public void onDraw(Canvas canvas) {
 		// super.onDraw(canvas);
@@ -78,11 +87,11 @@ public class CanvasView extends View {
 		// 		 set the pixelFactor as a variable
 		for (int x = 0; x < mGameBoardCells.length; x++) {
 			if (mGameBoardCells[x] == TicTacToeBoard.CellStatus.PLAYER_O)
-				canvas.drawBitmap(mPlayerOBitmap, (x % 3 * 160 + 20),
-						(x / 3 * 160 + 20), null);
+				canvas.drawBitmap(mPlayerOBitmap, (x % 3 * mPixelFactor + 20),
+						(x / 3 * mPixelFactor + 20), null);
 			else if (mGameBoardCells[x] == TicTacToeBoard.CellStatus.PLAYER_X)
-				canvas.drawBitmap(mPlayerXBitmap, (x % 3 * 160 + 20),
-						(x / 3 * 160 + 20), null);
+				canvas.drawBitmap(mPlayerXBitmap, (x % 3 * mPixelFactor + 20),
+						(x / 3 * mPixelFactor + 20), null);
 		}
 
 	}

@@ -41,6 +41,22 @@ public class TicTacToeBoard {
 	public void setCellStatus(int cell, int status) {
 		getmGameBoardCells()[cell] = status;
 	}
+	
+	public void setmCurrentPlayer (int thePlayer) {
+		this.mCurrentPlayer = thePlayer;
+	}
+	
+	public int getmCurrentPlayer () {
+		return this.mCurrentPlayer;
+	}
+	
+	public void setmGameBoardCells(int[] mGameBoardCells) {
+		this.mGameBoardCells = mGameBoardCells;
+	}
+
+	public int[] getmGameBoardCells() {
+		return mGameBoardCells;
+	}
 
 	public void consumeTurn(int attemptedCell) {
 		// If a move was made, set the targeted cell to the current player, and
@@ -124,19 +140,10 @@ public class TicTacToeBoard {
 		mCurrentPlayer = CellStatus.PLAYER_X;
 	}
 
-	public void setmGameBoardCells(int[] mGameBoardCells) {
-		this.mGameBoardCells = mGameBoardCells;
-	}
-
-	public int[] getmGameBoardCells() {
-		return mGameBoardCells;
-	}
-
 	public static final class CellStatus {
 		public static final int EMPTY = 0;
 		public static final int PLAYER_X = 1;
 		public static final int PLAYER_O = 2;
-
 	}
 
 	public static final class GameStatus {

@@ -2,6 +2,7 @@ package com.cbrown.practice.droidttt;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -11,38 +12,50 @@ public class DroidTTT extends Activity {
 
 	CanvasView canvasView;
 	TicTacToeBoard ticTacToeBoard;
-
+	DisplayMetrics dm;
+	
+	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.my_layout);
 
-		canvasView = (CanvasView) findViewById(R.id.cavasView);
+		canvasView = (CanvasView) findViewById(R.id.canvasView);
 		canvasView.setOnTouchListener(mTouchListener);
 
 		ticTacToeBoard = new TicTacToeBoard();
-
-		ticTacToeBoard.resetBoard();
-
+		
+		// Check to see if there was a saved state and recover if so, otherwise start a new game
+		if (savedInstanceState != null) {
+			ticTacToeBoard.setmGameBoardCells(savedInstanceState.getIntArray("gameBoardCells"));
+			ticTacToeBoard.setmCurrentPlayer(savedInstanceState.getInt("currentPlayer"));
+		}
+		else ticTacToeBoard.resetBoard();
+		
+		// Load the background, player X and player O bitmaps
 		ticTacToeBoard.setmBoardBitmap(canvasView.loadBitmap(this,
-				R.drawable.new_grid));
+				R.drawable.game_grid));
 		canvasView.setmBackgroundBitmap(ticTacToeBoard.getmBoardBitmap());
 
 		ticTacToeBoard.setmPlayerOBitmap(canvasView.loadBitmap(this,
-				R.drawable.android));
+				R.drawable.player_o));
 		canvasView.setmPlayerOBitmap(ticTacToeBoard.getmPlayerOBitmap());
 
 		ticTacToeBoard.setmPlayerXBitmap(canvasView.loadBitmap(this,
-				R.drawable.android2));
+				R.drawable.player_x));
 		canvasView.setmPlayerXBitmap(ticTacToeBoard.getmPlayerXBitmap());
 
 		canvasView.setmGameBoardCells(ticTacToeBoard.getmGameBoardCells());
+		
+		// Draw the board
 		canvasView.invalidate();
 
-		// DisplayMetrics dm = new DisplayMetrics();
-		// getWindowManager().getDefaultDisplay().getMetrics(dm);
-		//
+		dm = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(dm);
+		int pixelFactor = (dm.widthPixels < dm.heightPixels? dm.widthPixels : dm.heightPixels) / 3;
+		canvasView.setPixelFactor(pixelFactor);
+		
 		// Toast.makeText(this,
 		// "Width: " + dm.widthPixels + "\n" +
 		// "Height: " + dm.heightPixels + "\n", Toast.LENGTH_LONG).show();
@@ -50,34 +63,20 @@ public class DroidTTT extends Activity {
 
 	}
 	
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onRestoreInstanceState(android.os.Bundle)
-	 */
-	@Override
-	protected void onRestoreInstanceState(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		super.onRestoreInstanceState(savedInstanceState);
-	}
-
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onSaveInstanceState(android.os.Bundle)
-	 */
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		// TODO Auto-generated method stub
-		outState.putIntArray("gameBoardCells", ticTacToeBoard.getmGameBoardCells());
 		super.onSaveInstanceState(outState);
+		outState.putIntArray("gameBoardCells", ticTacToeBoard.getmGameBoardCells());
+		outState.putInt("currentPlayer", ticTacToeBoard.getmCurrentPlayer());
 	}
-	
 
 	View.OnTouchListener mTouchListener = new OnTouchListener() {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			int rawX = (int) event.getRawX();
 			int rawY = (int) event.getRawY();
-			
-			int pixelFactor = 160;
-
+			int pixelFactor = canvasView.getPixelFactor();
 			int xTranslated = rawX / pixelFactor;
 			int yTranslated = rawY / pixelFactor * 3;
 
@@ -97,41 +96,47 @@ public class DroidTTT extends Activity {
 			// "\nGameboard cell: " + gameBoardCell, Toast.LENGTH_LONG).show();
 
 			
-			// Pre-turn Check
+			/* PRE TURN CHECK
+			 * If the game is still in play and the move 
+			 * was not out of bounds, consume a turn.
+			 * Otherwise reset the board and redraw
+			 */
 			switch (currentGameStatus) {
-			case TicTacToeBoard.GameStatus.GAME_IN_PLAY:
-				// Out of bounds check
-				if (xTranslated < 3 && yTranslated <= 6) {
-					ticTacToeBoard.consumeTurn(gameBoardCell);
-					currentGameStatus = ticTacToeBoard
-							.getGameStatusAndCheckForWinner();
-				}
-					break;
-			case TicTacToeBoard.GameStatus.GAME_OVER_TIE:
-			case TicTacToeBoard.GameStatus.PLAYER_O_WINS:
-			case TicTacToeBoard.GameStatus.PLAYER_X_WINS:
-			default:
-				ticTacToeBoard.resetBoard();
-				canvasView.invalidate();
-				return false;
+				case TicTacToeBoard.GameStatus.GAME_IN_PLAY:
+					// Out of bounds check
+					if (xTranslated < 3 && yTranslated <= 6) {
+						ticTacToeBoard.consumeTurn(gameBoardCell);
+						currentGameStatus = ticTacToeBoard
+								.getGameStatusAndCheckForWinner();
+					}
+						break;
+				case TicTacToeBoard.GameStatus.GAME_OVER_TIE:
+				case TicTacToeBoard.GameStatus.PLAYER_O_WINS:
+				case TicTacToeBoard.GameStatus.PLAYER_X_WINS:
+				default:
+					ticTacToeBoard.resetBoard();
+					canvasView.invalidate();
+					return false;
 			}
 
-			// If the game is over, display a message and reset the game
+			/* POST TURN CHECK
+			 * If the game is over, display the message
+			 */
 			switch (currentGameStatus) {
-			case TicTacToeBoard.GameStatus.PLAYER_O_WINS:
-				Toast.makeText(v.getContext(), "Player O Wins!",
-						Toast.LENGTH_LONG).show();
-				break;
-			case TicTacToeBoard.GameStatus.PLAYER_X_WINS:
-				Toast.makeText(v.getContext(), "Player X Wins!",
-						Toast.LENGTH_LONG).show();
-				break;
-			case TicTacToeBoard.GameStatus.GAME_OVER_TIE:
-				Toast.makeText(v.getContext(), "It was a Tie!",
-						Toast.LENGTH_LONG).show();
-				break;
-			default:
-				break;
+				case TicTacToeBoard.GameStatus.PLAYER_O_WINS:
+					Toast.makeText(v.getContext(), "Player O Wins!",
+							Toast.LENGTH_LONG).show();
+					break;
+				case TicTacToeBoard.GameStatus.PLAYER_X_WINS:
+					Toast.makeText(v.getContext(), "Player X Wins!",
+							Toast.LENGTH_LONG).show();
+					break;
+				case TicTacToeBoard.GameStatus.GAME_OVER_TIE:
+					Toast.makeText(v.getContext(), "It was a Tie!",
+							Toast.LENGTH_LONG).show();
+					break;
+				default:
+					break;
 			}
 
 			canvasView.invalidate();
