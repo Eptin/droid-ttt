@@ -87,11 +87,11 @@ public class CanvasView extends View {
 		// 		 set the pixelFactor as a variable
 		for (int x = 0; x < mGameBoardCells.length; x++) {
 			if (mGameBoardCells[x] == TicTacToeBoard.CellStatus.PLAYER_O)
-				canvas.drawBitmap(mPlayerOBitmap, (x % 3 * mPixelFactor + 20),
-						(x / 3 * mPixelFactor + 20), null);
+				canvas.drawBitmap(mPlayerOBitmap, (x % 3 * mPixelFactor + mPixelFactor / 8),
+						(x / 3 * mPixelFactor + mPixelFactor / 8), null);
 			else if (mGameBoardCells[x] == TicTacToeBoard.CellStatus.PLAYER_X)
-				canvas.drawBitmap(mPlayerXBitmap, (x % 3 * mPixelFactor + 20),
-						(x / 3 * mPixelFactor + 20), null);
+				canvas.drawBitmap(mPlayerXBitmap, (x % 3 * mPixelFactor + mPixelFactor / 8),
+						(x / 3 * mPixelFactor + mPixelFactor / 8), null);
 		}
 
 	}
