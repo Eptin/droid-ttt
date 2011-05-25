@@ -3,10 +3,13 @@ package com.cbrown.practice.droidttt;
 import java.io.IOException;
 import java.io.InputStream;
 
+import android.R.color;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -77,23 +80,31 @@ public class CanvasView extends View {
 
 	@Override
 	public void onDraw(Canvas canvas) {
-		// super.onDraw(canvas);
-
+		super.onDraw(canvas);
+		Rect gridScale = new Rect(0, 0, mPixelFactor * 3, mPixelFactor * 3);
+		int playerScaledWidthHeight = mPixelFactor / 4 * 3;
 		// Draw the background
-		canvas.drawBitmap(mBackgroundBitmap, 0, 0, null);
+		//canvas.drawBitmap(mBackgroundBitmap, 0, 0, null);
+		//canvas.drawColor(Color.BLUE);
+		
+		// Draw the Background to scale, by multiplying the pixelFactor by 3 you get the height/width of the square grid
+		canvas.drawBitmap(mBackgroundBitmap, null, gridScale, null);
 
 		// Cycle through the TicTacToe board and draw any X's or O's as necessary
 		// Todo: set the padding as a variable
 		// 		 set the pixelFactor as a variable
 		for (int x = 0; x < mGameBoardCells.length; x++) {
+			Bitmap tempBitmap = null;
+			int xTranslatedToScreenCoordinate = x % 3 * mPixelFactor + mPixelFactor / 8;
+			int yTranslatedToScreenCoordinate = x / 3 * mPixelFactor + mPixelFactor / 8;
 			if (mGameBoardCells[x] == TicTacToeBoard.CellStatus.PLAYER_O)
-				canvas.drawBitmap(mPlayerOBitmap, (x % 3 * mPixelFactor + mPixelFactor / 8),
-						(x / 3 * mPixelFactor + mPixelFactor / 8), null);
+				tempBitmap = mPlayerOBitmap;
 			else if (mGameBoardCells[x] == TicTacToeBoard.CellStatus.PLAYER_X)
-				canvas.drawBitmap(mPlayerXBitmap, (x % 3 * mPixelFactor + mPixelFactor / 8),
-						(x / 3 * mPixelFactor + mPixelFactor / 8), null);
+				tempBitmap = mPlayerXBitmap;
+			if (tempBitmap != null) 
+				canvas.drawBitmap(tempBitmap, null, new Rect(xTranslatedToScreenCoordinate,
+						yTranslatedToScreenCoordinate, xTranslatedToScreenCoordinate + playerScaledWidthHeight, yTranslatedToScreenCoordinate + playerScaledWidthHeight), null);
 		}
-
 	}
 
 	protected Bitmap loadBitmap(Context context, int resourceId) {

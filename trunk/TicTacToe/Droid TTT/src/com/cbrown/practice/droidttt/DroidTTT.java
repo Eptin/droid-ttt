@@ -56,10 +56,8 @@ public class DroidTTT extends Activity {
 		int pixelFactor = (dm.widthPixels < dm.heightPixels? dm.widthPixels : dm.heightPixels) / 3;
 		canvasView.setPixelFactor(pixelFactor);
 		
-		// Toast.makeText(this,
-		// "Width: " + dm.widthPixels + "\n" +
-		// "Height: " + dm.heightPixels + "\n", Toast.LENGTH_LONG).show();
-		//
+		 Toast.makeText(this,"PixelFactor: " + pixelFactor, Toast.LENGTH_LONG).show();
+		
 
 	}
 	
@@ -125,20 +123,20 @@ public class DroidTTT extends Activity {
 			switch (currentGameStatus) {
 				case TicTacToeBoard.GameStatus.PLAYER_O_WINS:
 					Toast.makeText(v.getContext(), "Player O Wins!",
-							Toast.LENGTH_LONG).show();
+							Toast.LENGTH_SHORT).show();
 					break;
 				case TicTacToeBoard.GameStatus.PLAYER_X_WINS:
 					Toast.makeText(v.getContext(), "Player X Wins!",
-							Toast.LENGTH_LONG).show();
+							Toast.LENGTH_SHORT).show();
 					break;
 				case TicTacToeBoard.GameStatus.GAME_OVER_TIE:
 					Toast.makeText(v.getContext(), "It was a Tie!",
-							Toast.LENGTH_LONG).show();
+							Toast.LENGTH_SHORT).show();
 					break;
 				default:
 					break;
 			}
-
+			
 			canvasView.invalidate();
 			return false;
 		}
