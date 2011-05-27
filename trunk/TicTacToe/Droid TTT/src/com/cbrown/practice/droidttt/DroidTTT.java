@@ -56,7 +56,7 @@ public class DroidTTT extends Activity {
 		int pixelFactor = (dm.widthPixels < dm.heightPixels? dm.widthPixels : dm.heightPixels) / 3;
 		canvasView.setPixelFactor(pixelFactor);
 		
-		 Toast.makeText(this,"PixelFactor: " + pixelFactor, Toast.LENGTH_LONG).show();
+//		Toast.makeText(this,"PixelFactor: " + pixelFactor, Toast.LENGTH_LONG).show();
 		
 
 	}

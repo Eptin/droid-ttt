@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
@@ -80,7 +81,7 @@ public class CanvasView extends View {
 
 	@Override
 	public void onDraw(Canvas canvas) {
-		super.onDraw(canvas);
+		//super.onDraw(canvas);
 		Rect gridScale = new Rect(0, 0, mPixelFactor * 3, mPixelFactor * 3);
 		int playerScaledWidthHeight = mPixelFactor / 4 * 3;
 		// Draw the background
@@ -89,7 +90,12 @@ public class CanvasView extends View {
 		
 		// Draw the Background to scale, by multiplying the pixelFactor by 3 you get the height/width of the square grid
 		canvas.drawBitmap(mBackgroundBitmap, null, gridScale, null);
-
+		
+//	Line paint test		
+//		Paint linePaint = new Paint();
+//		linePaint.setColor(Color.GREEN);
+//		canvas.drawLine(0, 0, 480, 480, linePaint);
+		
 		// Cycle through the TicTacToe board and draw any X's or O's as necessary
 		// Todo: set the padding as a variable
 		// 		 set the pixelFactor as a variable
