@@ -28,36 +28,42 @@ public class DroidTTT extends Activity {
 		
 		// Check to see if there was a saved state and recover if so, otherwise start a new game
 		if (savedInstanceState != null) {
-			ticTacToeBoard.setmGameBoardCells(savedInstanceState.getIntArray("gameBoardCells"));
-			ticTacToeBoard.setmCurrentPlayer(savedInstanceState.getInt("currentPlayer"));
+			ticTacToeBoard.setGameBoardCells(savedInstanceState.getIntArray("gameBoardCells"));
+			ticTacToeBoard.setCurrentPlayer(savedInstanceState.getInt("currentPlayer"));
+			ticTacToeBoard.setNumCellsPerRow(savedInstanceState.getInt("numCellsPerRow"));
+			
 		}
-		else ticTacToeBoard.resetBoard();
+		else {
+			ticTacToeBoard.setGameType(TicTacToeBoard.GameType.GAME_6_X_6);
+			ticTacToeBoard.resetGame();
+		}
 		
 		// Load the background, player X and player O bitmaps
-		ticTacToeBoard.setmBoardBitmap(canvasView.loadBitmap(this,
-				R.drawable.game_grid));
-		canvasView.setmBackgroundBitmap(ticTacToeBoard.getmBoardBitmap());
+		ticTacToeBoard.setBoardBitmap(canvasView.loadBitmap(this,
+				R.drawable.wood_background));
+		canvasView.setmBackgroundBitmap(ticTacToeBoard.getBoardBitmap());
 
-		ticTacToeBoard.setmPlayerOBitmap(canvasView.loadBitmap(this,
-				R.drawable.player_o));
-		canvasView.setmPlayerOBitmap(ticTacToeBoard.getmPlayerOBitmap());
+		ticTacToeBoard.setPlayerOBitmap(canvasView.loadBitmap(this,
+				R.drawable.o));
+		canvasView.setmPlayerOBitmap(ticTacToeBoard.getPlayerOBitmap());
 
-		ticTacToeBoard.setmPlayerXBitmap(canvasView.loadBitmap(this,
-				R.drawable.player_x));
-		canvasView.setmPlayerXBitmap(ticTacToeBoard.getmPlayerXBitmap());
+		ticTacToeBoard.setPlayerXBitmap(canvasView.loadBitmap(this,
+				R.drawable.x));
+		canvasView.setmPlayerXBitmap(ticTacToeBoard.getPlayerXBitmap());
 
-		canvasView.setmGameBoardCells(ticTacToeBoard.getmGameBoardCells());
+		canvasView.setmGameBoardCells(ticTacToeBoard.getGameBoardCells());
+		canvasView.setNumCellsPerRow(ticTacToeBoard.getNumCellsPerRow());
 		
 		// Draw the board
 		canvasView.invalidate();
 
 		dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
-		int pixelFactor = (dm.widthPixels < dm.heightPixels? dm.widthPixels : dm.heightPixels) / 3;
+		int pixelFactor = (dm.widthPixels < dm.heightPixels? dm.widthPixels : dm.heightPixels) / ticTacToeBoard.getNumCellsPerRow();
+		
 		canvasView.setPixelFactor(pixelFactor);
 		
-//		Toast.makeText(this,"PixelFactor: " + pixelFactor, Toast.LENGTH_LONG).show();
-		
+		//Toast.makeText(this,"PixelFactor: " + pixelFactor, Toast.LENGTH_LONG).show();
 
 	}
 	
@@ -65,8 +71,9 @@ public class DroidTTT extends Activity {
 	protected void onSaveInstanceState(Bundle outState) {
 		// TODO Auto-generated method stub
 		super.onSaveInstanceState(outState);
-		outState.putIntArray("gameBoardCells", ticTacToeBoard.getmGameBoardCells());
-		outState.putInt("currentPlayer", ticTacToeBoard.getmCurrentPlayer());
+		outState.putIntArray("gameBoardCells", ticTacToeBoard.getGameBoardCells());
+		outState.putInt("currentPlayer", ticTacToeBoard.getCurrentPlayer());
+		outState.putInt("numCellsPerRow", ticTacToeBoard.getNumCellsPerRow());
 	}
 
 	View.OnTouchListener mTouchListener = new OnTouchListener() {
@@ -76,10 +83,10 @@ public class DroidTTT extends Activity {
 			int rawY = (int) event.getRawY();
 			int pixelFactor = canvasView.getPixelFactor();
 			int xTranslated = rawX / pixelFactor;
-			int yTranslated = rawY / pixelFactor * 3;
-
+			int yTranslated = rawY / pixelFactor * ticTacToeBoard.getNumCellsPerRow();
+			
 			int currentGameStatus = ticTacToeBoard
-					.getGameStatusAndCheckForWinner();
+					.getGameStatus();
 			int gameBoardCell = xTranslated + yTranslated;
 
 			// Toast.makeText(v.getContext(), "X: " +
@@ -102,17 +109,17 @@ public class DroidTTT extends Activity {
 			switch (currentGameStatus) {
 				case TicTacToeBoard.GameStatus.GAME_IN_PLAY:
 					// Out of bounds check
-					if (xTranslated < 3 && yTranslated <= 6) {
+					if (xTranslated < ticTacToeBoard.getNumCellsPerRow() && yTranslated <= (ticTacToeBoard.getNumCellsPerRow() -1) * ticTacToeBoard.getNumCellsPerRow()) {
 						ticTacToeBoard.consumeTurn(gameBoardCell);
 						currentGameStatus = ticTacToeBoard
-								.getGameStatusAndCheckForWinner();
+								.getGameStatus();
 					}
 						break;
 				case TicTacToeBoard.GameStatus.GAME_OVER_TIE:
 				case TicTacToeBoard.GameStatus.PLAYER_O_WINS:
 				case TicTacToeBoard.GameStatus.PLAYER_X_WINS:
 				default:
-					ticTacToeBoard.resetBoard();
+					ticTacToeBoard.resetGame();
 					canvasView.invalidate();
 					return false;
 			}

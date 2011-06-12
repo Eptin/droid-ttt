@@ -6,63 +6,105 @@ public class TicTacToeBoard {
 	private Bitmap mBoardBitmap;
 	private Bitmap mPlayerXBitmap;
 	private Bitmap mPlayerOBitmap;
-
-	private int[] mGameBoardCells = new int[9];
+	
+	private int[] mGameBoardCells = new int[36];
+	
+	private int mGameType;
+	private int mNumCellsPerRow;
+	private int mGameStatus;
 	private int mCurrentPlayer;
+	
 
-	public void setmBoardBitmap(Bitmap mBoardBitmap) {
+	public void setBoardBitmap(Bitmap mBoardBitmap) {
 		this.mBoardBitmap = mBoardBitmap;
 	}
 
-	public Bitmap getmBoardBitmap() {
+	public Bitmap getBoardBitmap() {
 		return mBoardBitmap;
 	}
 
-	public void setmPlayerXBitmap(Bitmap mPlayerXBitmap) {
+	public void setPlayerXBitmap(Bitmap mPlayerXBitmap) {
 		this.mPlayerXBitmap = mPlayerXBitmap;
 	}
 
-	public Bitmap getmPlayerXBitmap() {
+	public Bitmap getPlayerXBitmap() {
 		return mPlayerXBitmap;
 	}
 
-	public void setmPlayerOBitmap(Bitmap mPlayerOBitmap) {
+	public void setPlayerOBitmap(Bitmap mPlayerOBitmap) {
 		this.mPlayerOBitmap = mPlayerOBitmap;
 	}
 
-	public Bitmap getmPlayerOBitmap() {
+	public Bitmap getPlayerOBitmap() {
 		return mPlayerOBitmap;
 	}
 
+	public void setGameType(int mGameType) {
+		this.mGameType = mGameType;
+		
+		switch (getGameType()) {
+			case GameType.GAME_3_X_3: 
+				mNumCellsPerRow = 3;
+				break;
+			case GameType.GAME_4_X_4:
+				mNumCellsPerRow = 4;
+				break;
+			case GameType.GAME_6_X_6:
+				mNumCellsPerRow = 6;
+				break;
+		}
+	}
+
+	public int getGameType() {
+		return mGameType;
+	}
+
+	public void setGameStatus(int mGameStatus) {
+		this.mGameStatus = mGameStatus;
+	}
+
+	public int getGameStatus() {
+		return mGameStatus;
+	}
+
+	public void setNumCellsPerRow(int mNumCellsPerRow) {
+		this.mNumCellsPerRow = mNumCellsPerRow;
+	}
+
+	public int getNumCellsPerRow() {
+		return mNumCellsPerRow;
+	}
+
 	public int getCellStatus(int cell) {
-		return getmGameBoardCells()[cell];
+		return getGameBoardCells()[cell];
 	}
 
 	public void setCellStatus(int cell, int status) {
-		getmGameBoardCells()[cell] = status;
+		getGameBoardCells()[cell] = status;
 	}
 	
-	public void setmCurrentPlayer (int thePlayer) {
+	public void setCurrentPlayer (int thePlayer) {
 		this.mCurrentPlayer = thePlayer;
 	}
 	
-	public int getmCurrentPlayer () {
+	public int getCurrentPlayer () {
 		return this.mCurrentPlayer;
 	}
 	
-	public void setmGameBoardCells(int[] mGameBoardCells) {
+	public void setGameBoardCells(int[] mGameBoardCells) {
 		this.mGameBoardCells = mGameBoardCells;
 	}
 
-	public int[] getmGameBoardCells() {
+	public int[] getGameBoardCells() {
 		return mGameBoardCells;
 	}
 
 	public void consumeTurn(int attemptedCell) {
 		// If a move was made, set the targeted cell to the current player, and
 		// then cycle the player
-		if (getmGameBoardCells()[attemptedCell] == CellStatus.EMPTY) {
-			getmGameBoardCells()[attemptedCell] = mCurrentPlayer;
+		if (getGameBoardCells()[attemptedCell] == CellStatus.EMPTY) {
+			getGameBoardCells()[attemptedCell] = mCurrentPlayer;
+			mGameStatus = getGameStatusAndCheckForWinner(mCurrentPlayer);
 			if (mCurrentPlayer == CellStatus.PLAYER_O)
 				mCurrentPlayer = CellStatus.PLAYER_X;
 			else
@@ -70,74 +112,77 @@ public class TicTacToeBoard {
 		}
 	}
 
-	public int getGameStatusAndCheckForWinner() {
-		for (int x = 0; x < 3; x++) {
-			// Check each row for Player X
-			if (getmGameBoardCells()[(x * 3)] == TicTacToeBoard.CellStatus.PLAYER_X
-					&& getmGameBoardCells()[(x * 3 + 1)] == TicTacToeBoard.CellStatus.PLAYER_X
-					&& getmGameBoardCells()[(x * 3 + 2)] == TicTacToeBoard.CellStatus.PLAYER_X)
-				return TicTacToeBoard.GameStatus.PLAYER_X_WINS;
-
-			// Check each column X for Player X
-			if (getmGameBoardCells()[(x)] == TicTacToeBoard.CellStatus.PLAYER_X
-					&& getmGameBoardCells()[(x + 3)] == TicTacToeBoard.CellStatus.PLAYER_X
-					&& getmGameBoardCells()[(x + 6)] == TicTacToeBoard.CellStatus.PLAYER_X)
-				return TicTacToeBoard.GameStatus.PLAYER_X_WINS;
-
-			// Check Row X for Player O
-			if (getmGameBoardCells()[(x * 3)] == TicTacToeBoard.CellStatus.PLAYER_O
-					&& getmGameBoardCells()[(x * 3 + 1)] == TicTacToeBoard.CellStatus.PLAYER_O
-					&& getmGameBoardCells()[(x * 3 + 2)] == TicTacToeBoard.CellStatus.PLAYER_O)
-				return TicTacToeBoard.GameStatus.PLAYER_O_WINS;
-
-			// Check Column X for Player O
-			if (getmGameBoardCells()[(x)] == TicTacToeBoard.CellStatus.PLAYER_O
-					&& getmGameBoardCells()[(x + 3)] == TicTacToeBoard.CellStatus.PLAYER_O
-					&& getmGameBoardCells()[(x + 6)] == TicTacToeBoard.CellStatus.PLAYER_O)
-				return TicTacToeBoard.GameStatus.PLAYER_O_WINS;
+	public int getGameStatusAndCheckForWinner(int lastPlayer) {
+		int currentCellOfCurrentRow;
+		int lastCellOfCurrentRow;
+		
+		int currentCellOfCurrentColumn; 
+		int lastCellOfCurrentColumn;
+		
+		int currentCellOfCurrentDiag;
+		int lastCellOfCurrentDiag;
+		for (int x = 0; x < mNumCellsPerRow; x++) {
+			
+			// Check each row to see if the last player won
+			currentCellOfCurrentRow = x * mNumCellsPerRow;
+			lastCellOfCurrentRow = x * mNumCellsPerRow + mNumCellsPerRow - 1;
+			while (mGameBoardCells[currentCellOfCurrentRow] == lastPlayer && currentCellOfCurrentRow <= lastCellOfCurrentRow) {
+				if (currentCellOfCurrentRow == lastCellOfCurrentRow)
+					return (lastPlayer == CellStatus.PLAYER_X? GameStatus.PLAYER_X_WINS : GameStatus.PLAYER_O_WINS);
+				currentCellOfCurrentRow++;
+			}
+			
+			// Check each column to see if the last player won
+			currentCellOfCurrentColumn = x;
+			lastCellOfCurrentColumn = mNumCellsPerRow * mNumCellsPerRow - mNumCellsPerRow + x;
+			while (mGameBoardCells[currentCellOfCurrentColumn] == lastPlayer && currentCellOfCurrentColumn <= lastCellOfCurrentColumn) {
+				if (currentCellOfCurrentColumn == lastCellOfCurrentColumn)
+					return (lastPlayer == CellStatus.PLAYER_X? GameStatus.PLAYER_X_WINS : GameStatus.PLAYER_O_WINS);
+				currentCellOfCurrentColumn += mNumCellsPerRow;
+			}			
 		}
-
-		// Check Diagonals for Player X
-		if (getmGameBoardCells()[(0)] == TicTacToeBoard.CellStatus.PLAYER_X
-				&& getmGameBoardCells()[(4)] == TicTacToeBoard.CellStatus.PLAYER_X
-				&& getmGameBoardCells()[(8)] == TicTacToeBoard.CellStatus.PLAYER_X)
-			return TicTacToeBoard.GameStatus.PLAYER_X_WINS;
-
-		if (getmGameBoardCells()[(6)] == TicTacToeBoard.CellStatus.PLAYER_X
-				&& getmGameBoardCells()[(4)] == TicTacToeBoard.CellStatus.PLAYER_X
-				&& getmGameBoardCells()[(2)] == TicTacToeBoard.CellStatus.PLAYER_X)
-			return TicTacToeBoard.GameStatus.PLAYER_X_WINS;
-
-		// Check Diagonals for Player O
-		if (getmGameBoardCells()[(0)] == TicTacToeBoard.CellStatus.PLAYER_O
-				&& getmGameBoardCells()[(4)] == TicTacToeBoard.CellStatus.PLAYER_O
-				&& getmGameBoardCells()[(8)] == TicTacToeBoard.CellStatus.PLAYER_O)
-			return TicTacToeBoard.GameStatus.PLAYER_O_WINS;
-
-		if (getmGameBoardCells()[(6)] == TicTacToeBoard.CellStatus.PLAYER_O
-				&& getmGameBoardCells()[(4)] == TicTacToeBoard.CellStatus.PLAYER_O
-				&& getmGameBoardCells()[(2)] == TicTacToeBoard.CellStatus.PLAYER_O)
-			return TicTacToeBoard.GameStatus.PLAYER_O_WINS;
-
-		boolean movesLeft = false;
-		for (int x = 0; x < getmGameBoardCells().length; x++) {
-			if (getmGameBoardCells()[x] == CellStatus.EMPTY)
-				movesLeft = true;
+		
+		
+		// Check the top-left to bottom-right diagonal
+		currentCellOfCurrentDiag = 0;
+		lastCellOfCurrentDiag = mNumCellsPerRow * mNumCellsPerRow - 1;
+		while (mGameBoardCells[currentCellOfCurrentDiag] == lastPlayer && currentCellOfCurrentDiag <= lastCellOfCurrentDiag) {
+			if (currentCellOfCurrentDiag == lastCellOfCurrentDiag)
+				return (lastPlayer == CellStatus.PLAYER_X? GameStatus.PLAYER_X_WINS : GameStatus.PLAYER_O_WINS);
+			currentCellOfCurrentDiag += mNumCellsPerRow + 1;
 		}
-
-		if (!movesLeft)
-			return GameStatus.GAME_OVER_TIE;
+		// Check first top-right to bottom-left diagonal
+		currentCellOfCurrentDiag = mNumCellsPerRow - 1;
+		lastCellOfCurrentDiag = mNumCellsPerRow * (mNumCellsPerRow - 1);
+		while (mGameBoardCells[currentCellOfCurrentDiag] == lastPlayer && currentCellOfCurrentDiag <= lastCellOfCurrentDiag) {
+			if (currentCellOfCurrentDiag == lastCellOfCurrentDiag)
+				return (lastPlayer == CellStatus.PLAYER_X? GameStatus.PLAYER_X_WINS : GameStatus.PLAYER_O_WINS);
+			currentCellOfCurrentDiag += mNumCellsPerRow - 1;
+		}
+		
+		// Check for a tie (all cells are filled)
+		int x = 0;
+		int lastCell = mNumCellsPerRow * mNumCellsPerRow - 1;
+		while (mGameBoardCells[x] != CellStatus.EMPTY && x <= lastCell) {
+			if (x == lastCell)
+				return GameStatus.GAME_OVER_TIE;
+			x++;
+		}		
+		
+		// If no one has won, and there is not a tie, then the game is still in play
 		return GameStatus.GAME_IN_PLAY;
 	}
-
-	public void resetBoard() {
+	
+	public void resetGame() {
+				
 		// Set each cell to EMPTY
-		for (int x = 0; x < getmGameBoardCells().length; x++) {
-			getmGameBoardCells()[x] = CellStatus.EMPTY;
+		for (int x = 0; x < getGameBoardCells().length; x++) {
+			getGameBoardCells()[x] = CellStatus.EMPTY;
 		}
-
 		// Set the first player to Player X;
 		mCurrentPlayer = CellStatus.PLAYER_X;
+		// Set the game status to in play
+		mGameStatus = GameStatus.GAME_IN_PLAY;
 	}
 
 	public static final class CellStatus {
@@ -151,6 +196,12 @@ public class TicTacToeBoard {
 		public static final int PLAYER_X_WINS = 1;
 		public static final int PLAYER_O_WINS = 2;
 		public static final int GAME_OVER_TIE = 3;
+	}
+	
+	public static final class GameType {
+		public static final int GAME_3_X_3 = 0;
+		public static final int GAME_4_X_4 = 1;
+		public static final int GAME_6_X_6 = 2;
 	}
 
 }
