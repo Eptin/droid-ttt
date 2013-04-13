@@ -1,4 +1,10 @@
-#summary a place to list the useful resouces
+== summary a place to list the useful resouces ==
+
+=== Android SDK stuff ===
+*Start here:  http://developer.android.com/index.html
+*Eclipse
+**Get subversive via Eclipse->Help->
+** use SVN KIT 1.3.8 (for SVN v1.6.x and earlier)
 
 
 http://images.my-addr.com/resize_png_online_tool-free_png_resizer_for_web.php
