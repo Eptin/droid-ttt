@@ -4,7 +4,9 @@
   * Start here:  http://developer.android.com/index.html
   * Eclipse
     * Get subversive via Eclipse->Help->Install New Software->Search->"subversive"
-    * Use SVN KIT 1.3.8 (for SVN v1.6.x and earlier)
+      * Use SVN KIT 1.3.8 (for SVN v1.6.x and earlier)
+      * URL: https://cbpoc.googlecode.com/svn
+      * Authentication: ex. cmanbrown@gmail.com...
 
 
 http://images.my-addr.com/resize_png_online_tool-free_png_resizer_for_web.php
