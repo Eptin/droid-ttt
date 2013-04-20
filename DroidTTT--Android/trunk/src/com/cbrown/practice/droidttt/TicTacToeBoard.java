@@ -3,6 +3,7 @@ package com.cbrown.practice.droidttt;
 import android.graphics.Bitmap;
 
 public class TicTacToeBoard {
+	//Declaring bitmaps
 	private Bitmap mBoardBitmap;
 	private Bitmap mPlayerXBitmap;
 	private Bitmap mPlayerOBitmap;
