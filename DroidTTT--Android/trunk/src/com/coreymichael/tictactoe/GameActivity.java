@@ -1,4 +1,4 @@
-package com.cbrown.practice.droidttt;
+package com.coreymichael.tictactoe;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.Toast;
 
-public class DroidTTT extends Activity {
+public class GameActivity extends Activity {
 
 	CanvasView canvasView;
 	TicTacToeBoard ticTacToeBoard;
@@ -34,7 +34,7 @@ public class DroidTTT extends Activity {
 			
 		}
 		else {
-			ticTacToeBoard.setGameType(TicTacToeBoard.GameType.GAME_6_X_6);
+			ticTacToeBoard.setGameType(TicTacToeBoard.GameType.GAME_4_X_4);
 			ticTacToeBoard.resetGame();
 		}
 		

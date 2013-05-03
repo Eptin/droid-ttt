@@ -1,4 +1,4 @@
-package com.cbrown.practice.droidttt;
+package com.coreymichael.tictactoe;
 
 import java.io.IOException;
 import java.io.InputStream;
