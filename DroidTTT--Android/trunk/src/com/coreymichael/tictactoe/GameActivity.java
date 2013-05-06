@@ -85,8 +85,7 @@ public class GameActivity extends Activity {
 			int xTranslated = rawX / pixelFactor;
 			int yTranslated = rawY / pixelFactor * ticTacToeBoard.getNumCellsPerRow();
 			
-			int currentGameStatus = ticTacToeBoard
-					.getGameStatus();
+			int currentGameStatus = ticTacToeBoard.getGameStatus();
 			int gameBoardCell = xTranslated + yTranslated;
 
 			// Toast.makeText(v.getContext(), "X: " +
