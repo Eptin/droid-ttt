@@ -1,6 +1,8 @@
 == summary a place to list the useful resouces ==
 === General Coding ===
   * [http://equivalence.co.uk/archives/101 How to write beautiful code]
+  * [http://www.joelonsoftware.com/articles/fog0000000043.html Joel Test - 12 steps to better code]
+  * [http://equivalence.co.uk/archives/99 Abolish the switch statement]
 
 === Android SDK stuff ===
   * Start here:  http://developer.android.com/index.html
