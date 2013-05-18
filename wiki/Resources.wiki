@@ -16,3 +16,7 @@ http://en.wikipedia.org/wiki/Graphic_display_resolutions#WQVGA_.28432.C3.97240.2
 http://android-developers.blogspot.com/2010/06/game-development-for-android-quick.html
 
 http://android-developers.blogspot.com/index.html
+
+==== Android LifeCycle ====
+  * [http://developer.android.com/reference/android/app/Activity.html#Activity Lifecycle LifeCycle workflow]
+  * [http://developer.android.com/guide/components/activities.html#Lifecycle Managing Activity LifeCycle]
