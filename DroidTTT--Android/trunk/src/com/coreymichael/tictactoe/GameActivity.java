@@ -1,6 +1,7 @@
 package com.coreymichael.tictactoe;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
@@ -25,7 +26,7 @@ public class GameActivity extends Activity {
 		canvasView.setOnTouchListener(mTouchListener);
 
 		ticTacToeBoard = new TicTacToeBoard();
-		
+			
 		// Check to see if there was a saved state and recover if so, otherwise start a new game
 		if (savedInstanceState != null) {
 			ticTacToeBoard.setGameBoardCells(savedInstanceState.getIntArray("gameBoardCells"));
@@ -34,7 +35,10 @@ public class GameActivity extends Activity {
 			
 		}
 		else {
-			ticTacToeBoard.setGameType(TicTacToeBoard.GameType.GAME_4_X_4);
+			Intent intent = getIntent();
+			int gameType = TicTacToeBoard.GameType.getGameTypeFromString((intent.getStringExtra(MainActivity.GAME_TYPE)));
+
+			ticTacToeBoard.setGameType(gameType);
 			ticTacToeBoard.resetGame();
 		}
 		

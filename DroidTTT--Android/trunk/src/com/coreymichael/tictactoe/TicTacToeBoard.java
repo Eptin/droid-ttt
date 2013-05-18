@@ -203,6 +203,13 @@ public class TicTacToeBoard {
 		public static final int GAME_3_X_3 = 0;
 		public static final int GAME_4_X_4 = 1;
 		public static final int GAME_6_X_6 = 2;
+		
+		public static final int getGameTypeFromString (String string) {
+			if (string.equals("GAME_6_X_6")) return GAME_6_X_6;
+			if (string.equals("GAME_4_X_4")) return GAME_4_X_4;
+			
+			return GAME_3_X_3;
+		}
 	}
 
 }

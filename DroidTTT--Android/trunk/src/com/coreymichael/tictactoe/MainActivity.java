@@ -5,9 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
-    public final static String EXTRA_MESSAGE = "com.coreymichael.tictactoe.MESSAGE";
+    public final static String GAME_TYPE = "com.coreymichael.tictactoe.GAME_TYPE";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -26,9 +27,8 @@ public class MainActivity extends Activity {
 	public void startGame(View view) {
 	    // Do something in response to button
 		Intent intent = new Intent(this, GameActivity.class);
-		
-		String message = "test message";
-		intent.putExtra(EXTRA_MESSAGE, message);
+		String message = view.getTag().toString();
+		intent.putExtra(GAME_TYPE, message);
 		startActivity(intent);
 	}
 

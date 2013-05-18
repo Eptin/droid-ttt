@@ -5,6 +5,8 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="action_settings">Settings</string>
     <string name="welcome_text">Droid Tic Tac Toe</string>
-    <string name="button_start">Start Game</string>
+    <string name="button_start_3x3">Start 3x3 Game</string>
+    <string name="button_start_4x4">Start 4x4 Game</string>
+    <string name="button_start_6x6">Start 6x6 Game</string>
 
 </resources>

@@ -10,19 +10,45 @@
     tools:context=".MainActivity" >
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/welcome_textbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:text="@string/welcome_text" />
 
     <Button
+        android:id="@+id/button_3x3"
+        android:tag="GAME_3_X_3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:layout_centerVertical="true"
+        android:onClick="startGame"
+        android:text="@string/button_start_3x3"
+        android:textAlignment="center" />
+    
+    <Button
+        android:id="@+id/button_4x4"
+        android:tag="GAME_4_X_4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/button_3x3"
         android:layout_centerHorizontal="true"
         android:onClick="startGame"
-        android:text="@string/button_start"
+        android:text="@string/button_start_4x4"
         android:textAlignment="center" />
+    
+    <Button
+        android:id="@+id/button_6x6"
+        android:tag="GAME_6_X_6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/button_4x4"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:onClick="startGame"
+        android:text="@string/button_start_6x6"
+        android:textAlignment="center" />
+
 
 </RelativeLayout>
