@@ -1,4 +1,6 @@
 == summary a place to list the useful resouces ==
+=== General Coding ===
+  * [http://equivalence.co.uk/archives/101 How to write beautiful code]
 
 === Android SDK stuff ===
   * Start here:  http://developer.android.com/index.html
