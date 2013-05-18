@@ -16,7 +16,7 @@ import android.view.View;
 import android.widget.Toast;
 
 public class CanvasView extends View {
-	private int[] mGameBoardCells;
+	private int[][] mGameBoardCells;
 	private int mNumCellsPerRow;
 	
 	private Bitmap mBackgroundBitmap;
@@ -24,7 +24,7 @@ public class CanvasView extends View {
 	private Bitmap mPlayerXBitmap;
 
 	private static BitmapFactory.Options sBitmapOptions = new BitmapFactory.Options();
-	private int mPixelFactor;
+	private int mCellPixelSize;
 	
 	public CanvasView(Context context) {
 		super(context);
@@ -66,11 +66,11 @@ public class CanvasView extends View {
 		return mPlayerXBitmap;
 	}
 
-	public void setmGameBoardCells(int[] mGameBoardCells) {
+	public void setmGameBoardCells(int[][] mGameBoardCells) {
 		this.mGameBoardCells = mGameBoardCells;
 	}
 
-	public int[] getmGameBoardCells() {
+	public int[][] getmGameBoardCells() {
 		return mGameBoardCells;
 	}
 
@@ -82,53 +82,57 @@ public class CanvasView extends View {
 		return mNumCellsPerRow;
 	}
 
-	public void setPixelFactor(int pixelFactor) {
-		this.mPixelFactor = pixelFactor;
+	public void setCellPixelSize(int cellPixelSize) {
+		this.mCellPixelSize = cellPixelSize;
 	}
 
-	public int getPixelFactor() {
-		return mPixelFactor;
+	public int getCellPixelSize() {
+		return mCellPixelSize;
 	}
 
 	@Override
 	public void onDraw(Canvas canvas) {
 		//super.onDraw(canvas);
-		Rect gridScale = new Rect(0, 0, mPixelFactor * mNumCellsPerRow, mPixelFactor * mNumCellsPerRow);
+		Rect gridScale = new Rect(0, 0, mCellPixelSize * mNumCellsPerRow, mCellPixelSize * mNumCellsPerRow);
 		//Rect gridScale = new Rect(0, 0, 800, 480);
 		
-		int playerScaledWidthHeight = mPixelFactor / 4 * 3;
+		int playerScaledWidthHeight = mCellPixelSize / 4 * 3;
 		// Draw the background
 		//canvas.drawBitmap(mBackgroundBitmap, 0, 0, null);
 		//canvas.drawColor(Color.WHITE);
 		Paint bgPaint = new Paint();
 		bgPaint.setColor(Color.WHITE);
-		canvas.drawRect(new Rect(0, 0, mPixelFactor * getNumCellsPerRow(), mPixelFactor * getNumCellsPerRow()), bgPaint);
-		// Draw the Background to scale, by multiplying the pixelFactor by 3 you get the height/width of the square grid
+		canvas.drawRect(new Rect(0, 0, mCellPixelSize * getNumCellsPerRow(), mCellPixelSize * getNumCellsPerRow()), bgPaint);
+		// Draw the Background to scale, by multiplying the cellPixelSize by 3 you get the height/width of the square grid
 		//canvas.drawBitmap(mBackgroundBitmap, null, gridScale, null);
 
 		// Line paint test		
 		Paint linePaint = new Paint();
 		linePaint.setColor(Color.BLACK);
 		for (int x = 0; x < mNumCellsPerRow; x++) {
-			canvas.drawLine(x * mPixelFactor + mPixelFactor, 0,  x * mPixelFactor + mPixelFactor, mPixelFactor * mNumCellsPerRow, linePaint);
-			canvas.drawLine(0, x * mPixelFactor + mPixelFactor, mPixelFactor * mNumCellsPerRow, x * mPixelFactor + mPixelFactor, linePaint);
+			canvas.drawLine(x * mCellPixelSize + mCellPixelSize, 0,  x * mCellPixelSize + mCellPixelSize, mCellPixelSize * mNumCellsPerRow, linePaint);
+			canvas.drawLine(0, x * mCellPixelSize + mCellPixelSize, mCellPixelSize * mNumCellsPerRow, x * mCellPixelSize + mCellPixelSize, linePaint);
 		}
 		
 		
 		// Cycle through the TicTacToe board and draw any X's or O's as necessary
 		// Todo: set the padding as a variable
-		// 		 set the pixelFactor as a variable
-		for (int x = 0; x < mGameBoardCells.length; x++) {
-			Bitmap tempBitmap = null;
-			int xTranslatedToScreenCoordinate = x % getNumCellsPerRow() * mPixelFactor + mPixelFactor / 8;
-			int yTranslatedToScreenCoordinate = x / getNumCellsPerRow() * mPixelFactor + mPixelFactor / 8;
-			if (mGameBoardCells[x] == TicTacToeBoard.CellStatus.PLAYER_O)
-				tempBitmap = mPlayerOBitmap;
-			else if (mGameBoardCells[x] == TicTacToeBoard.CellStatus.PLAYER_X)
-				tempBitmap = mPlayerXBitmap;
-			if (tempBitmap != null) 
-				canvas.drawBitmap(tempBitmap, null, new Rect(xTranslatedToScreenCoordinate,
-						yTranslatedToScreenCoordinate, xTranslatedToScreenCoordinate + playerScaledWidthHeight, yTranslatedToScreenCoordinate + playerScaledWidthHeight), null);
+		// 		 set the cellPixelSize as a variable
+		//mGameBoardCells[row][col]
+		for (int row = 0; row < mGameBoardCells.length; row++) { // Iterates over the rows
+			for (int col = 0; col < mGameBoardCells[0].length; col++) { // Iterates over the columns
+				Bitmap tempBitmap = null;
+				int padding = mCellPixelSize / 8;	// If each cell were 80 pixels across, this would give 1/8th of a cell on either size.
+													// That would be 10 pixels padding, then 60 pixels for the image, then 10 pixels padding.
+				int xTranslatedToScreenCoordinate = (col * mCellPixelSize) + padding;
+				int yTranslatedToScreenCoordinate = (row * mCellPixelSize) + padding;
+				if (mGameBoardCells[row][col] == TicTacToeBoard.CellStatus.PLAYER_O)
+					tempBitmap = mPlayerOBitmap;
+				else if (mGameBoardCells[row][col] == TicTacToeBoard.CellStatus.PLAYER_X)
+					tempBitmap = mPlayerXBitmap;
+				if (tempBitmap != null) //then we draw the X or O bitmap on the appropriate cell
+					canvas.drawBitmap(tempBitmap, null, new Rect(xTranslatedToScreenCoordinate, yTranslatedToScreenCoordinate, xTranslatedToScreenCoordinate + playerScaledWidthHeight, yTranslatedToScreenCoordinate + playerScaledWidthHeight), null);
+			}
 		}
 	}
 
