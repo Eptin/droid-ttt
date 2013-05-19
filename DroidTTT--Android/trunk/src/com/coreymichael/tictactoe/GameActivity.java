@@ -41,9 +41,16 @@ public class GameActivity extends Activity {
 		
 		// Check to see if there was a saved state and recover if so, otherwise start a new game
 		if (savedInstanceState != null) {
-			ticTacToeBoard.setGameBoardCells(savedInstanceState.getIntArray("gameBoardCells"));
-			ticTacToeBoard.setCurrentPlayer(savedInstanceState.getInt("currentPlayer"));
-			ticTacToeBoard.setNumCellsPerRow(savedInstanceState.getInt("numCellsPerRow"));
+			//ticTacToeBoard.setGameBoardCells(savedInstanceState.getIntArray("gameBoardCells"));
+			SaveData saveData = (SaveData) getLastNonConfigurationInstance();
+		    if (saveData != null) {
+				ticTacToeBoard.setCurrentPlayer(saveData.currentPlayer);
+				ticTacToeBoard.setNumCellsPerRow(saveData.numCellsPerRow);
+				ticTacToeBoard.setGameType(saveData.gameType);
+		    	ticTacToeBoard.setGameBoardCells(saveData.gameBoardCells);
+		        
+		    }
+
 		}
 		else {
 			Intent intent = getIntent();
@@ -83,12 +90,13 @@ public class GameActivity extends Activity {
 	}
 	
 	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		// TODO Auto-generated method stub
-		super.onSaveInstanceState(outState);
-		outState.putIntArray("gameBoardCells", ticTacToeBoard.getGameBoardCells());
-		outState.putInt("currentPlayer", ticTacToeBoard.getCurrentPlayer());
-		outState.putInt("numCellsPerRow", ticTacToeBoard.getNumCellsPerRow());
+	public Object onRetainNonConfigurationInstance() {
+	    SaveData saveData = new SaveData();
+	    saveData.currentPlayer = ticTacToeBoard.getCurrentPlayer();
+	    saveData.numCellsPerRow = ticTacToeBoard.getNumCellsPerRow();
+	    saveData.gameType = ticTacToeBoard.getGameType();
+	    saveData.gameBoardCells = ticTacToeBoard.getGameBoardCells();
+	    return saveData;
 	}
 
 	View.OnTouchListener mTouchListener = new OnTouchListener() {
@@ -160,4 +168,13 @@ public class GameActivity extends Activity {
 			return false;
 		}
 	};
+
+	public class SaveData {
+		public int currentPlayer;
+		public int numCellsPerRow;
+		public int gameType;
+		public int [][] gameBoardCells;
+		
+	}
+
 }
