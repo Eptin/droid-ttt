@@ -1,6 +1,7 @@
 package com.coreymichael.tictactoe;
 
 import android.graphics.Bitmap;
+import java.util.*; 
 
 public class TicTacToeBoard {
 	//Declaring bitmaps
@@ -9,11 +10,17 @@ public class TicTacToeBoard {
 	private Bitmap mPlayerOBitmap;
 	
 	private int[][] mGameBoardCells;
+	ArrayList mCurrentStreak = new ArrayList(); // List of the coordinates for the current player's winning streak
 	
 	private int mGameType;
 	private int mNumCellsPerRow;
 	private int mGameStatus;
 	private int mCurrentPlayer;
+	private int mMovesNeededToWin;
+	private int mMovesSoFar = 0;
+	private int mRoomForWinningMove = 0; // This counts both current player pieces as well as empty spaces to determine if a winning move is possible
+	
+	private boolean mWinningMovePossible;
 	
 
 	public void setBoardBitmap(Bitmap mBoardBitmap) {
@@ -94,6 +101,18 @@ public class TicTacToeBoard {
 		return this.mCurrentPlayer;
 	}
 	
+	public int CurrentPlayerWins () {
+		return (getCurrentPlayer() == CellStatus.PLAYER_X? GameStatus.PLAYER_X_WINS : GameStatus.PLAYER_O_WINS);
+	}
+	
+	public int getMovesSoFar() {
+		return mMovesSoFar;
+	}
+
+	public void setMovesSoFar(int mMovesSoFar) {
+		this.mMovesSoFar = mMovesSoFar;
+	}
+
 	public void setGameBoardCells(int[][] mGameBoardCells) {
 		this.mGameBoardCells = mGameBoardCells;
 	}
@@ -106,6 +125,7 @@ public class TicTacToeBoard {
 		// If a move was made, set the targeted cell to the current player, and then cycle the player
 		if (getGameBoardCells()[attemptedRow][attemptedColumn] == CellStatus.EMPTY) {
 			getGameBoardCells()[attemptedRow][attemptedColumn] = mCurrentPlayer;
+			setMovesSoFar(getMovesSoFar() + 1);
 // Right now, this function is out-of-order			mGameStatus = getGameStatusAndCheckForWinner(mCurrentPlayer);
 mGameStatus = GameStatus.GAME_IN_PLAY; // Remove this line when getGameStatusAndCheckForWinner is fixed.
 			if (mCurrentPlayer == CellStatus.PLAYER_O)
@@ -114,7 +134,83 @@ mGameStatus = GameStatus.GAME_IN_PLAY; // Remove this line when getGameStatusAnd
 				mCurrentPlayer = CellStatus.PLAYER_O;
 		}
 	}
+	
+	
+	
+	
+	
+	// Under Construction below
+	
+	
+	public int checkHorizontal(int row) {
+		for (int col = 0; col < getGameBoardCells()[row].length; col++) { // Iterates across the current row
+			
+			// Adding one more of the current player's pieces to the 'Winning Streak'
+			if (getCellStatus(row, col) == getCurrentPlayer()) {
+				mRoomForWinningMove++;
+				mCurrentStreak.add(row + "," + col); // Add coordinates for current piece to the 'Winning Streak'
+// *** How do I ensure the     row & "," & col    is cast as a String?
+			}
+			
+			// If we encounter a blank space, we reset the 'Winning Streak' but keep counting the 'Room for Winning Move'
+			if (getCellStatus(row, col) == CellStatus.EMPTY) {
+				mRoomForWinningMove++;
+				mCurrentStreak = null;
+// *** How do I ensure the line above actually empties the ArrayList?
+			}
+			
+			// It's back to 0 if we detect a piece by the other player
+			if (getCellStatus(row, col) != getCurrentPlayer()) {
+				mRoomForWinningMove = 0; // Reset the mRoomForWinningMove counter
+				mCurrentStreak = null;
+// *** How do I ensure the line above actually empties the ArrayList?
+			}
+			
+			// Tallying up a current player's pieces
+			if (mCurrentStreak.size() >= mMovesNeededToWin) {
+				return CurrentPlayerWins();
+			}
+			
+// *** TO DO: Figure out when to reset mWinningMovePossible to false
+			// If there is enough room for a winning move, then we know we aren't deadlocked
+			if (mRoomForWinningMove >= mMovesNeededToWin) {
+				mWinningMovePossible = true;
+			}
+			
+		}
+		return GameStatus.GAME_IN_PLAY; // If no one has won, and there is not a tie, then the game is still in play
+	}
+	
+	
+// *** TO DO: Figure out a way to move the generic "winner detection" code to checkBlock and have checkHorizontal merely set the direction
+	public int checkBlock(String startingCell) {
+		return CurrentPlayerWins();
+	}
+	
+	
+	
+	
+	
 
+	// New method for Winner Detection
+	public int getGameStatusAndCheckForWinner(int lastPlayer) {
+		if ((int) Math.ceil(getMovesSoFar() / 2.0) >= mMovesNeededToWin) { // We only check for winner if we have enough pieces on the board
+		
+			for (int x = 0; x < mNumCellsPerRow; x++) {
+				checkBlock();
+			}
+			
+		}
+		return GameStatus.GAME_IN_PLAY; // If no one has won, and there is not a tie, then the game is still in play
+	}
+	
+	// Under Construction above
+	
+	
+	
+	
+	
+	
 //	public int getGameStatusAndCheckForWinner(int lastPlayer) {
 //		int currentCellOfCurrentRow;
 //		int lastCellOfCurrentRow;

@@ -81,7 +81,7 @@ public class GameActivity extends Activity {
 
 		dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
-		int cellPixelSize = (getScreenOrientation() == "portrait" ? dm.widthPixels : dm.heightPixels) / ticTacToeBoard.getNumCellsPerRow();
+		int cellPixelSize = Math.min(dm.widthPixels, dm.heightPixels) / ticTacToeBoard.getNumCellsPerRow();
 		
 		canvasView.setCellPixelSize(cellPixelSize);
 		
