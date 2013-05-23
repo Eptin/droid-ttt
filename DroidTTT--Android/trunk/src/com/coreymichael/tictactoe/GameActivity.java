@@ -1,9 +1,12 @@
 package com.coreymichael.tictactoe;
 
+import java.io.IOException;
 import android.app.Activity;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -14,8 +17,28 @@ public class GameActivity extends Activity {
 	CanvasView canvasView;
 	TicTacToeBoard ticTacToeBoard;
 	DisplayMetrics dm;
+	MediaPlayer mp;
+
 	
-	public String getScreenOrientation() {
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // The activity is about to be destroyed.
+        if (mp != null) {
+            mp.stop();
+            mp.reset();
+//            try {
+//            	mp.prepare();
+//            } catch (IOException e) {
+//            	System.err.println("Caught IOException: " + e.getMessage());
+//            }
+
+            mp.release();
+
+        }
+    }
+
+    public String getScreenOrientation() {
 		dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
 		if (dm.widthPixels < dm.heightPixels) {
@@ -58,6 +81,9 @@ public class GameActivity extends Activity {
 
 			ticTacToeBoard.setGameType(gameType);
 			ticTacToeBoard.resetGame();
+			mp = MediaPlayer.create(this, R.raw.beat);
+			mp.start();
+
 		}
 		
 		// Load the background, player X and player O bitmaps

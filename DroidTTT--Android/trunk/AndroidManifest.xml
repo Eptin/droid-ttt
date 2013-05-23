@@ -22,7 +22,8 @@
         </activity>
         <activity 
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" 
-            android:name="GameActivity" 
+            android:name="GameActivity"
+            android:configChanges="orientation|screenSize" 
             android:parentActivityName="com.coreymichael.tictactoe.MainActivity">
             <meta-data 
                 android:name="android.support.PARENT_ACTIVITY"
