@@ -10,7 +10,7 @@ public class TicTacToeBoard {
 	private Bitmap mPlayerOBitmap;
 	
 	private int[][] mGameBoardCells;
-	ArrayList mCurrentStreak = new ArrayList(); // List of the coordinates for the current player's winning streak
+	ArrayList<String> mCurrentStreak = new ArrayList<String>(); // List of the coordinates for the current player's winning streak
 	
 	private int mGameType;
 	private int mNumCellsPerRow;
@@ -20,7 +20,7 @@ public class TicTacToeBoard {
 	private int mMovesSoFar = 0;
 	private int mRoomForWinningMove = 0; // This counts both current player pieces as well as empty spaces to determine if a winning move is possible
 	
-	private boolean mWinningMovePossible;
+	private boolean mWinningMovePossible = false;
 	
 
 	public void setBoardBitmap(Bitmap mBoardBitmap) {
@@ -101,8 +101,13 @@ public class TicTacToeBoard {
 		return this.mCurrentPlayer;
 	}
 	
+	public boolean isOpposingPlayer (int player) {
+		return (getCurrentPlayer() == CellStatus.PLAYER_X || getCurrentPlayer() == CellStatus.PLAYER_O);
+// *** not sure it this would work.
+	}
+	
 	public int CurrentPlayerWins () {
-		return (getCurrentPlayer() == CellStatus.PLAYER_X? GameStatus.PLAYER_X_WINS : GameStatus.PLAYER_O_WINS);
+		return (getCurrentPlayer() == CellStatus.PLAYER_X ? GameStatus.PLAYER_X_WINS : GameStatus.PLAYER_O_WINS);
 	}
 	
 	public int getMovesSoFar() {
@@ -126,8 +131,7 @@ public class TicTacToeBoard {
 		if (getGameBoardCells()[attemptedRow][attemptedColumn] == CellStatus.EMPTY) {
 			getGameBoardCells()[attemptedRow][attemptedColumn] = mCurrentPlayer;
 			setMovesSoFar(getMovesSoFar() + 1);
-// Right now, this function is out-of-order			mGameStatus = getGameStatusAndCheckForWinner(mCurrentPlayer);
-mGameStatus = GameStatus.GAME_IN_PLAY; // Remove this line when getGameStatusAndCheckForWinner is fixed.
+			mGameStatus = getGameStatusAndCheckForWinner(mCurrentPlayer);
 			if (mCurrentPlayer == CellStatus.PLAYER_O)
 				mCurrentPlayer = CellStatus.PLAYER_X;
 			else
@@ -149,21 +153,18 @@ mGameStatus = GameStatus.GAME_IN_PLAY; // Remove this line when getGameStatusAnd
 			if (getCellStatus(row, col) == getCurrentPlayer()) {
 				mRoomForWinningMove++;
 				mCurrentStreak.add(row + "," + col); // Add coordinates for current piece to the 'Winning Streak'
-// *** How do I ensure the     row & "," & col    is cast as a String?
 			}
 			
 			// If we encounter a blank space, we reset the 'Winning Streak' but keep counting the 'Room for Winning Move'
 			if (getCellStatus(row, col) == CellStatus.EMPTY) {
 				mRoomForWinningMove++;
-				mCurrentStreak = null;
-// *** How do I ensure the line above actually empties the ArrayList?
+				mCurrentStreak.clear();
 			}
 			
 			// It's back to 0 if we detect a piece by the other player
-			if (getCellStatus(row, col) != getCurrentPlayer()) {
+			if (isOpposingPlayer(getCellStatus(row, col))) { // If current cell belongs to the opposing player...
 				mRoomForWinningMove = 0; // Reset the mRoomForWinningMove counter
-				mCurrentStreak = null;
-// *** How do I ensure the line above actually empties the ArrayList?
+				mCurrentStreak.clear();
 			}
 			
 			// Tallying up a current player's pieces
@@ -171,7 +172,6 @@ mGameStatus = GameStatus.GAME_IN_PLAY; // Remove this line when getGameStatusAnd
 				return CurrentPlayerWins();
 			}
 			
-// *** TO DO: Figure out when to reset mWinningMovePossible to false
 			// If there is enough room for a winning move, then we know we aren't deadlocked
 			if (mRoomForWinningMove >= mMovesNeededToWin) {
 				mWinningMovePossible = true;
@@ -182,22 +182,82 @@ mGameStatus = GameStatus.GAME_IN_PLAY; // Remove this line when getGameStatusAnd
 	}
 	
 	
+	
+	
+	
+	
+	
 // *** TO DO: Figure out a way to move the generic "winner detection" code to checkBlock and have checkHorizontal merely set the direction
-	public int checkBlock(String startingCell) {
-		return CurrentPlayerWins();
+	public int checkBlock(String[] blockOfCells) {
+		private int row;
+		private int col;
+		for (int x = 0; x < blockOfCells.length; x++) { // Iterates across the current row
+			
+			// Splitting the string that's stored in the block, assuming the string is formatted: "row,col"
+			String[] coordinate = blockOfCells[x].split(",");
+// *** Is there a more direct method to access coordinate[0] than first assigning it it's own small array?
+			row = (int) coordinate[0];
+			col = (int) coordinate[1];
+// *** Why does it complain of casting from a String to an Int? That's a valid way, right?
+			
+			// Adding one more of the current player's pieces to the 'Winning Streak'
+			if (getCellStatus(row, col) == getCurrentPlayer()) {
+				mRoomForWinningMove++;
+				mCurrentStreak.add(row + "," + col); // Add coordinates for current piece to the 'Winning Streak'
+			}
+// *** Is it good to directly access and modify mCurrentStreak as a global variable? (That is, global within this file). Is this bad practice?
+			
+			// If we encounter a blank space, we reset the 'Winning Streak' but keep counting the 'Room for Winning Move'
+			if (getCellStatus(row, col) == CellStatus.EMPTY) {
+				mRoomForWinningMove++;
+				mCurrentStreak.clear();
+			}
+			
+			// It's back to 0 if we detect a piece by the other player
+			if (isOpposingPlayer(getCellStatus(row, col))) { // If current cell belongs to the opposing player...
+				mRoomForWinningMove = 0; // Reset the mRoomForWinningMove counter
+				mCurrentStreak.clear();
+			}
+			
+			// Tallying up a current player's pieces
+			if (mCurrentStreak.size() >= mMovesNeededToWin) {
+				return CurrentPlayerWins();
+			}
+			
+			// If there is enough room for a winning move, then we know we aren't deadlocked
+			if (mRoomForWinningMove >= mMovesNeededToWin) {
+				mWinningMovePossible = true;
+			}
+			
+		}
+		return GameStatus.GAME_IN_PLAY; // If no one has won, and there is not a tie, then the game is still in play
 	}
 	
 	
 	
 	
 	
-
+	
 	// New method for Winner Detection
 	public int getGameStatusAndCheckForWinner(int lastPlayer) {
+// *** Do we want to use variable lastPlayer? Or should we always just check for the current player?
 		if ((int) Math.ceil(getMovesSoFar() / 2.0) >= mMovesNeededToWin) { // We only check for winner if we have enough pieces on the board
-		
-			for (int x = 0; x < mNumCellsPerRow; x++) {
-				checkBlock();
+			
+			mWinningMovePossible = false;
+			
+			for (int row = 0; row < mNumCellsPerRow; row++) {
+				if (checkHorizontal(row) == CurrentPlayerWins()) { // If any of the rows are a winner, we return a winning status
+					return CurrentPlayerWins();
+				}
+			}
+			
+			//check vertical
+			
+			//check diagonal
+			
+			// Are we in a deadlock?
+			if (mWinningMovePossible == false) {
+				return GameStatus.GAME_OVER_TIE;
 			}
 			
 		}
