@@ -147,38 +147,10 @@ public class TicTacToeBoard {
 	
 	
 	public int checkHorizontal(int row) {
-		for (int col = 0; col < getGameBoardCells()[row].length; col++) { // Iterates across the current row
-			
-			// Adding one more of the current player's pieces to the 'Winning Streak'
-			if (getCellStatus(row, col) == getCurrentPlayer()) {
-				mRoomForWinningMove++;
-				mCurrentStreak.add(row + "," + col); // Add coordinates for current piece to the 'Winning Streak'
-			}
-			
-			// If we encounter a blank space, we reset the 'Winning Streak' but keep counting the 'Room for Winning Move'
-			if (getCellStatus(row, col) == CellStatus.EMPTY) {
-				mRoomForWinningMove++;
-				mCurrentStreak.clear();
-			}
-			
-			// It's back to 0 if we detect a piece by the other player
-			if (isOpposingPlayer(getCellStatus(row, col))) { // If current cell belongs to the opposing player...
-				mRoomForWinningMove = 0; // Reset the mRoomForWinningMove counter
-				mCurrentStreak.clear();
-			}
-			
-			// Tallying up a current player's pieces
-			if (mCurrentStreak.size() >= mMovesNeededToWin) {
-				return CurrentPlayerWins();
-			}
-			
-			// If there is enough room for a winning move, then we know we aren't deadlocked
-			if (mRoomForWinningMove >= mMovesNeededToWin) {
-				mWinningMovePossible = true;
-			}
-			
-		}
-		return GameStatus.GAME_IN_PLAY; // If no one has won, and there is not a tie, then the game is still in play
+		private String[] mGameBoardBlock;
+// *** Still determining whether it should be a String[] or int[], and if it's int[], then I guess I need to pass the coordinates manually? Still working on it.
+		mGameBoardBlock = getGameBoardCells()[row]; // Gets the entire row that's extracted from the 2D array game board
+		return checkBlock(mGameBoardBlock); // checkBlock analyzes the entire 1D array that's passed in
 	}
 	
 	
@@ -186,8 +158,6 @@ public class TicTacToeBoard {
 	
 	
 	
-	
-// *** TO DO: Figure out a way to move the generic "winner detection" code to checkBlock and have checkHorizontal merely set the direction
 	public int checkBlock(String[] blockOfCells) {
 		private int row;
 		private int col;
