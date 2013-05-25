@@ -10,8 +10,7 @@ public class TicTacToeBoard {
 	private Bitmap mPlayerOBitmap;
 	
 	private int[][] mGameBoardCells;
-	ArrayList<String> mCurrentStreak = new ArrayList<String>(); // List of the coordinates for the current player's winning streak
-	
+
 	private int mGameType;
 	private int mNumCellsPerRow;
 	private int mGameStatus;
@@ -147,10 +146,10 @@ public class TicTacToeBoard {
 	
 	
 	public int checkHorizontal(int row) {
-		private String[] mGameBoardBlock;
+//		private String[] mGameBoardBlock;
 // *** Still determining whether it should be a String[] or int[], and if it's int[], then I guess I need to pass the coordinates manually? Still working on it.
-		mGameBoardBlock = getGameBoardCells()[row]; // Gets the entire row that's extracted from the 2D array game board
-		return checkBlock(mGameBoardBlock); // checkBlock analyzes the entire 1D array that's passed in
+//		mGameBoardBlock = getGameBoardCells()[row]; // Gets the entire row that's extracted from the 2D array game board
+		return checkBlock(getGameBoardCells()[row]); // checkBlock analyzes the entire 1D array that's passed in
 	}
 	
 	
@@ -158,39 +157,42 @@ public class TicTacToeBoard {
 	
 	
 	
-	public int checkBlock(String[] blockOfCells) {
-		private int row;
-		private int col;
+	public int checkBlock(int[] blockOfCells) {
+		int cellStatus;
+		int col;
+		int mCurrentStreak = 0;
+
 		for (int x = 0; x < blockOfCells.length; x++) { // Iterates across the current row
-			
+			cellStatus = blockOfCells[x];
 			// Splitting the string that's stored in the block, assuming the string is formatted: "row,col"
-			String[] coordinate = blockOfCells[x].split(",");
+//			String[] coordinate = blockOfCells[x].split(",");
 // *** Is there a more direct method to access coordinate[0] than first assigning it it's own small array?
-			row = (int) coordinate[0];
-			col = (int) coordinate[1];
+//			row = (int) coordinate[0];
+//			col = (int) coordinate[1];
 // *** Why does it complain of casting from a String to an Int? That's a valid way, right?
 			
 			// Adding one more of the current player's pieces to the 'Winning Streak'
-			if (getCellStatus(row, col) == getCurrentPlayer()) {
+			if (cellStatus == getCurrentPlayer()) {
 				mRoomForWinningMove++;
-				mCurrentStreak.add(row + "," + col); // Add coordinates for current piece to the 'Winning Streak'
+				mCurrentStreak++; // Increment the current streak
 			}
 // *** Is it good to directly access and modify mCurrentStreak as a global variable? (That is, global within this file). Is this bad practice?
+// Corey - this is fine as long as we need to access it in more than one method =)			
 			
 			// If we encounter a blank space, we reset the 'Winning Streak' but keep counting the 'Room for Winning Move'
-			if (getCellStatus(row, col) == CellStatus.EMPTY) {
+			if (cellStatus == CellStatus.EMPTY) {
 				mRoomForWinningMove++;
-				mCurrentStreak.clear();
+				mCurrentStreak = 0;
 			}
 			
 			// It's back to 0 if we detect a piece by the other player
-			if (isOpposingPlayer(getCellStatus(row, col))) { // If current cell belongs to the opposing player...
+			if (isOpposingPlayer(cellStatus)) { // If current cell belongs to the opposing player...
 				mRoomForWinningMove = 0; // Reset the mRoomForWinningMove counter
-				mCurrentStreak.clear();
+				mCurrentStreak = 0;
 			}
 			
 			// Tallying up a current player's pieces
-			if (mCurrentStreak.size() >= mMovesNeededToWin) {
+			if (mCurrentStreak >= mMovesNeededToWin) {
 				return CurrentPlayerWins();
 			}
 			
@@ -211,14 +213,16 @@ public class TicTacToeBoard {
 	// New method for Winner Detection
 	public int getGameStatusAndCheckForWinner(int lastPlayer) {
 // *** Do we want to use variable lastPlayer? Or should we always just check for the current player?
-		if ((int) Math.ceil(getMovesSoFar() / 2.0) >= mMovesNeededToWin) { // We only check for winner if we have enough pieces on the board
+		if (getMovesSoFar() >= ((mMovesNeededToWin * 2) - 1) ) { // We only check for winner if we have enough pieces on the board
 			
 			mWinningMovePossible = false;
 			
 			for (int row = 0; row < mNumCellsPerRow; row++) {
-				if (checkHorizontal(row) == CurrentPlayerWins()) { // If any of the rows are a winner, we return a winning status
-					return CurrentPlayerWins();
-				}
+//				if (checkHorizontal(row) == CurrentPlayerWins()) { // If any of the rows are a winner, we return a winning status
+				int rowStatus = checkHorizontal(row);
+				if (rowStatus != GameStatus.GAME_IN_PLAY)
+					return rowStatus;
+//				}
 			}
 			
 			//check vertical
