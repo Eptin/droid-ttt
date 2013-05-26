@@ -11,9 +11,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.view.View;
-import android.widget.Toast;
 
 public class CanvasView extends View {
 	private int[][] mGameBoardCells;
@@ -93,7 +91,7 @@ public class CanvasView extends View {
 	@Override
 	public void onDraw(Canvas canvas) {
 		//super.onDraw(canvas);
-		Rect gridScale = new Rect(0, 0, mCellPixelSize * mNumCellsPerRow, mCellPixelSize * mNumCellsPerRow);
+		//Rect gridScale = new Rect(0, 0, mCellPixelSize * mNumCellsPerRow, mCellPixelSize * mNumCellsPerRow);
 		//Rect gridScale = new Rect(0, 0, 800, 480);
 		
 		int playerScaledWidthHeight = mCellPixelSize / 4 * 3;
