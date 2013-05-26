@@ -102,7 +102,6 @@ public class TicTacToeBoard {
 	
 	public boolean isOpposingPlayer (int player) {
 		return (getCurrentPlayer() == CellStatus.PLAYER_X || getCurrentPlayer() == CellStatus.PLAYER_O);
-// *** not sure it this would work.
 	}
 	
 	public int CurrentPlayerWins () {
@@ -142,57 +141,61 @@ public class TicTacToeBoard {
 	
 	
 	
-	// Under Construction below
 	
 	
 	public int checkHorizontal(int row) {
-//		private String[] mGameBoardBlock;
-// *** Still determining whether it should be a String[] or int[], and if it's int[], then I guess I need to pass the coordinates manually? Still working on it.
-//		mGameBoardBlock = getGameBoardCells()[row]; // Gets the entire row that's extracted from the 2D array game board
 		return checkBlock(getGameBoardCells()[row]); // checkBlock analyzes the entire 1D array that's passed in
 	}
 	
 	
 	
+	// Under Construction below
+	
+	
+	public int checkVertical(int col) {
+		int[] mGameBoardBlock;
+		for (int row = 0; row < getGameBoardCells()[0][col].length; row++) { // Note: this retrieves the "height" of only the first column.
+			// The line above needs to be reworked with we have columns of varying length (or "height").
+			mGameBoardBlock[row] = getGameBoardCells()[row][col];	
+		}
+		return checkBlock(mGameBoardBlock); // checkBlock analyzes the entire 1D array that's passed in
+	}
+	
 	
 	
 	
 	public int checkBlock(int[] blockOfCells) {
-		int cellStatus;
+	// blockOfCells stores coordinates in this format:   [row1][col1][row2][col2][row3][col3]
+		ArrayList<int> mCurrentStreak = new ArrayList<int>(); // List of the coordinates for the current player's winning streak
+		// mCurrentStreak stores coordinates in the same format as blockOfCells
+		int row;
 		int col;
-		int mCurrentStreak = 0;
-
-		for (int x = 0; x < blockOfCells.length; x++) { // Iterates across the current row
-			cellStatus = blockOfCells[x];
-			// Splitting the string that's stored in the block, assuming the string is formatted: "row,col"
-//			String[] coordinate = blockOfCells[x].split(",");
-// *** Is there a more direct method to access coordinate[0] than first assigning it it's own small array?
-//			row = (int) coordinate[0];
-//			col = (int) coordinate[1];
-// *** Why does it complain of casting from a String to an Int? That's a valid way, right?
+		
+		for (int x = 0; x < blockOfCells.length * 2; x += 2) { // Iterates across the block
+			row = blockOfCells[x];
+			col = blockOfCells[x + 1];
 			
 			// Adding one more of the current player's pieces to the 'Winning Streak'
-			if (cellStatus == getCurrentPlayer()) {
+			if (getCellStatus(row, col) == getCurrentPlayer()) {
 				mRoomForWinningMove++;
-				mCurrentStreak++; // Increment the current streak
+				mCurrentStreak.add(row); // Add coordinates for current piece to the 'Winning Streak'
+				mCurrentStreak.add(col); // Add coordinates for current piece to the 'Winning Streak'
 			}
-// *** Is it good to directly access and modify mCurrentStreak as a global variable? (That is, global within this file). Is this bad practice?
-// Corey - this is fine as long as we need to access it in more than one method =)			
 			
 			// If we encounter a blank space, we reset the 'Winning Streak' but keep counting the 'Room for Winning Move'
-			if (cellStatus == CellStatus.EMPTY) {
+			if (getCellStatus(row, col) == CellStatus.EMPTY) {
 				mRoomForWinningMove++;
-				mCurrentStreak = 0;
+				mCurrentStreak.clear();
 			}
 			
 			// It's back to 0 if we detect a piece by the other player
-			if (isOpposingPlayer(cellStatus)) { // If current cell belongs to the opposing player...
+			if (isOpposingPlayer(getCellStatus(row, col))) { // If current cell belongs to the opposing player...
 				mRoomForWinningMove = 0; // Reset the mRoomForWinningMove counter
-				mCurrentStreak = 0;
+				mCurrentStreak.clear();
 			}
 			
 			// Tallying up a current player's pieces
-			if (mCurrentStreak >= mMovesNeededToWin) {
+			if (mCurrentStreak.size() >= mMovesNeededToWin) {
 				return CurrentPlayerWins();
 			}
 			
