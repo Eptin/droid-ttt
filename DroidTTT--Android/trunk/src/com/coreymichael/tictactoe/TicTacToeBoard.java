@@ -16,8 +16,8 @@ public class TicTacToeBoard {
 	private int mGameStatus;
 	private int mCurrentPlayer;
 	private int mMovesNeededToWin;
-	private int mMovesSoFar = 0;
-	private int mRoomForWinningMove = 0; // This counts both current player pieces as well as empty spaces to determine if a winning move is possible
+	private int mMovesSoFar;
+	private int mRoomForWinningMove; // This counts both current player pieces as well as empty spaces to determine if a winning move is possible
 	
 	private boolean mWinningMovePossible = false;
 	
@@ -327,6 +327,8 @@ public class TicTacToeBoard {
 		mCurrentPlayer = CellStatus.PLAYER_X;
 		// Set the game status to in play
 		mGameStatus = GameStatus.GAME_IN_PLAY;
+		mMovesSoFar = 0;
+		mRoomForWinningMove = 0;
 	}
 	
 	public static final class CellStatus {
