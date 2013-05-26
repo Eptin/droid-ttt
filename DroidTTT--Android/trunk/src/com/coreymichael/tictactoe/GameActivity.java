@@ -17,38 +17,26 @@ public class GameActivity extends Activity {
 	CanvasView canvasView;
 	TicTacToeBoard ticTacToeBoard;
 	DisplayMetrics dm;
-	MediaPlayer mp;
+//	MediaPlayer mp;
 
 	
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
         // The activity is about to be destroyed.
-        if (mp != null) {
-            mp.stop();
-            mp.reset();
+//        if (mp != null) {
+//            mp.stop();
+//            mp.reset();
 //            try {
 //            	mp.prepare();
 //            } catch (IOException e) {
 //            	System.err.println("Caught IOException: " + e.getMessage());
 //            }
 
-            mp.release();
+//            mp.release();
 
-        }
-    }
-
-    public String getScreenOrientation() {
-		dm = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(dm);
-		if (dm.widthPixels < dm.heightPixels) {
-			return "portrait";
-		} else if (dm.widthPixels > dm.heightPixels) {
-			return "landscape";
-		} else {
-			return "square";
-		}
-	}
+//        }
+//    }
 	
 	
 	/** Called when the activity is first created. */
@@ -81,8 +69,8 @@ public class GameActivity extends Activity {
 
 			ticTacToeBoard.setGameType(gameType);
 			ticTacToeBoard.resetGame();
-			mp = MediaPlayer.create(this, R.raw.beat);
-			mp.start();
+//			mp = MediaPlayer.create(this, R.raw.beat);
+//			mp.start();
 
 		}
 		
