@@ -100,8 +100,12 @@ public class TicTacToeBoard {
 		return this.mCurrentPlayer;
 	}
 	
-	public boolean isOpposingPlayer (int player) {
-		return (getCurrentPlayer() == CellStatus.PLAYER_X || getCurrentPlayer() == CellStatus.PLAYER_O);
+	public boolean isPlayer (int cellStatus) {
+		return (cellStatus == CellStatus.PLAYER_X || cellStatus == CellStatus.PLAYER_O);
+	}
+	
+	public boolean isOpposingPlayer (int cellStatus) {
+		return (isPlayer(cellStatus) && cellStatus != getCurrentPlayer());
 	}
 	
 	public int CurrentPlayerWins () {
@@ -111,7 +115,7 @@ public class TicTacToeBoard {
 	public int getMovesSoFar() {
 		return mMovesSoFar;
 	}
-
+	
 	public void setMovesSoFar(int mMovesSoFar) {
 		this.mMovesSoFar = mMovesSoFar;
 	}
@@ -154,9 +158,10 @@ public class TicTacToeBoard {
 	
 	public int checkVertical(int col) {
 		int[] mGameBoardBlock;
-		for (int row = 0; row < getGameBoardCells()[0][col].length; row++) { // Note: this retrieves the "height" of only the first column.
+		for (int row = 0; row < getGameBoardCells()[0][col].length * 2; row += 2) { // Note: this retrieves the "height" of only the first column.
 			// The line above needs to be reworked with we have columns of varying length (or "height").
-			mGameBoardBlock[row] = getGameBoardCells()[row][col];	
+			mGameBoardBlock[row] = row;
+			mGameBoardBlock[row + 1] = col;
 		}
 		return checkBlock(mGameBoardBlock); // checkBlock analyzes the entire 1D array that's passed in
 	}
@@ -165,8 +170,8 @@ public class TicTacToeBoard {
 	
 	
 	public int checkBlock(int[] blockOfCells) {
-	// blockOfCells stores coordinates in this format:   [row1][col1][row2][col2][row3][col3]
-		ArrayList<int> mCurrentStreak = new ArrayList<int>(); // List of the coordinates for the current player's winning streak
+	// blockOfCells stores coordinates in this format:   [row1][col1][row2][col2][row3][col3] etc...
+		ArrayList<Integer> mCurrentStreak = new ArrayList<Integer>(); // List of the coordinates for the current player's winning streak
 		// mCurrentStreak stores coordinates in the same format as blockOfCells
 		int row;
 		int col;
