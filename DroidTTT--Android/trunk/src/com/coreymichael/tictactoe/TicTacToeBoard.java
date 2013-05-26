@@ -10,7 +10,7 @@ public class TicTacToeBoard {
 	private Bitmap mPlayerOBitmap;
 	
 	private int[][] mGameBoardCells;
-
+	
 	private int mGameType;
 	private int mNumCellsPerRow;
 	private int mGameStatus;
@@ -21,31 +21,31 @@ public class TicTacToeBoard {
 	
 	private boolean mWinningMovePossible = false;
 	
-
+	
 	public void setBoardBitmap(Bitmap mBoardBitmap) {
 		this.mBoardBitmap = mBoardBitmap;
 	}
-
+	
 	public Bitmap getBoardBitmap() {
 		return mBoardBitmap;
 	}
-
+	
 	public void setPlayerXBitmap(Bitmap mPlayerXBitmap) {
 		this.mPlayerXBitmap = mPlayerXBitmap;
 	}
-
+	
 	public Bitmap getPlayerXBitmap() {
 		return mPlayerXBitmap;
 	}
-
+	
 	public void setPlayerOBitmap(Bitmap mPlayerOBitmap) {
 		this.mPlayerOBitmap = mPlayerOBitmap;
 	}
-
+	
 	public Bitmap getPlayerOBitmap() {
 		return mPlayerOBitmap;
 	}
-
+	
 	public void setGameType(int mGameType) {
 		this.mGameType = mGameType;
 		
@@ -63,31 +63,31 @@ public class TicTacToeBoard {
 		
 		mGameBoardCells = new int[mNumCellsPerRow][mNumCellsPerRow]; //Initializes a new game board that is 3x3, 4x4, 6x6, etc.
 	}
-
+	
 	public int getGameType() {
 		return mGameType;
 	}
-
+	
 	public void setGameStatus(int mGameStatus) {
 		this.mGameStatus = mGameStatus;
 	}
-
+	
 	public int getGameStatus() {
 		return mGameStatus;
 	}
-
+	
 	public void setNumCellsPerRow(int mNumCellsPerRow) {
 		this.mNumCellsPerRow = mNumCellsPerRow;
 	}
-
+	
 	public int getNumCellsPerRow() {
 		return mNumCellsPerRow;
 	}
-
+	
 	public int getCellStatus(int row, int col) {
 		return getGameBoardCells()[row][col];
 	}
-
+	
 	public void setCellStatus(int row, int col, int status) {
 		getGameBoardCells()[row][col] = status;
 	}
@@ -119,15 +119,15 @@ public class TicTacToeBoard {
 	public void setMovesSoFar(int mMovesSoFar) {
 		this.mMovesSoFar = mMovesSoFar;
 	}
-
+	
 	public void setGameBoardCells(int[][] mGameBoardCells) {
 		this.mGameBoardCells = mGameBoardCells;
 	}
-
+	
 	public int[][] getGameBoardCells() {
 		return mGameBoardCells;
 	}
-
+	
 	public void consumeTurn(int attemptedRow, int attemptedColumn) {
 		// If a move was made, set the targeted cell to the current player, and then cycle the player
 		if (getGameBoardCells()[attemptedRow][attemptedColumn] == CellStatus.EMPTY) {
@@ -149,12 +149,13 @@ public class TicTacToeBoard {
 	
 	
 	public int checkHorizontal(int row) {
-		return checkBlock(getGameBoardCells()[row]); // checkBlock analyzes the entire 1D array that's passed in
+		int[] mGameBoardBlock = new int[mNumCellsPerRow * 2];
+		for (int col = 0; col < mNumCellsPerRow; col++) {
+			mGameBoardBlock[(col * 2)] = row;
+			mGameBoardBlock[(col * 2) + 1] = col;
+		}
+		return checkBlock(mGameBoardBlock); // checkBlock analyzes the entire 1D array that's passed in.
 	}
-// *** Need to rework to pass a 1D array with coordinates, not a 1D array with the cell values themselves.
-	
-	
-
 	
 	
 	public int checkVertical(int col) {
@@ -163,22 +164,20 @@ public class TicTacToeBoard {
 			mGameBoardBlock[(row * 2)] = row;
 			mGameBoardBlock[(row * 2) + 1] = col;
 		}
-		return checkBlock(mGameBoardBlock); // checkBlock analyzes the entire 1D array that's passed in
+		return checkBlock(mGameBoardBlock); // checkBlock analyzes the entire 1D array that's passed in.
 	}
 	
 	
-	
-	
-	public int checkBlock(int[] blockOfCells) {
-	// blockOfCells stores coordinates in this format:   [row1][col1][row2][col2][row3][col3] etc...
+	public int checkBlock(int[] blockOfCoordinates) {
+	// blockOfCoordinates stores coordinates in this format:   [row1][col1][row2][col2][row3][col3] etc...
 		ArrayList<Integer> mCurrentStreak = new ArrayList<Integer>(); // List of the coordinates for the current player's winning streak
-		// mCurrentStreak stores coordinates in the same format as blockOfCells
+		// mCurrentStreak stores coordinates in the same format as blockOfCoordinates
 		int row;
 		int col;
 		
-		for (int x = 0; x < blockOfCells.length * 2; x += 2) { // Iterates across the block
-			row = blockOfCells[x];
-			col = blockOfCells[x + 1];
+		for (int x = 0; x < blockOfCoordinates.length; x += 2) { // Iterates across the block
+			row = blockOfCoordinates[x];
+			col = blockOfCoordinates[x + 1];
 			
 			// Adding one more of the current player's pieces to the 'Winning Streak'
 			if (getCellStatus(row, col) == getCurrentPlayer()) {
