@@ -144,24 +144,24 @@ public class TicTacToeBoard {
 	
 	
 	
+	// Under Construction below
 	
 	
 	
 	public int checkHorizontal(int row) {
 		return checkBlock(getGameBoardCells()[row]); // checkBlock analyzes the entire 1D array that's passed in
 	}
+// *** Need to rework to pass a 1D array with coordinates, not a 1D array with the cell values themselves.
 	
 	
-	
-	// Under Construction below
+
 	
 	
 	public int checkVertical(int col) {
-		int[] mGameBoardBlock;
-		for (int row = 0; row < getGameBoardCells()[0][col].length * 2; row += 2) { // Note: this retrieves the "height" of only the first column.
-			// The line above needs to be reworked with we have columns of varying length (or "height").
-			mGameBoardBlock[row] = row;
-			mGameBoardBlock[row + 1] = col;
+		int[] mGameBoardBlock = new int[mNumCellsPerRow * 2];
+		for (int row = 0; row < mNumCellsPerRow; row++) {
+			mGameBoardBlock[(row * 2)] = row;
+			mGameBoardBlock[(row * 2) + 1] = col;
 		}
 		return checkBlock(mGameBoardBlock); // checkBlock analyzes the entire 1D array that's passed in
 	}
@@ -226,7 +226,6 @@ public class TicTacToeBoard {
 			mWinningMovePossible = false;
 			
 			for (int row = 0; row < mNumCellsPerRow; row++) {
-//				if (checkHorizontal(row) == CurrentPlayerWins()) { // If any of the rows are a winner, we return a winning status
 				int rowStatus = checkHorizontal(row);
 				if (rowStatus != GameStatus.GAME_IN_PLAY)
 					return rowStatus;
@@ -245,6 +244,8 @@ public class TicTacToeBoard {
 		}
 		return GameStatus.GAME_IN_PLAY; // If no one has won, and there is not a tie, then the game is still in play
 	}
+	
+	
 	
 	// Under Construction above
 	
