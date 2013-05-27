@@ -132,20 +132,15 @@ public class TicTacToeBoard {
 	}
 	
 	public void consumeTurn(int attemptedRow, int attemptedColumn) {
-		// If a move was made, set the targeted cell to the current player, and then cycle the player
-		if (getGameBoardCells()[attemptedRow][attemptedColumn] == CellStatus.EMPTY) {
-			getGameBoardCells()[attemptedRow][attemptedColumn] = mCurrentPlayer;
+		// If a move was made, set the targeted cell to the current player, and then swap the players
+		if (getCellStatus(attemptedRow, attemptedColumn) == CellStatus.EMPTY) {
+			setCellStatus(attemptedRow, attemptedColumn, mCurrentPlayer);
 			setMovesSoFar(getMovesSoFar() + 1);
 			setGameStatus(updateGameStatus());
 			swapThePlayers();
 		}
 	}
-	
-	
-	
-	
-	// Under Construction below
-	
+		
 	private void swapThePlayers() {
 		if (mCurrentPlayer == CellStatus.PLAYER_O)
 			mCurrentPlayer = CellStatus.PLAYER_X;
@@ -153,27 +148,30 @@ public class TicTacToeBoard {
 			mCurrentPlayer = CellStatus.PLAYER_O;
 	}
 	
+	// Under Construction below
+
 	public int checkHorizontal(int row) {
-		int[] mGameBoardBlock = new int[mNumCellsPerRow * 2];
+		int[] blockOfRowCoordinates = new int[mNumCellsPerRow * 2];
 		for (int col = 0; col < mNumCellsPerRow; col++) {
-			mGameBoardBlock[(col * 2)] = row;
-			mGameBoardBlock[(col * 2) + 1] = col;
+			blockOfRowCoordinates[(col * 2)] = row;
+			blockOfRowCoordinates[(col * 2) + 1] = col;
 		}
-		return checkBlock(mGameBoardBlock); // checkBlock analyzes the entire 1D array that's passed in.
+		return checkBlock(blockOfRowCoordinates); // checkBlock analyzes the entire 1D array that's passed in.
 	}
 	
 	
 	public int checkVertical(int col) {
-		int[] mGameBoardBlock = new int[mNumCellsPerRow * 2];
+		int[] blockOfColumnCoordinates = new int[mNumCellsPerRow * 2];
 		for (int row = 0; row < mNumCellsPerRow; row++) {
-			mGameBoardBlock[(row * 2)] = row;
-			mGameBoardBlock[(row * 2) + 1] = col;
+			blockOfColumnCoordinates[(row * 2)] = row;
+			blockOfColumnCoordinates[(row * 2) + 1] = col;
 		}
-		return checkBlock(mGameBoardBlock); // checkBlock analyzes the entire 1D array that's passed in.
+		return checkBlock(blockOfColumnCoordinates); // checkBlock analyzes the entire 1D array that's passed in.
 	}
 	
 	
 	public int checkBlock(int[] blockOfCoordinates) {
+		mRoomForWinningMove = 0;
 	// blockOfCoordinates stores coordinates in this format:   [row1][col1][row2][col2][row3][col3] etc...
 		ArrayList<Integer> mCurrentStreak = new ArrayList<Integer>(); // List of the coordinates for the current player's winning streak
 		// mCurrentStreak stores coordinates in the same format as blockOfCoordinates
@@ -204,7 +202,7 @@ public class TicTacToeBoard {
 			}
 			
 			// Tallying up a current player's pieces
-			if (mCurrentStreak.size() >= mMovesNeededToWin) {
+			if (mCurrentStreak.size() >= mMovesNeededToWin * 2) {
 				return CurrentPlayerWins();
 			}
 			
@@ -228,20 +226,26 @@ public class TicTacToeBoard {
 			
 			mWinningMovePossible = false;
 			
+			// check rows
 			for (int row = 0; row < mNumCellsPerRow; row++) {
 				int rowStatus = checkHorizontal(row);
 				if (rowStatus != GameStatus.GAME_IN_PLAY)
 					return rowStatus;
 			}
 			
-			//check vertical
-			
-			//check diagonal
+			// check columns
+			for (int col = 0; col < mNumCellsPerRow; col++) {
+				int colStatus = checkVertical(col);
+				if (colStatus != GameStatus.GAME_IN_PLAY)
+					return colStatus;
+			}
+
+			// check diagonals
 			
 			// Are we in a deadlock?
-			//if (mWinningMovePossible == false) {
-			//	return GameStatus.GAME_OVER_TIE;
-			//}
+			if (mWinningMovePossible == false) {
+				return GameStatus.GAME_OVER_TIE;
+			}
 			
 		}
 		return GameStatus.GAME_IN_PLAY; // If no one has won, and there is not a tie, then the game is still in play
@@ -260,7 +264,6 @@ public class TicTacToeBoard {
 		mCurrentPlayer = CellStatus.PLAYER_X;	// Set the first player to Player X;
 		mGameStatus = GameStatus.GAME_IN_PLAY;
 		mMovesSoFar = 0;
-		mRoomForWinningMove = 0;
 	}
 	
 	public static final class CellStatus {
