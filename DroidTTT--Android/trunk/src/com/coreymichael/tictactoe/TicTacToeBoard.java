@@ -52,12 +52,15 @@ public class TicTacToeBoard {
 		switch (getGameType()) {
 			case GameType.GAME_3_X_3: 
 				mNumCellsPerRow = 3;
+				mMovesNeededToWin = 3;
 				break;
 			case GameType.GAME_4_X_4:
 				mNumCellsPerRow = 4;
+				mMovesNeededToWin = 3;
 				break;
 			case GameType.GAME_6_X_6:
 				mNumCellsPerRow = 6;
+				mMovesNeededToWin = 4;
 				break;
 		}
 		
@@ -133,11 +136,8 @@ public class TicTacToeBoard {
 		if (getGameBoardCells()[attemptedRow][attemptedColumn] == CellStatus.EMPTY) {
 			getGameBoardCells()[attemptedRow][attemptedColumn] = mCurrentPlayer;
 			setMovesSoFar(getMovesSoFar() + 1);
-			mGameStatus = getGameStatusAndCheckForWinner(mCurrentPlayer);
-			if (mCurrentPlayer == CellStatus.PLAYER_O)
-				mCurrentPlayer = CellStatus.PLAYER_X;
-			else
-				mCurrentPlayer = CellStatus.PLAYER_O;
+			setGameStatus(updateGameStatus());
+			swapThePlayers();
 		}
 	}
 	
@@ -146,7 +146,12 @@ public class TicTacToeBoard {
 	
 	// Under Construction below
 	
-	
+	private void swapThePlayers() {
+		if (mCurrentPlayer == CellStatus.PLAYER_O)
+			mCurrentPlayer = CellStatus.PLAYER_X;
+		else
+			mCurrentPlayer = CellStatus.PLAYER_O;
+	}
 	
 	public int checkHorizontal(int row) {
 		int[] mGameBoardBlock = new int[mNumCellsPerRow * 2];
@@ -218,8 +223,7 @@ public class TicTacToeBoard {
 	
 	
 	// New method for Winner Detection
-	public int getGameStatusAndCheckForWinner(int lastPlayer) {
-// *** Do we want to use variable lastPlayer? Or should we always just check for the current player?
+	public int updateGameStatus() {  
 		if (getMovesSoFar() >= ((mMovesNeededToWin * 2) - 1) ) { // We only check for winner if we have enough pieces on the board
 			
 			mWinningMovePossible = false;
@@ -228,7 +232,6 @@ public class TicTacToeBoard {
 				int rowStatus = checkHorizontal(row);
 				if (rowStatus != GameStatus.GAME_IN_PLAY)
 					return rowStatus;
-//				}
 			}
 			
 			//check vertical
@@ -236,84 +239,15 @@ public class TicTacToeBoard {
 			//check diagonal
 			
 			// Are we in a deadlock?
-			if (mWinningMovePossible == false) {
-				return GameStatus.GAME_OVER_TIE;
-			}
+			//if (mWinningMovePossible == false) {
+			//	return GameStatus.GAME_OVER_TIE;
+			//}
 			
 		}
 		return GameStatus.GAME_IN_PLAY; // If no one has won, and there is not a tie, then the game is still in play
 	}
-	
-	
-	
 	// Under Construction above
-	
-	
-	
-	
-	
-	
-//	public int getGameStatusAndCheckForWinner(int lastPlayer) {
-//		int currentCellOfCurrentRow;
-//		int lastCellOfCurrentRow;
-//		
-//		int currentCellOfCurrentColumn; 
-//		int lastCellOfCurrentColumn;
-//		
-//		int currentCellOfCurrentDiag;
-//		int lastCellOfCurrentDiag;
-//		for (int x = 0; x < mNumCellsPerRow; x++) {
-//			
-//			// Check each row to see if the last player won
-//			currentCellOfCurrentRow = x * mNumCellsPerRow;
-//			lastCellOfCurrentRow = x * mNumCellsPerRow + mNumCellsPerRow - 1;
-//			while (mGameBoardCells[currentCellOfCurrentRow][???] == lastPlayer && currentCellOfCurrentRow <= lastCellOfCurrentRow) {
-//				if (currentCellOfCurrentRow == lastCellOfCurrentRow)
-//					return (lastPlayer == CellStatus.PLAYER_X? GameStatus.PLAYER_X_WINS : GameStatus.PLAYER_O_WINS);
-//				currentCellOfCurrentRow++;
-//			}
-//			
-//			// Check each column to see if the last player won
-//			currentCellOfCurrentColumn = x;
-//			lastCellOfCurrentColumn = mNumCellsPerRow * mNumCellsPerRow - mNumCellsPerRow + x;
-//			while (mGameBoardCells[currentCellOfCurrentColumn][???] == lastPlayer && currentCellOfCurrentColumn <= lastCellOfCurrentColumn) {
-//				if (currentCellOfCurrentColumn == lastCellOfCurrentColumn)
-//					return (lastPlayer == CellStatus.PLAYER_X? GameStatus.PLAYER_X_WINS : GameStatus.PLAYER_O_WINS);
-//				currentCellOfCurrentColumn += mNumCellsPerRow;
-//			}			
-//		}
-//		
-//		
-//		// Check the top-left to bottom-right diagonal
-//		currentCellOfCurrentDiag = 0;
-//		lastCellOfCurrentDiag = mNumCellsPerRow * mNumCellsPerRow - 1;
-//		while (mGameBoardCells[currentCellOfCurrentDiag][???] == lastPlayer && currentCellOfCurrentDiag <= lastCellOfCurrentDiag) {
-//			if (currentCellOfCurrentDiag == lastCellOfCurrentDiag)
-//				return (lastPlayer == CellStatus.PLAYER_X? GameStatus.PLAYER_X_WINS : GameStatus.PLAYER_O_WINS);
-//			currentCellOfCurrentDiag += mNumCellsPerRow + 1;
-//		}
-//		// Check first top-right to bottom-left diagonal
-//		currentCellOfCurrentDiag = mNumCellsPerRow - 1;
-//		lastCellOfCurrentDiag = mNumCellsPerRow * (mNumCellsPerRow - 1);
-//		while (mGameBoardCells[currentCellOfCurrentDiag][???] == lastPlayer && currentCellOfCurrentDiag <= lastCellOfCurrentDiag) {
-//			if (currentCellOfCurrentDiag == lastCellOfCurrentDiag)
-//				return (lastPlayer == CellStatus.PLAYER_X? GameStatus.PLAYER_X_WINS : GameStatus.PLAYER_O_WINS);
-//			currentCellOfCurrentDiag += mNumCellsPerRow - 1;
-//		}
-//		
-//		// Check for a tie (all cells are filled)
-//		int x = 0;
-//		int lastCell = mNumCellsPerRow * mNumCellsPerRow - 1;
-//		while (mGameBoardCells[x][???] != CellStatus.EMPTY && x <= lastCell) {
-//			if (x == lastCell)
-//				return GameStatus.GAME_OVER_TIE;
-//			x++;
-//		}		
-//		
-//		// If no one has won, and there is not a tie, then the game is still in play
-//		return GameStatus.GAME_IN_PLAY;
-//	}
-	
+
 	public void resetGame() {
 		
 		// Set each cell to EMPTY
@@ -322,10 +256,8 @@ public class TicTacToeBoard {
 				setCellStatus(row, col, CellStatus.EMPTY);
 			}
 		}
-		
-		// Set the first player to Player X;
-		mCurrentPlayer = CellStatus.PLAYER_X;
-		// Set the game status to in play
+
+		mCurrentPlayer = CellStatus.PLAYER_X;	// Set the first player to Player X;
 		mGameStatus = GameStatus.GAME_IN_PLAY;
 		mMovesSoFar = 0;
 		mRoomForWinningMove = 0;
