@@ -17,27 +17,23 @@ public class GameActivity extends Activity {
 	CanvasView canvasView;
 	TicTacToeBoard ticTacToeBoard;
 	DisplayMetrics dm;
-//	MediaPlayer mp;
+	MediaPlayer mp;
 
 	
-//    @Override
-//    protected void onDestroy() {
-//        super.onDestroy();
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
         // The activity is about to be destroyed.
-//        if (mp != null) {
-//            mp.stop();
-//            mp.reset();
-//            try {
-//            	mp.prepare();
-//            } catch (IOException e) {
-//            	System.err.println("Caught IOException: " + e.getMessage());
-//            }
-
-//            mp.release();
-
-//        }
-//    }
+        if (mp != null) {
+            mp.stop();
+            mp.reset();
+            mp.release();
+        }
+    }
 	
+    public void cycleMusic() {
+    	
+    }
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -69,8 +65,8 @@ public class GameActivity extends Activity {
 
 			ticTacToeBoard.setGameType(gameType);
 			ticTacToeBoard.resetGame();
-//			mp = MediaPlayer.create(this, R.raw.beat);
-//			mp.start();
+			mp = MediaPlayer.create(this, R.raw.beat);
+			mp.start();
 
 		}
 		
@@ -146,6 +142,7 @@ public class GameActivity extends Activity {
 					// Out of bounds check
 					if (colClicked < ticTacToeBoard.getNumCellsPerRow() && rowClicked <= (ticTacToeBoard.getNumCellsPerRow() -1) * ticTacToeBoard.getNumCellsPerRow()) {
 						ticTacToeBoard.consumeTurn(rowClicked, colClicked);
+						cycleMusic();
 						currentGameStatus = ticTacToeBoard.getGameStatus();
 					}
 						break;
