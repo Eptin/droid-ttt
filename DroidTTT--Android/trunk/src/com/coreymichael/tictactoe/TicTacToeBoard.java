@@ -169,6 +169,35 @@ public class TicTacToeBoard {
 		return checkBlock(blockOfColumnCoordinates); // checkBlock analyzes the entire 1D array that's passed in.
 	}
 	
+	// Check the top-left to bottom-right diagonal
+	public int checkDiagonalLeftToRight(int row, int col) {
+		int remainingRowLength = mNumCellsPerRow - row;
+		int remainingColLength = mNumCellsPerRow - col;
+		int lengthOfDiagonal = Math.min(remainingRowLength, remainingColLength);
+		int[] blockOfCoordinates = new int[lengthOfDiagonal * 2];
+//		// Keep looping while the calculated row / column is less than the edge of the game board
+//		for (int x = 0; (mNumCellsPerRow < row + x) && (mNumCellsPerRow < col + x); x++) {
+		for (int x = 0; x < lengthOfDiagonal; x++) {
+			blockOfCoordinates[(row * 2)] = row + x;
+			blockOfCoordinates[(row * 2) + 1] = col + x;
+		}
+		return checkBlock(blockOfCoordinates); // checkBlock analyzes the entire 1D array that's passed in.
+	}
+	
+	// Check first top-right to bottom-left diagonal
+	public int checkDiagonalRightToLeft(int row, int col) {
+		int remainingRowLength = row;
+		int remainingColLength = mNumCellsPerRow - col;
+		int lengthOfDiagonal = Math.min(remainingRowLength, remainingColLength);
+		int[] blockOfCoordinates = new int[lengthOfDiagonal * 2];
+//		// Keep looping while the calculated row / column is less than the edge of the game board
+//		for (int x = 0; (mNumCellsPerRow < row + x) && (mNumCellsPerRow < col + x); x++) {
+		for (int x = 0; x < lengthOfDiagonal; x++) {
+			blockOfCoordinates[(row * 2)] = row - x;
+			blockOfCoordinates[(row * 2) + 1] = col + x;
+		}
+		return checkBlock(blockOfCoordinates); // checkBlock analyzes the entire 1D array that's passed in.
+	}
 	
 	public int checkBlock(int[] blockOfCoordinates) {
 		mRoomForWinningMove = 0;
