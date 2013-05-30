@@ -149,7 +149,7 @@ public class TicTacToeBoard {
 	}
 	
 	// Under Construction below
-
+	
 	public int checkHorizontal(int row) {
 		int[] blockOfRowCoordinates = new int[mNumCellsPerRow * 2];
 		for (int col = 0; col < mNumCellsPerRow; col++) {
@@ -184,7 +184,7 @@ public class TicTacToeBoard {
 		return checkBlock(blockOfCoordinates); // checkBlock analyzes the entire 1D array that's passed in.
 	}
 	
-	// Check first top-right to bottom-left diagonal
+	// Check the top-right to bottom-left diagonal
 	public int checkDiagonalRightToLeft(int row, int col) {
 		int remainingRowLength = row;
 		int remainingColLength = mNumCellsPerRow - col;
@@ -268,8 +268,36 @@ public class TicTacToeBoard {
 				if (colStatus != GameStatus.GAME_IN_PLAY)
 					return colStatus;
 			}
-
-			// check diagonals
+			
+		// check diagonals
+			
+			// Check the top-left to bottom-right diagonal, starting cell on the left wall.
+			for (int row = mNumCellsPerRow - mMovesNeededToWin; row > 0; row--) { // Starting at the earliest diagonal that is long enough to have a winning move
+				int diagonalStatus = checkDiagonalLeftToRight(row, 0);
+				if (diagonalStatus != GameStatus.GAME_IN_PLAY)
+					return diagonalStatus;
+			}
+			
+			// Check the top-left to bottom-right diagonal, starting cell on the top wall.
+			for (int col = 0; col < Math.min(mNumCellsPerRow - mMovesNeededToWin, mNumCellsPerRow); col++) { // Ending at the latest diagonal that is long enough to have a winning move
+				int diagonalStatus = checkDiagonalLeftToRight(0, col);
+				if (diagonalStatus != GameStatus.GAME_IN_PLAY)
+					return diagonalStatus;
+			}
+			
+			// Check the top-right to bottom-left diagonal, starting cell on the top wall.
+			for (int col = mMovesNeededToWin - 1; col < mNumCellsPerRow; col++) { // Starting at the earliest diagonal that is long enough to have a winning move
+				int diagonalStatus = checkDiagonalRightToLeft(0, col);
+				if (diagonalStatus != GameStatus.GAME_IN_PLAY)
+					return diagonalStatus;
+			}
+			
+			// Check the top-right to bottom-left diagonal, starting cell on the right wall.
+			for (int row = 0; row < Math.min(mNumCellsPerRow - mMovesNeededToWin + 1, mNumCellsPerRow); row++) { // Ending at the latest diagonal that is long enough to have a winning move
+				int diagonalStatus = checkDiagonalRightToLeft(row, mNumCellsPerRow);
+				if (diagonalStatus != GameStatus.GAME_IN_PLAY)
+					return diagonalStatus;
+			}
 			
 			// Are we in a deadlock?
 			if (mWinningMovePossible == false) {
@@ -280,7 +308,7 @@ public class TicTacToeBoard {
 		return GameStatus.GAME_IN_PLAY; // If no one has won, and there is not a tie, then the game is still in play
 	}
 	// Under Construction above
-
+	
 	public void resetGame() {
 		
 		// Set each cell to EMPTY
@@ -289,7 +317,7 @@ public class TicTacToeBoard {
 				setCellStatus(row, col, CellStatus.EMPTY);
 			}
 		}
-
+		
 		mCurrentPlayer = CellStatus.PLAYER_X;	// Set the first player to Player X;
 		mGameStatus = GameStatus.GAME_IN_PLAY;
 		mMovesSoFar = 0;
