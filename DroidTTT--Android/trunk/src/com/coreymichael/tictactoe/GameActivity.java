@@ -17,18 +17,18 @@ public class GameActivity extends Activity {
 	CanvasView canvasView;
 	TicTacToeBoard ticTacToeBoard;
 	DisplayMetrics dm;
-	MediaPlayer mp;
+//	MediaPlayer mp;
 
 	
     @Override
     protected void onDestroy() {
         super.onDestroy();
         // The activity is about to be destroyed.
-        if (mp != null) {
-            mp.stop();
-            mp.reset();
-            mp.release();
-        }
+//        if (mp != null) {
+//            mp.stop();
+//            mp.reset();
+//            mp.release();
+//        }
     }
 	
     public void cycleMusic() {
@@ -65,8 +65,8 @@ public class GameActivity extends Activity {
 
 			ticTacToeBoard.setGameType(gameType);
 			ticTacToeBoard.resetGame();
-			mp = MediaPlayer.create(this, R.raw.beat);
-			mp.start();
+//			mp = MediaPlayer.create(this, R.raw.beat);
+//			mp.start();
 
 		}
 		

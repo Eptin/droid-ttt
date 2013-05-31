@@ -123,7 +123,8 @@ public class CanvasView extends View {
 					tempBitmap = mPlayerOBitmap;
 				else if (mGameBoardCells[row][col] == TicTacToeBoard.CellStatus.PLAYER_X)
 					tempBitmap = mPlayerXBitmap;
-				drawPiece(canvas, row, col, tempBitmap);
+				if (tempBitmap != null)
+					drawPiece(canvas, row, col, tempBitmap);
 			}
 		}
 	}
