@@ -94,7 +94,6 @@ public class CanvasView extends View {
 		//Rect gridScale = new Rect(0, 0, mCellPixelSize * mNumCellsPerRow, mCellPixelSize * mNumCellsPerRow);
 		//Rect gridScale = new Rect(0, 0, 800, 480);
 		
-		int playerScaledWidthHeight = mCellPixelSize / 4 * 3;
 		// Draw the background
 		//canvas.drawBitmap(mBackgroundBitmap, 0, 0, null);
 		//canvas.drawColor(Color.WHITE);
@@ -120,20 +119,25 @@ public class CanvasView extends View {
 		for (int row = 0; row < mGameBoardCells.length; row++) { // Iterates over the rows
 			for (int col = 0; col < mGameBoardCells[0].length; col++) { // Iterates over the columns
 				Bitmap tempBitmap = null;
-				int padding = mCellPixelSize / 8;	// If each cell were 80 pixels across, this would give 1/8th of a cell on either size.
-													// That would be 10 pixels padding, then 60 pixels for the image, then 10 pixels padding.
-				int xTranslatedToScreenCoordinate = (col * mCellPixelSize) + padding;
-				int yTranslatedToScreenCoordinate = (row * mCellPixelSize) + padding;
 				if (mGameBoardCells[row][col] == TicTacToeBoard.CellStatus.PLAYER_O)
 					tempBitmap = mPlayerOBitmap;
 				else if (mGameBoardCells[row][col] == TicTacToeBoard.CellStatus.PLAYER_X)
 					tempBitmap = mPlayerXBitmap;
-				if (tempBitmap != null) //then we draw the X or O bitmap on the appropriate cell
-					canvas.drawBitmap(tempBitmap, null, new Rect(xTranslatedToScreenCoordinate, yTranslatedToScreenCoordinate, xTranslatedToScreenCoordinate + playerScaledWidthHeight, yTranslatedToScreenCoordinate + playerScaledWidthHeight), null);
+				drawPiece(canvas, row, col, tempBitmap);
 			}
 		}
 	}
-
+	
+	public void drawPiece(Canvas canvas, int row, int col, Bitmap tempBitmap) {
+		int playerScaledWidthHeight = mCellPixelSize / 4 * 3;
+		int padding = mCellPixelSize / 8;	// If each cell were 80 pixels across, this would give 1/8th of a cell on either size.
+											// That would be 10 pixels padding, then 60 pixels for the image, then 10 pixels padding.
+		int xTranslatedToScreenCoordinate = (col * mCellPixelSize) + padding;
+		int yTranslatedToScreenCoordinate = (row * mCellPixelSize) + padding;
+		if (tempBitmap != null) //then we draw the X or O bitmap on the appropriate cell
+			canvas.drawBitmap(tempBitmap, null, new Rect(xTranslatedToScreenCoordinate, yTranslatedToScreenCoordinate, xTranslatedToScreenCoordinate + playerScaledWidthHeight, yTranslatedToScreenCoordinate + playerScaledWidthHeight), null);
+	}
+	
 	protected Bitmap loadBitmap(Context context, int resourceId) {
 		Bitmap bitmap = null;
 		if (context != null) {

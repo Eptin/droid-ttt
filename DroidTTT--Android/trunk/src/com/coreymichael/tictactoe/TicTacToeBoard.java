@@ -137,7 +137,7 @@ public class TicTacToeBoard {
 			setCellStatus(attemptedRow, attemptedColumn, mCurrentPlayer);
 			setMovesSoFar(getMovesSoFar() + 1);
 			setGameStatus(updateGameStatus());
-			swapThePlayers();
+//**			swapThePlayers();
 		}
 	}
 		
@@ -178,8 +178,8 @@ public class TicTacToeBoard {
 //		// Keep looping while the calculated row / column is less than the edge of the game board
 //		for (int x = 0; (mNumCellsPerRow < row + x) && (mNumCellsPerRow < col + x); x++) {
 		for (int x = 0; x < lengthOfDiagonal; x++) {
-			blockOfCoordinates[(row * 2)] = row + x;
-			blockOfCoordinates[(row * 2) + 1] = col + x;
+			blockOfCoordinates[(x * 2)] = row + x;
+			blockOfCoordinates[(x * 2) + 1] = col + x;
 		}
 		return checkBlock(blockOfCoordinates); // checkBlock analyzes the entire 1D array that's passed in.
 	}
@@ -193,8 +193,8 @@ public class TicTacToeBoard {
 //		// Keep looping while the calculated row / column is less than the edge of the game board
 //		for (int x = 0; (mNumCellsPerRow < row + x) && (mNumCellsPerRow < col + x); x++) {
 		for (int x = 0; x < lengthOfDiagonal; x++) {
-			blockOfCoordinates[(row * 2)] = row - x;
-			blockOfCoordinates[(row * 2) + 1] = col + x;
+			blockOfCoordinates[(x * 2)] = row - x;
+			blockOfCoordinates[(x * 2) + 1] = col + x;
 		}
 		return checkBlock(blockOfCoordinates); // checkBlock analyzes the entire 1D array that's passed in.
 	}
@@ -251,7 +251,7 @@ public class TicTacToeBoard {
 	
 	// New method for Winner Detection
 	public int updateGameStatus() {  
-		if (getMovesSoFar() >= ((mMovesNeededToWin * 2) - 1) ) { // We only check for winner if we have enough pieces on the board
+//**		if (getMovesSoFar() >= ((mMovesNeededToWin * 2) - 1) ) { // We only check for winner if we have enough pieces on the board
 			
 			mWinningMovePossible = false;
 			
@@ -304,7 +304,7 @@ public class TicTacToeBoard {
 				return GameStatus.GAME_OVER_TIE;
 			}
 			
-		}
+//**		}
 		return GameStatus.GAME_IN_PLAY; // If no one has won, and there is not a tie, then the game is still in play
 	}
 	// Under Construction above
