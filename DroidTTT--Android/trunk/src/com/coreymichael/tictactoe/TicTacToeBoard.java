@@ -103,16 +103,30 @@ public class TicTacToeBoard {
 		return this.mCurrentPlayer;
 	}
 	
+	public int getOpposingPlayer () {
+		return (this.mCurrentPlayer == CellStatus.PLAYER_X ? CellStatus.PLAYER_O : CellStatus.PLAYER_X);
+	}
+	
 	public boolean isPlayer (int cellStatus) {
 		return (cellStatus == CellStatus.PLAYER_X || cellStatus == CellStatus.PLAYER_O);
 	}
 	
+	// Returns a boolean for whether the cellstatus belongs to a player opposing the current player
 	public boolean isOpposingPlayer (int cellStatus) {
 		return (isPlayer(cellStatus) && cellStatus != getCurrentPlayer());
 	}
 	
+	// Returns a boolean for whether the cellstatus belongs to a player opposing the player passed in
+	public boolean isOpposingPlayerToThisPlayer (int cellStatus, int otherPlayer) {
+		return (isPlayer(cellStatus) && cellStatus != otherPlayer);
+	}
+	
 	public int CurrentPlayerWins () {
 		return (getCurrentPlayer() == CellStatus.PLAYER_X ? GameStatus.PLAYER_X_WINS : GameStatus.PLAYER_O_WINS);
+	}
+	
+	public int ThisPlayerWins (int player) {
+		return (player == CellStatus.PLAYER_X ? GameStatus.PLAYER_X_WINS : GameStatus.PLAYER_O_WINS);
 	}
 	
 	public int getMovesSoFar() {
@@ -150,26 +164,29 @@ public class TicTacToeBoard {
 	
 	// Under Construction below
 	
+	// Checks a single horizontal row
 	public int checkHorizontal(int row) {
 		int[] blockOfRowCoordinates = new int[mNumCellsPerRow * 2];
 		for (int col = 0; col < mNumCellsPerRow; col++) {
 			blockOfRowCoordinates[(col * 2)] = row;
 			blockOfRowCoordinates[(col * 2) + 1] = col;
 		}
-		return checkBlock(blockOfRowCoordinates); // checkBlock analyzes the entire 1D array that's passed in.
+		checkBlockForRoomForWinningMove(blockOfRowCoordinates, getOpposingPlayer());
+		return checkBlock(blockOfRowCoordinates, getCurrentPlayer()); // checkBlock analyzes the entire 1D array that's passed in.
 	}
 	
-	
+	// Checks a single vertical column
 	public int checkVertical(int col) {
 		int[] blockOfColumnCoordinates = new int[mNumCellsPerRow * 2];
 		for (int row = 0; row < mNumCellsPerRow; row++) {
 			blockOfColumnCoordinates[(row * 2)] = row;
 			blockOfColumnCoordinates[(row * 2) + 1] = col;
 		}
-		return checkBlock(blockOfColumnCoordinates); // checkBlock analyzes the entire 1D array that's passed in.
+		checkBlockForRoomForWinningMove(blockOfColumnCoordinates, getOpposingPlayer());
+		return checkBlock(blockOfColumnCoordinates, getCurrentPlayer()); // checkBlock analyzes the entire 1D array that's passed in.
 	}
 	
-	// Check the top-left to bottom-right diagonal
+	// Checks a single top-left to bottom-right diagonal
 	public int checkDiagonalLeftToRight(int row, int col) {
 		int remainingRowLength = mNumCellsPerRow - row;
 		int remainingColLength = mNumCellsPerRow - col;
@@ -181,10 +198,11 @@ public class TicTacToeBoard {
 			blockOfCoordinates[(x * 2)] = row + x;
 			blockOfCoordinates[(x * 2) + 1] = col + x;
 		}
-		return checkBlock(blockOfCoordinates); // checkBlock analyzes the entire 1D array that's passed in.
+		checkBlockForRoomForWinningMove(blockOfCoordinates, getOpposingPlayer());
+		return checkBlock(blockOfCoordinates, getCurrentPlayer()); // checkBlock analyzes the entire 1D array that's passed in.
 	}
 	
-	// Check the top-right to bottom-left diagonal
+	// Checks a single top-right to bottom-left diagonal
 	public int checkDiagonalRightToLeft(int row, int col) {
 		int remainingRowLength = mNumCellsPerRow - row;
 		int remainingColLength = col + 1;
@@ -196,13 +214,14 @@ public class TicTacToeBoard {
 			blockOfCoordinates[(x * 2)] = row + x;
 			blockOfCoordinates[(x * 2) + 1] = col - x;
 		}
-		return checkBlock(blockOfCoordinates); // checkBlock analyzes the entire 1D array that's passed in.
+		checkBlockForRoomForWinningMove(blockOfCoordinates, getOpposingPlayer());
+		return checkBlock(blockOfCoordinates, getCurrentPlayer()); // checkBlock analyzes the entire 1D array that's passed in.
 	}
 	
-	public int checkBlock(int[] blockOfCoordinates) {
+	public int checkBlock(int[] blockOfCoordinates, int player) {
 		mRoomForWinningMove = 0;
 	// blockOfCoordinates stores coordinates in this format:   [row1][col1][row2][col2][row3][col3] etc...
-		ArrayList<Integer> mCurrentStreak = new ArrayList<Integer>(); // List of the coordinates for the current player's winning streak
+		ArrayList<Integer> mCurrentStreak = new ArrayList<Integer>(); // List of the coordinates for the player's winning streak
 		// mCurrentStreak stores coordinates in the same format as blockOfCoordinates
 		int row;
 		int col;
@@ -211,8 +230,8 @@ public class TicTacToeBoard {
 			row = blockOfCoordinates[x];
 			col = blockOfCoordinates[x + 1];
 			
-			// Adding one more of the current player's pieces to the 'Winning Streak'
-			if (getCellStatus(row, col) == getCurrentPlayer()) {
+			// Adding one more of the player's pieces to the 'Winning Streak'
+			if (getCellStatus(row, col) == player) {
 				mRoomForWinningMove++;
 				mCurrentStreak.add(row); // Add coordinates for current piece to the 'Winning Streak'
 				mCurrentStreak.add(col); // Add coordinates for current piece to the 'Winning Streak'
@@ -224,15 +243,15 @@ public class TicTacToeBoard {
 				mCurrentStreak.clear();
 			}
 			
-			// It's back to 0 if we detect a piece by the other player
-			if (isOpposingPlayer(getCellStatus(row, col))) { // If current cell belongs to the opposing player...
+			// It's back to 0 if we detect a piece by the opposing player
+			if (isOpposingPlayerToThisPlayer(getCellStatus(row, col), player)) { // If current cell belongs to the opposing player...
 				mRoomForWinningMove = 0; // Reset the mRoomForWinningMove counter
 				mCurrentStreak.clear();
 			}
 			
-			// Tallying up a current player's pieces
+			// Tallying up the player's pieces
 			if (mCurrentStreak.size() >= mMovesNeededToWin * 2) {
-				return CurrentPlayerWins();
+				return ThisPlayerWins(player);
 			}
 			
 			// If there is enough room for a winning move, then we know we aren't deadlocked
@@ -245,7 +264,33 @@ public class TicTacToeBoard {
 	}
 	
 	
-	
+	public void checkBlockForRoomForWinningMove(int[] blockOfCoordinates, int player) {
+		mRoomForWinningMove = 0;
+	// blockOfCoordinates stores coordinates in this format:   [row1][col1][row2][col2][row3][col3] etc...
+		int row;
+		int col;
+		
+		for (int x = 0; x < blockOfCoordinates.length; x += 2) { // Iterates across the block
+			row = blockOfCoordinates[x];
+			col = blockOfCoordinates[x + 1];
+			
+			// We add to mRoomForWinningMove if we encounter either the player's pieces or a blank space
+			if ((getCellStatus(row, col) == player) || (getCellStatus(row, col) == CellStatus.EMPTY)) {
+				mRoomForWinningMove++;
+			}
+			
+			// It's back to 0 if we detect a piece by the opposing player
+			if (isOpposingPlayerToThisPlayer(getCellStatus(row, col), player)) { // If current cell belongs to the opposing player...
+				mRoomForWinningMove = 0; // Reset the mRoomForWinningMove counter
+			}
+			
+			// If there is enough room for a winning move, then we know we aren't deadlocked
+			if (mRoomForWinningMove >= mMovesNeededToWin) {
+				mWinningMovePossible = true;
+			}
+			
+		}
+	}
 	
 	
 	
@@ -255,21 +300,21 @@ public class TicTacToeBoard {
 			
 			mWinningMovePossible = false;
 			
-			// check rows
+			// Check all rows
 			for (int row = 0; row < mNumCellsPerRow; row++) {
 				int rowStatus = checkHorizontal(row);
 				if (rowStatus != GameStatus.GAME_IN_PLAY)
 					return rowStatus;
 			}
 			
-			// check columns
+			// Check all columns
 			for (int col = 0; col < mNumCellsPerRow; col++) {
 				int colStatus = checkVertical(col);
 				if (colStatus != GameStatus.GAME_IN_PLAY)
 					return colStatus;
 			}
 			
-		// check diagonals
+		// Check diagonals (only the ones long enough to contain a possible winner)
 			
 			// Check the top-left to bottom-right diagonal, starting cell on the left wall.
 			for (int row = mNumCellsPerRow - mMovesNeededToWin; row >= 0; row--) { // Starting at the earliest diagonal that is long enough to have a winning move
