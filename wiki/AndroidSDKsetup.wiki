@@ -29,3 +29,4 @@ Follow these steps first: [https://devs.ouya.tv/developers/docs/setup Setup Inst
       * Click OK
   * Eclipse: Speed up your emulator with these directions:
       * [http://software.intel.com/en-us/articles/speeding-up-the-android-emulator-on-intel-architecture Speeding Up the Android Emulator on Intel Architecture]
+      * Tip: When the article says to enable GPU emulation, they mean selecting the *Use Host GPU* option.
