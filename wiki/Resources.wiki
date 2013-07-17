@@ -1,7 +1,7 @@
 == A place to list the useful resources ==
 
 
-*Android SDK setup: [AndroidSDKsetup]*
+*Android SDK installation: [AndroidSDKsetup]*
 
 == General Coding ==
   * [http://equivalence.co.uk/archives/101 How to write beautiful code]
