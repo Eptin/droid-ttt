@@ -27,3 +27,5 @@ Follow these steps first: [https://devs.ouya.tv/developers/docs/setup Setup Inst
       * Device: Nexus 4
       * Target: Android 4.2.2 - API Level 17
       * Click OK
+  * Eclipse: Speed up your emulator with these directions:
+      * [http://software.intel.com/en-us/articles/speeding-up-the-android-emulator-on-intel-architecture Speeding Up the Android Emulator on Intel Architecture]
