@@ -14,7 +14,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 public class CanvasView extends View {
-	private int[][] mGameBoardCells;
+	private char[][] mGameBoardCells;
 	private int mNumCellsPerRow;
 	
 	private Bitmap mBackgroundBitmap;
@@ -64,11 +64,11 @@ public class CanvasView extends View {
 		return mPlayerXBitmap;
 	}
 
-	public void setmGameBoardCells(int[][] mGameBoardCells) {
+	public void setmGameBoardCells(char[][] mGameBoardCells) {
 		this.mGameBoardCells = mGameBoardCells;
 	}
 
-	public int[][] getmGameBoardCells() {
+	public char[][] getmGameBoardCells() {
 		return mGameBoardCells;
 	}
 

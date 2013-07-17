@@ -9,12 +9,12 @@ public class TicTacToeBoard {
 	private Bitmap mPlayerXBitmap;
 	private Bitmap mPlayerOBitmap;
 	
-	private int[][] mGameBoardCells;
+	private char[][] mGameBoardCells;
 	
-	private int mGameType;
+	private char mGameType;
 	private int mNumCellsPerRow;
-	private int mGameStatus;
-	private int mCurrentPlayer;
+	private char mGameStatus;
+	private char mCurrentPlayer;
 	private int mMovesNeededToWin;
 	private int mMovesSoFar;
 	private int mRoomForWinningMove; // This counts both current player pieces as well as empty spaces to determine if a winning move is possible
@@ -46,7 +46,7 @@ public class TicTacToeBoard {
 		return mPlayerOBitmap;
 	}
 	
-	public void setGameType(int mGameType) {
+	public void setGameType(char mGameType) {
 		this.mGameType = mGameType;
 		
 		switch (getGameType()) {
@@ -64,18 +64,18 @@ public class TicTacToeBoard {
 				break;
 		}
 		
-		mGameBoardCells = new int[mNumCellsPerRow][mNumCellsPerRow]; //Initializes a new game board that is 3x3, 4x4, 6x6, etc.
+		mGameBoardCells = new char[mNumCellsPerRow][mNumCellsPerRow]; //Initializes a new game board that is 3x3, 4x4, 6x6, etc.
 	}
 	
-	public int getGameType() {
+	public char getGameType() {
 		return mGameType;
 	}
 	
-	public void setGameStatus(int mGameStatus) {
+	public void setGameStatus(char mGameStatus) {
 		this.mGameStatus = mGameStatus;
 	}
 	
-	public int getGameStatus() {
+	public char getGameStatus() {
 		return mGameStatus;
 	}
 	
@@ -87,45 +87,45 @@ public class TicTacToeBoard {
 		return mNumCellsPerRow;
 	}
 	
-	public int getCellStatus(int row, int col) {
+	public char getCellStatus(int row, int col) {
 		return getGameBoardCells()[row][col];
 	}
 	
-	public void setCellStatus(int row, int col, int status) {
+	public void setCellStatus(int row, int col, char status) {
 		getGameBoardCells()[row][col] = status;
 	}
 	
-	public void setCurrentPlayer (int thePlayer) {
+	public void setCurrentPlayer (char thePlayer) {
 		this.mCurrentPlayer = thePlayer;
 	}
 	
-	public int getCurrentPlayer () {
+	public char getCurrentPlayer () {
 		return this.mCurrentPlayer;
 	}
 	
-	public int getOpposingPlayer () {
+	public char getOpposingPlayer () {
 		return (this.mCurrentPlayer == CellStatus.PLAYER_X ? CellStatus.PLAYER_O : CellStatus.PLAYER_X);
 	}
 	
-	public boolean isPlayer (int cellStatus) {
+	public boolean isPlayer (char cellStatus) {
 		return (cellStatus == CellStatus.PLAYER_X || cellStatus == CellStatus.PLAYER_O);
 	}
 	
 	// Returns a boolean for whether the cellstatus belongs to a player opposing the current player
-	public boolean isOpposingPlayer (int cellStatus) {
+	public boolean isOpposingPlayer (char cellStatus) {
 		return (isPlayer(cellStatus) && cellStatus != getCurrentPlayer());
 	}
 	
 	// Returns a boolean for whether the cellstatus belongs to a player opposing the player passed in
-	public boolean isOpposingPlayerToThisPlayer (int cellStatus, int otherPlayer) {
+	public boolean isOpposingPlayerToThisPlayer (char cellStatus, char otherPlayer) {
 		return (isPlayer(cellStatus) && cellStatus != otherPlayer);
 	}
 	
-	public int CurrentPlayerWins () {
+	public char CurrentPlayerWins () {
 		return (getCurrentPlayer() == CellStatus.PLAYER_X ? GameStatus.PLAYER_X_WINS : GameStatus.PLAYER_O_WINS);
 	}
 	
-	public int ThisPlayerWins (int player) {
+	public char ThisPlayerWins (char player) {
 		return (player == CellStatus.PLAYER_X ? GameStatus.PLAYER_X_WINS : GameStatus.PLAYER_O_WINS);
 	}
 	
@@ -137,11 +137,11 @@ public class TicTacToeBoard {
 		this.mMovesSoFar = mMovesSoFar;
 	}
 	
-	public void setGameBoardCells(int[][] mGameBoardCells) {
+	public void setGameBoardCells(char[][] mGameBoardCells) {
 		this.mGameBoardCells = mGameBoardCells;
 	}
 	
-	public int[][] getGameBoardCells() {
+	public char[][] getGameBoardCells() {
 		return mGameBoardCells;
 	}
 	
@@ -165,7 +165,7 @@ public class TicTacToeBoard {
 	// Under Construction below
 	
 	// Checks a single horizontal row
-	public int checkHorizontal(int row) {
+	public char checkHorizontal(int row) {
 		int[] blockOfRowCoordinates = new int[mNumCellsPerRow * 2];
 		for (int col = 0; col < mNumCellsPerRow; col++) {
 			blockOfRowCoordinates[(col * 2)] = row;
@@ -176,7 +176,7 @@ public class TicTacToeBoard {
 	}
 	
 	// Checks a single vertical column
-	public int checkVertical(int col) {
+	public char checkVertical(int col) {
 		int[] blockOfColumnCoordinates = new int[mNumCellsPerRow * 2];
 		for (int row = 0; row < mNumCellsPerRow; row++) {
 			blockOfColumnCoordinates[(row * 2)] = row;
@@ -187,7 +187,7 @@ public class TicTacToeBoard {
 	}
 	
 	// Checks a single top-left to bottom-right diagonal
-	public int checkDiagonalLeftToRight(int row, int col) {
+	public char checkDiagonalLeftToRight(int row, int col) {
 		int remainingRowLength = mNumCellsPerRow - row;
 		int remainingColLength = mNumCellsPerRow - col;
 		int lengthOfDiagonal = Math.min(remainingRowLength, remainingColLength);
@@ -203,7 +203,7 @@ public class TicTacToeBoard {
 	}
 	
 	// Checks a single top-right to bottom-left diagonal
-	public int checkDiagonalRightToLeft(int row, int col) {
+	public char checkDiagonalRightToLeft(int row, int col) {
 		int remainingRowLength = mNumCellsPerRow - row;
 		int remainingColLength = col + 1;
 		int lengthOfDiagonal = Math.min(remainingRowLength, remainingColLength);
@@ -218,7 +218,7 @@ public class TicTacToeBoard {
 		return checkBlock(blockOfCoordinates, getCurrentPlayer()); // checkBlock analyzes the entire 1D array that's passed in.
 	}
 	
-	public int checkBlock(int[] blockOfCoordinates, int player) {
+	public char checkBlock(int[] blockOfCoordinates, char player) {
 		mRoomForWinningMove = 0;
 	// blockOfCoordinates stores coordinates in this format:   [row1][col1][row2][col2][row3][col3] etc...
 		ArrayList<Integer> mCurrentStreak = new ArrayList<Integer>(); // List of the coordinates for the player's winning streak
@@ -264,7 +264,7 @@ public class TicTacToeBoard {
 	}
 	
 	
-	public void checkBlockForRoomForWinningMove(int[] blockOfCoordinates, int player) {
+	public void checkBlockForRoomForWinningMove(int[] blockOfCoordinates, char player) {
 		mRoomForWinningMove = 0;
 	// blockOfCoordinates stores coordinates in this format:   [row1][col1][row2][col2][row3][col3] etc...
 		int row;
@@ -295,21 +295,21 @@ public class TicTacToeBoard {
 	
 	
 	// New method for Winner Detection
-	public int updateGameStatus() {  
+	public char updateGameStatus() {  
 //**		if (getMovesSoFar() >= ((mMovesNeededToWin * 2) - 1) ) { // We only check for winner if we have enough pieces on the board
 			
 			mWinningMovePossible = false;
 			
 			// Check all rows
 			for (int row = 0; row < mNumCellsPerRow; row++) {
-				int rowStatus = checkHorizontal(row);
+				char rowStatus = checkHorizontal(row);
 				if (rowStatus != GameStatus.GAME_IN_PLAY)
 					return rowStatus;
 			}
 			
 			// Check all columns
 			for (int col = 0; col < mNumCellsPerRow; col++) {
-				int colStatus = checkVertical(col);
+				char colStatus = checkVertical(col);
 				if (colStatus != GameStatus.GAME_IN_PLAY)
 					return colStatus;
 			}
@@ -318,28 +318,28 @@ public class TicTacToeBoard {
 			
 			// Check the top-left to bottom-right diagonal, starting cell on the left wall.
 			for (int row = mNumCellsPerRow - mMovesNeededToWin; row >= 0; row--) { // Starting at the earliest diagonal that is long enough to have a winning move
-				int diagonalStatus = checkDiagonalLeftToRight(row, 0);
+				char diagonalStatus = checkDiagonalLeftToRight(row, 0);
 				if (diagonalStatus != GameStatus.GAME_IN_PLAY)
 					return diagonalStatus;
 			}
 			
 			// Check the top-left to bottom-right diagonal, starting cell on the top wall.
 			for (int col = 0; col <= mNumCellsPerRow - mMovesNeededToWin; col++) { // Ending at the latest diagonal that is long enough to have a winning move
-				int diagonalStatus = checkDiagonalLeftToRight(0, col);
+				char diagonalStatus = checkDiagonalLeftToRight(0, col);
 				if (diagonalStatus != GameStatus.GAME_IN_PLAY)
 					return diagonalStatus;
 			}
 			
 			// Check the top-right to bottom-left diagonal, starting cell on the top wall.
 			for (int col = mMovesNeededToWin - 1; col < mNumCellsPerRow; col++) { // Starting at the earliest diagonal that is long enough to have a winning move
-				int diagonalStatus = checkDiagonalRightToLeft(0, col);
+				char diagonalStatus = checkDiagonalRightToLeft(0, col);
 				if (diagonalStatus != GameStatus.GAME_IN_PLAY)
 					return diagonalStatus;
 			}
 			
 			// Check the top-right to bottom-left diagonal, starting cell on the right wall.
 			for (int row = 0; row <= mNumCellsPerRow - mMovesNeededToWin; row++) { // Ending at the latest diagonal that is long enough to have a winning move
-				int diagonalStatus = checkDiagonalRightToLeft(row, mNumCellsPerRow - 1);
+				char diagonalStatus = checkDiagonalRightToLeft(row, mNumCellsPerRow - 1);
 				if (diagonalStatus != GameStatus.GAME_IN_PLAY)
 					return diagonalStatus;
 			}
@@ -369,24 +369,24 @@ public class TicTacToeBoard {
 	}
 	
 	public static final class CellStatus {
-		public static final int EMPTY = 0;
-		public static final int PLAYER_X = 1;
-		public static final int PLAYER_O = 2;
+		public static final char EMPTY    = '_';
+		public static final char PLAYER_X = 'X';
+		public static final char PLAYER_O = 'O';
 	}
 	
 	public static final class GameStatus {
-		public static final int GAME_IN_PLAY = 0;
-		public static final int PLAYER_X_WINS = 1;
-		public static final int PLAYER_O_WINS = 2;
-		public static final int GAME_OVER_TIE = 3;
+		public static final char GAME_IN_PLAY  = 'P';
+		public static final char PLAYER_X_WINS = 'X';
+		public static final char PLAYER_O_WINS = 'O';
+		public static final char GAME_OVER_TIE = 'T';
 	}
 	
 	public static final class GameType {
-		public static final int GAME_3_X_3 = 3;
-		public static final int GAME_4_X_4 = 4;
-		public static final int GAME_6_X_6 = 6;
+		public static final char GAME_3_X_3 = '3';
+		public static final char GAME_4_X_4 = '4';
+		public static final char GAME_6_X_6 = '6';
 		
-		public static final int getGameTypeFromString (String string) {
+		public static final char getGameTypeFromString (String string) {
 			if (string.equals("GAME_6_X_6")) return GAME_6_X_6;
 			if (string.equals("GAME_4_X_4")) return GAME_4_X_4;
 			if (string.equals("GAME_3_X_3")) return GAME_3_X_3;

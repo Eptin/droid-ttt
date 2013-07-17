@@ -61,7 +61,7 @@ public class GameActivity extends Activity {
 		}
 		else {
 			Intent intent = getIntent();
-			int gameType = TicTacToeBoard.GameType.getGameTypeFromString((intent.getStringExtra(MainActivity.GAME_TYPE)));
+			char gameType = TicTacToeBoard.GameType.getGameTypeFromString((intent.getStringExtra(MainActivity.GAME_TYPE)));
 
 			ticTacToeBoard.setGameType(gameType);
 			ticTacToeBoard.resetGame();
@@ -181,10 +181,10 @@ public class GameActivity extends Activity {
 	};
 
 	public class SaveData {
-		public int currentPlayer;
+		public char currentPlayer;
 		public int numCellsPerRow;
-		public int gameType;
-		public int [][] gameBoardCells;
+		public char gameType;
+		public char [][] gameBoardCells;
 		
 	}
 
