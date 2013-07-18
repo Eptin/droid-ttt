@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import java.util.*; 
 
 public class TicTacToeBoard {
+	
 	//Declaring bitmaps
 	private Bitmap mBoardBitmap;
 	private Bitmap mPlayerXBitmap;
@@ -20,6 +21,18 @@ public class TicTacToeBoard {
 	private int mRoomForWinningMove; // This counts both current player pieces as well as empty spaces to determine if a winning move is possible
 	
 	private boolean mWinningMovePossible = false;
+	
+	// Constructs a game with the provided board (either an empty or pre-filled board)
+	TicTacToeBoard(char gameType, char[][] mGameBoardCells) {
+		setGameType(gameType);
+    	setGameBoardCells(mGameBoardCells);
+	}
+	
+	// Constructs a new game with an empty board
+	TicTacToeBoard(char gameType) {
+		mGameBoardCells = new char[mNumCellsPerRow][mNumCellsPerRow]; //Initializes a new game board that is 3x3, 4x4, 6x6, etc.
+		this(gameType, mGameBoardCells);
+	}
 	
 	
 	public void setBoardBitmap(Bitmap mBoardBitmap) {
@@ -49,7 +62,7 @@ public class TicTacToeBoard {
 	public void setGameType(char mGameType) {
 		this.mGameType = mGameType;
 		
-		switch (getGameType()) {
+		switch (mGameType) {
 			case GameType.GAME_3_X_3: 
 				mNumCellsPerRow = 3;
 				mMovesNeededToWin = 3;
@@ -63,8 +76,6 @@ public class TicTacToeBoard {
 				mMovesNeededToWin = 4;
 				break;
 		}
-		
-		mGameBoardCells = new char[mNumCellsPerRow][mNumCellsPerRow]; //Initializes a new game board that is 3x3, 4x4, 6x6, etc.
 	}
 	
 	public char getGameType() {
@@ -372,6 +383,8 @@ public class TicTacToeBoard {
 		public static final char EMPTY    = '_';
 		public static final char PLAYER_X = 'X';
 		public static final char PLAYER_O = 'O';
+		public static final char DEAD     = 'D'; // Dead cells aka "craters" are formerly-playable cells
+		public static final char VOID     = 'V'; // Void cells are used to remove cells from the game board altogether. They can be used to shape the board.
 	}
 	
 	public static final class GameStatus {
