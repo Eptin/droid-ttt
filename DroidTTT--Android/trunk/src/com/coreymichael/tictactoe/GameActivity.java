@@ -43,27 +43,22 @@ public class GameActivity extends Activity {
 
 		canvasView = (CanvasView) findViewById(R.id.canvasView);
 		canvasView.setOnTouchListener(mTouchListener);
-
-		ticTacToeBoard = new TicTacToeBoard();
 		
 		// Check to see if there was a saved state and recover if so, otherwise start a new game
-		if (savedInstanceState != null) {
+		if (savedInstanceState != null) { // We are resuming a game in progress 
 			//ticTacToeBoard.setGameBoardCells(savedInstanceState.getIntArray("gameBoardCells"));
 			SaveData saveData = (SaveData) getLastNonConfigurationInstance();
 		    if (saveData != null) {
+		    	ticTacToeBoard = new TicTacToeBoard(saveData.gameType, saveData.gameBoardCells);
 				ticTacToeBoard.setCurrentPlayer(saveData.currentPlayer);
-				ticTacToeBoard.setNumCellsPerRow(saveData.numCellsPerRow);
-				ticTacToeBoard.setGameType(saveData.gameType);
-		    	ticTacToeBoard.setGameBoardCells(saveData.gameBoardCells);
-		        
+// shouldn't need this line				ticTacToeBoard.setNumCellsPerRow(saveData.numCellsPerRow);
 		    }
 
-		}
-		else {
+		} else { // We have no saved game data. Starting from scratch
 			Intent intent = getIntent();
 			char gameType = TicTacToeBoard.GameType.getGameTypeFromString((intent.getStringExtra(MainActivity.GAME_TYPE)));
-
-			ticTacToeBoard.setGameType(gameType);
+			
+			ticTacToeBoard = new TicTacToeBoard(gameType);
 			ticTacToeBoard.resetGame();
 //			mp = MediaPlayer.create(this, R.raw.beat);
 //			mp.start();
