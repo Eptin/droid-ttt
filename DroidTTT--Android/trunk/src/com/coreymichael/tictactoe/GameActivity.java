@@ -140,7 +140,13 @@ public class GameActivity extends Activity {
 			switch (currentGameStatus) {
 				case TicTacToeBoard.GameStatus.GAME_IN_PLAY:
 					// Out of bounds check
-					if (colClicked < ticTacToeBoard.getNumCellsPerRow() && rowClicked <= (ticTacToeBoard.getNumCellsPerRow() -1) * ticTacToeBoard.getNumCellsPerRow()) {
+					boolean colAlright;
+					boolean rowAlright;
+//					int numCellsPerRow;
+//					numCellsPerRow = ticTacToeBoard.getNumCellsPerRow();
+					colAlright = colClicked < ticTacToeBoard.getNumCellsPerRow();
+					rowAlright = rowClicked < ticTacToeBoard.getNumCellsPerRow();
+					if (colAlright && rowAlright) {
 						ticTacToeBoard.consumeTurn(rowClicked, colClicked);
 						cycleMusic();
 						currentGameStatus = ticTacToeBoard.getGameStatus();
