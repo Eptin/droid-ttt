@@ -25,14 +25,26 @@ public class TicTacToeBoard {
 	// Constructs a game with the provided board (either an empty or pre-filled board)
 	TicTacToeBoard(char gameType, char[][] mGameBoardCells) {
 		setGameType(gameType);
+		setCurrentPlayer(CellStatus.PLAYER_X);
+		setGameStatus(GameStatus.GAME_IN_PLAY);
+		mMovesSoFar = 0;
     	setGameBoardCells(mGameBoardCells);
 	}
 	
 	// Constructs a new game with an empty board
 	TicTacToeBoard(char gameType) {
 		setGameType(gameType);
-		mGameBoardCells = new char[mNumCellsPerRow][mNumCellsPerRow]; //Initializes a new game board that is 3x3, 4x4, 6x6, etc.
-		setGameBoardCells(mGameBoardCells);
+		setCurrentPlayer(CellStatus.PLAYER_X);
+		setGameStatus(GameStatus.GAME_IN_PLAY);
+		mMovesSoFar = 0;
+		setGameBoardCells(new char[mNumCellsPerRow][mNumCellsPerRow]); // Initializes a new game board that is 3x3, 4x4, 6x6, etc.
+		
+		// Set each cell of the game board to EMPTY
+		for (int row = 0; row < mGameBoardCells.length; row++) { // Iterates over the rows
+			for (int col = 0; col < mGameBoardCells[0].length; col++) { // Iterates over the columns
+				setCellStatus(row, col, CellStatus.EMPTY);
+			}
+		}
 	}
 	
 	
@@ -367,17 +379,6 @@ public class TicTacToeBoard {
 	// Under Construction above
 	
 	public void resetGame() {
-		
-		// Set each cell to EMPTY
-		for (int row = 0; row < mGameBoardCells.length; row++) { // Iterates over the rows
-			for (int col = 0; col < mGameBoardCells[0].length; col++) { // Iterates over the columns
-				setCellStatus(row, col, CellStatus.EMPTY);
-			}
-		}
-		
-		mCurrentPlayer = CellStatus.PLAYER_X;	// Set the first player to Player X;
-		mGameStatus = GameStatus.GAME_IN_PLAY;
-		mMovesSoFar = 0;
 	}
 	
 	public static final class CellStatus {
