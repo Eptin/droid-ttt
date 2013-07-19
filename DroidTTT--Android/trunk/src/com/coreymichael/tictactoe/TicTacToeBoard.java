@@ -30,9 +30,9 @@ public class TicTacToeBoard {
 	
 	// Constructs a new game with an empty board
 	TicTacToeBoard(char gameType) {
-		setGameType(gameType);
 		mGameBoardCells = new char[mNumCellsPerRow][mNumCellsPerRow]; //Initializes a new game board that is 3x3, 4x4, 6x6, etc.
-
+		setGameType(gameType);
+		setGameBoardCells(mGameBoardCells);
 	}
 	
 	
