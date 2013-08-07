@@ -32,7 +32,7 @@ public class GameActivity extends Activity {
     }
 	
     public void cycleMusic() {
-    	
+    	// Nothing here but us chickens! 🐔 🐔 🐔
     }
 	
 	/** Called when the activity is first created. */
@@ -45,8 +45,7 @@ public class GameActivity extends Activity {
 		canvasView.setOnTouchListener(mTouchListener);
 		
 		// Check to see if there was a saved state and recover if so, otherwise start a new game
-		if (savedInstanceState != null) { // We are resuming a game in progress 
-			//ticTacToeBoard.setGameBoardCells(savedInstanceState.getIntArray("gameBoardCells"));
+		if (savedInstanceState != null) { // We are resuming a game in progress
 			SaveData saveData = (SaveData) getLastNonConfigurationInstance();
 		    if (saveData != null) {
 		    	ticTacToeBoard = new TicTacToeBoard(saveData.gameType, saveData.gameBoardCells);
@@ -134,8 +133,6 @@ public class GameActivity extends Activity {
 					// Out of bounds check
 					boolean colAlright;
 					boolean rowAlright;
-//					int numCellsPerRow;
-//					numCellsPerRow = ticTacToeBoard.getNumCellsPerRow();
 					colAlright = colClicked < ticTacToeBoard.getNumCellsPerRow();
 					rowAlright = rowClicked < ticTacToeBoard.getNumCellsPerRow();
 					if (colAlright && rowAlright) {
@@ -148,15 +145,15 @@ public class GameActivity extends Activity {
 				case TicTacToeBoard.GameStatus.PLAYER_O_WINS:
 				case TicTacToeBoard.GameStatus.PLAYER_X_WINS:
 				default:
-					ticTacToeBoard = null; // Out with the old, in with the new
-					ticTacToeBoard = new TicTacToeBoard(getGameType()); // Starting a new game by calling a constructor
+					char gameType = ticTacToeBoard.getGameType();
+//** probably unnecessary					ticTacToeBoard = null; // Out with the old, in with the new
+					ticTacToeBoard = new TicTacToeBoard(gameType); // Starting a new game by calling a constructor
 					canvasView.invalidate();
 					return false;
 			}
 
-			/* POST TURN CHECK
-			 * If the game is over, display the message
-			 */
+			// POST TURN CHECK
+			// If the game is over, display the message
 			switch (currentGameStatus) {
 				case TicTacToeBoard.GameStatus.PLAYER_O_WINS:
 					Toast.makeText(v.getContext(), "Player O Wins!",
