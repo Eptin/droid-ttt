@@ -51,15 +51,12 @@ public class GameActivity extends Activity {
 		    if (saveData != null) {
 		    	ticTacToeBoard = new TicTacToeBoard(saveData.gameType, saveData.gameBoardCells);
 				ticTacToeBoard.setCurrentPlayer(saveData.currentPlayer);
-// shouldn't need this line				ticTacToeBoard.setNumCellsPerRow(saveData.numCellsPerRow);
 		    }
 
 		} else { // We have no saved game data. Starting from scratch
 			Intent intent = getIntent();
 			char gameType = TicTacToeBoard.GameType.getGameTypeFromString((intent.getStringExtra(MainActivity.GAME_TYPE)));
-			
-			ticTacToeBoard = new TicTacToeBoard(gameType);
-			ticTacToeBoard.resetGame();
+			ticTacToeBoard = new TicTacToeBoard(gameType); // Starting a new game by calling a constructor
 //			mp = MediaPlayer.create(this, R.raw.beat);
 //			mp.start();
 
@@ -151,7 +148,8 @@ public class GameActivity extends Activity {
 				case TicTacToeBoard.GameStatus.PLAYER_O_WINS:
 				case TicTacToeBoard.GameStatus.PLAYER_X_WINS:
 				default:
-					ticTacToeBoard.resetGame();
+					ticTacToeBoard = null; // Out with the old, in with the new
+					ticTacToeBoard = new TicTacToeBoard(getGameType()); // Starting a new game by calling a constructor
 					canvasView.invalidate();
 					return false;
 			}

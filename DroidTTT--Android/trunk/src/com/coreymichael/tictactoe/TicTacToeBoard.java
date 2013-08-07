@@ -320,7 +320,7 @@ public class TicTacToeBoard {
 	
 	// New method for Winner Detection
 	public char updateGameStatus() {  
-//**		if (getMovesSoFar() >= ((mMovesNeededToWin * 2) - 1) ) { // We only check for winner if we have enough pieces on the board
+		if (getMovesSoFar() >= ((mMovesNeededToWin * 2) - 1) ) { // We only check for winner if we have enough pieces on the board
 			
 			mWinningMovePossible = false;
 			
@@ -373,12 +373,8 @@ public class TicTacToeBoard {
 				return GameStatus.GAME_OVER_TIE;
 			}
 			
-//**		}
+		}
 		return GameStatus.GAME_IN_PLAY; // If no one has won, and there is not a tie, then the game is still in play
-	}
-	// Under Construction above
-	
-	public void resetGame() {
 	}
 	
 	public static final class CellStatus {
