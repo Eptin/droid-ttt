@@ -11,7 +11,7 @@
   * [http://android-developers.blogspot.com/ Android Developers Blog]
 
 
-=== Graphics ===
+=== [Graphics] ===
   * [http://tinypng.org/ TinyPNG]
   * [http://images.my-addr.com/resize_png_online_tool-free_png_resizer_for_web.php Free PNG resizer]
   * [http://en.wikipedia.org/wiki/Graphics_display_resolution Graphics display resolution]
