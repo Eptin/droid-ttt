@@ -119,9 +119,9 @@ public class CanvasView extends View {
 		for (int row = 0; row < mGameBoardCells.length; row++) { // Iterates over the rows
 			for (int col = 0; col < mGameBoardCells[0].length; col++) { // Iterates over the columns
 				Bitmap tempBitmap = null;
-				if (mGameBoardCells[row][col] == TicTacToeBoard.CellStatus.PLAYER_O)
+				if (mGameBoardCells[row][col] == CurrentGame.CellStatus.PLAYER_O)
 					tempBitmap = mPlayerOBitmap;
-				else if (mGameBoardCells[row][col] == TicTacToeBoard.CellStatus.PLAYER_X)
+				else if (mGameBoardCells[row][col] == CurrentGame.CellStatus.PLAYER_X)
 					tempBitmap = mPlayerXBitmap;
 				if (tempBitmap != null)
 					drawPiece(canvas, row, col, tempBitmap);

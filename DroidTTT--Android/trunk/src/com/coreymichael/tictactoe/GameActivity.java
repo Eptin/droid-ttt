@@ -15,7 +15,7 @@ import android.widget.Toast;
 public class GameActivity extends Activity {
 
 	CanvasView canvasView;
-	TicTacToeBoard ticTacToeBoard;
+	CurrentGame currentGame;
 	DisplayMetrics dm;
 //	MediaPlayer mp;
 
@@ -48,41 +48,41 @@ public class GameActivity extends Activity {
 		if (savedInstanceState != null) { // We are resuming a game in progress
 			SaveData saveData = (SaveData) getLastNonConfigurationInstance();
 		    if (saveData != null) {
-		    	ticTacToeBoard = new TicTacToeBoard(saveData.gameType, saveData.gameBoardCells);
-				ticTacToeBoard.setCurrentPlayer(saveData.currentPlayer);
+		    	currentGame = new CurrentGame(saveData.gameType, saveData.gameBoardCells);
+				currentGame.setCurrentPlayer(saveData.currentPlayer);
 		    }
 
 		} else { // We have no saved game data. Starting from scratch
 			Intent intent = getIntent();
-			char gameType = TicTacToeBoard.GameType.getGameTypeFromString((intent.getStringExtra(MainActivity.GAME_TYPE)));
-			ticTacToeBoard = new TicTacToeBoard(gameType); // Starting a new game by calling a constructor
+			char gameType = CurrentGame.GameType.getGameTypeFromString((intent.getStringExtra(MainActivity.GAME_TYPE)));
+			currentGame = new CurrentGame(gameType); // Starting a new game by calling a constructor
 //			mp = MediaPlayer.create(this, R.raw.beat);
 //			mp.start();
 
 		}
 		
 		// Load the background, player X and player O bitmaps
-		ticTacToeBoard.setBoardBitmap(canvasView.loadBitmap(this,
+		currentGame.setBoardBitmap(canvasView.loadBitmap(this,
 				R.drawable.wood_background));
-		canvasView.setmBackgroundBitmap(ticTacToeBoard.getBoardBitmap());
+		canvasView.setmBackgroundBitmap(currentGame.getBoardBitmap());
 
-		ticTacToeBoard.setPlayerOBitmap(canvasView.loadBitmap(this,
+		currentGame.setPlayerOBitmap(canvasView.loadBitmap(this,
 				R.drawable.o));
-		canvasView.setmPlayerOBitmap(ticTacToeBoard.getPlayerOBitmap());
+		canvasView.setmPlayerOBitmap(currentGame.getPlayerOBitmap());
 
-		ticTacToeBoard.setPlayerXBitmap(canvasView.loadBitmap(this,
+		currentGame.setPlayerXBitmap(canvasView.loadBitmap(this,
 				R.drawable.x));
-		canvasView.setmPlayerXBitmap(ticTacToeBoard.getPlayerXBitmap());
+		canvasView.setmPlayerXBitmap(currentGame.getPlayerXBitmap());
 
-		canvasView.setmGameBoardCells(ticTacToeBoard.getGameBoardCells());
-		canvasView.setNumCellsPerRow(ticTacToeBoard.getNumCellsPerRow());
+		canvasView.setmGameBoardCells(currentGame.getGameBoardCells());
+		canvasView.setNumCellsPerRow(currentGame.getNumCellsPerRow());
 		
 		// Draw the board
 		canvasView.invalidate();
 
 		dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
-		int cellPixelSize = Math.min(dm.widthPixels, dm.heightPixels) / ticTacToeBoard.getNumCellsPerRow();
+		int cellPixelSize = Math.min(dm.widthPixels, dm.heightPixels) / currentGame.getNumCellsPerRow();
 		
 		canvasView.setCellPixelSize(cellPixelSize);
 		
@@ -93,10 +93,10 @@ public class GameActivity extends Activity {
 	@Override
 	public Object onRetainNonConfigurationInstance() {
 	    SaveData saveData = new SaveData();
-	    saveData.currentPlayer = ticTacToeBoard.getCurrentPlayer();
-	    saveData.numCellsPerRow = ticTacToeBoard.getNumCellsPerRow();
-	    saveData.gameType = ticTacToeBoard.getGameType();
-	    saveData.gameBoardCells = ticTacToeBoard.getGameBoardCells();
+	    saveData.currentPlayer = currentGame.getCurrentPlayer();
+	    saveData.numCellsPerRow = currentGame.getNumCellsPerRow();
+	    saveData.gameType = currentGame.getGameType();
+	    saveData.gameBoardCells = currentGame.getGameBoardCells();
 	    return saveData;
 	}
 
@@ -109,7 +109,7 @@ public class GameActivity extends Activity {
 			int colClicked = rawX / cellPixelSize;
 			int rowClicked = rawY / cellPixelSize;
 			
-			int currentGameStatus = ticTacToeBoard.getGameStatus();
+			int currentGameStatus = currentGame.getGameStatus();
 
 			// Toast.makeText(v.getContext(), "X: " +
 			// rawX + " Y: " + rawY, Toast.LENGTH_LONG).show();
@@ -129,25 +129,25 @@ public class GameActivity extends Activity {
 			 * Otherwise reset the board and redraw
 			 */
 			switch (currentGameStatus) {
-				case TicTacToeBoard.GameStatus.GAME_IN_PLAY:
+				case CurrentGame.GameStatus.GAME_IN_PLAY:
 					// Out of bounds check
 					boolean colAlright;
 					boolean rowAlright;
-					colAlright = colClicked < ticTacToeBoard.getNumCellsPerRow();
-					rowAlright = rowClicked < ticTacToeBoard.getNumCellsPerRow();
+					colAlright = colClicked < currentGame.getNumCellsPerRow();
+					rowAlright = rowClicked < currentGame.getNumCellsPerRow();
 					if (colAlright && rowAlright) {
-						ticTacToeBoard.consumeTurn(rowClicked, colClicked);
+						currentGame.consumeTurn(rowClicked, colClicked);
 						cycleMusic();
-						currentGameStatus = ticTacToeBoard.getGameStatus();
+						currentGameStatus = currentGame.getGameStatus();
 					}
 						break;
-				case TicTacToeBoard.GameStatus.GAME_OVER_TIE:
-				case TicTacToeBoard.GameStatus.PLAYER_O_WINS:
-				case TicTacToeBoard.GameStatus.PLAYER_X_WINS:
+				case CurrentGame.GameStatus.GAME_OVER_TIE:
+				case CurrentGame.GameStatus.PLAYER_O_WINS:
+				case CurrentGame.GameStatus.PLAYER_X_WINS:
 				default:
-					char gameType = ticTacToeBoard.getGameType();
-//** probably unnecessary					ticTacToeBoard = null; // Out with the old, in with the new
-					ticTacToeBoard = new TicTacToeBoard(gameType); // Starting a new game by calling a constructor
+					char gameType = currentGame.getGameType();
+//** probably unnecessary					currentGame = null; // Out with the old, in with the new
+					currentGame = new CurrentGame(gameType); // Starting a new game by calling a constructor
 					canvasView.invalidate();
 					return false;
 			}
@@ -155,15 +155,15 @@ public class GameActivity extends Activity {
 			// POST TURN CHECK
 			// If the game is over, display the message
 			switch (currentGameStatus) {
-				case TicTacToeBoard.GameStatus.PLAYER_O_WINS:
+				case CurrentGame.GameStatus.PLAYER_O_WINS:
 					Toast.makeText(v.getContext(), "Player O Wins!",
 							Toast.LENGTH_SHORT).show();
 					break;
-				case TicTacToeBoard.GameStatus.PLAYER_X_WINS:
+				case CurrentGame.GameStatus.PLAYER_X_WINS:
 					Toast.makeText(v.getContext(), "Player X Wins!",
 							Toast.LENGTH_SHORT).show();
 					break;
-				case TicTacToeBoard.GameStatus.GAME_OVER_TIE:
+				case CurrentGame.GameStatus.GAME_OVER_TIE:
 					Toast.makeText(v.getContext(), "It was a Tie!",
 							Toast.LENGTH_SHORT).show();
 					break;

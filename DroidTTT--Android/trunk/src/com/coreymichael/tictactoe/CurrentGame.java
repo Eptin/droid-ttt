@@ -3,7 +3,7 @@ package com.coreymichael.tictactoe;
 import android.graphics.Bitmap;
 import java.util.*; 
 
-public class TicTacToeBoard {
+public class CurrentGame {
 	
 	//Declaring bitmaps
 	private Bitmap mBoardBitmap;
@@ -23,7 +23,7 @@ public class TicTacToeBoard {
 	private boolean mWinningMovePossible = false;
 	
 	// Constructs a game with the provided board (either an empty or pre-filled board)
-	TicTacToeBoard(char gameType, char[][] mGameBoardCells) {
+	CurrentGame(char gameType, char[][] mGameBoardCells) {
 		setGameType(gameType);
 		setCurrentPlayer(CellStatus.PLAYER_X);
 		setGameStatus(GameStatus.GAME_IN_PLAY);
@@ -32,7 +32,7 @@ public class TicTacToeBoard {
 	}
 	
 	// Constructs a new game with an empty board
-	TicTacToeBoard(char gameType) {
+	CurrentGame(char gameType) {
 		setGameType(gameType);
 		setCurrentPlayer(CellStatus.PLAYER_X);
 		setGameStatus(GameStatus.GAME_IN_PLAY);
