@@ -4,6 +4,8 @@
 
 A page for everything related to graphic sizes, dimensions, or resolutions.
 
+*[http://dpi.lv/ DPI love ♥]* Easily find the DPI of any screen. Excellent tool, plus a *large list of device resolutions*.
+
 
 = Device Resolutions =
 
