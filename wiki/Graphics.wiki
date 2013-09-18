@@ -6,6 +6,7 @@ A page for everything related to graphic sizes, dimensions, or resolutions.
 
 *[http://dpi.lv/ DPI love ♥]* Easily find the DPI of any screen. Excellent tool, plus a *large list of device resolutions*.
 
+DPI is often used for the actual device pixels and Dots Per Pixel (dppx) for the amount of device pixels per CSS pixel (e.g. in Retina displays this will be 2).
 
 = Device Resolutions =
 
