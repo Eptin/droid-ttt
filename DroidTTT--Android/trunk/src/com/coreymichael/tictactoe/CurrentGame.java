@@ -15,34 +15,24 @@ public class CurrentGame {
 	private int mMovesNeededToWin;
 	private int mMovesSoFar;
 	private int mRoomForWinningMove; // This counts both current player pieces as well as empty spaces to determine if a winning move is possible
-	
 	private boolean mWinningMovePossible = false;
 	
+	private GameBoard mGameBoard;
+	
 	// Constructs a game with the provided board (either an empty or pre-filled board)
-	CurrentGame(char gameType, String gameBoardLocation) {
-		setGameType(gameType);
+	CurrentGame(String gameBoardLocation) {
 		setCurrentPlayer(CellStatus.PLAYER_X);
 		setGameStatus(GameStatus.GAME_IN_PLAY);
 		mMovesSoFar = 0;
-//** OLD   no longer working directly with the game board array; no longer constructing it here. 	setGameBoardCells(mGameBoardCells);
-    	
-		mGameBoard = new GameBoard(gameBoardLocation); // Building a pre-filled game board by passing the location of the board's file.
+		GameBoard mGameBoard = new GameBoard(gameBoardLocation); // Builds a pre-filled game board by passing the location of the board's file.
 	}
 	
 	// Constructs a new game with an empty board
 	CurrentGame(char gameType) {
-		setGameType(gameType);
 		setCurrentPlayer(CellStatus.PLAYER_X);
 		setGameStatus(GameStatus.GAME_IN_PLAY);
 		mMovesSoFar = 0;
-		setGameBoardCells(new char[mNumCellsPerRow][mNumCellsPerRow]); // Initializes a new game board that is 3x3, 4x4, 6x6, etc.
-		
-		// Set each cell of the game board to EMPTY
-		for (int row = 0; row < mGameBoardCells.length; row++) { // Iterates over the rows
-			for (int col = 0; col < mGameBoardCells[0].length; col++) { // Iterates over the columns
-				setCellStatus(row, col, CellStatus.EMPTY);
-			}
-		}
+		GameBoard mGameBoard = new GameBoard(gameType); // Initializes a new game board that is 3x3, 4x4, 6x6, etc.
 	}
 	
 	
@@ -68,29 +58,6 @@ public class CurrentGame {
 	
 	public Bitmap getPlayerOBitmap() {
 		return mPlayerOBitmap;
-	}
-	
-	public void setGameType(char mGameType) {
-		this.mGameType = mGameType;
-		
-		switch (mGameType) {
-			case GameType.GAME_3_X_3: 
-				mNumCellsPerRow = 3;
-				mMovesNeededToWin = 3;
-				break;
-			case GameType.GAME_4_X_4:
-				mNumCellsPerRow = 4;
-				mMovesNeededToWin = 3;
-				break;
-			case GameType.GAME_6_X_6:
-				mNumCellsPerRow = 6;
-				mMovesNeededToWin = 4;
-				break;
-		}
-	}
-	
-	public char getGameType() {
-		return mGameType;
 	}
 	
 	public void setGameStatus(char mGameStatus) {
@@ -145,8 +112,8 @@ public class CurrentGame {
 	
 	public void consumeTurn(int attemptedRow, int attemptedColumn) {
 		// If a move was made, set the targeted cell to the current player, and then swap the players
-		if (getCellStatus(attemptedRow, attemptedColumn) == CellStatus.EMPTY) {
-			setCellStatus(attemptedRow, attemptedColumn, mCurrentPlayer);
+		if (mGameBoard.getCellStatus(attemptedRow, attemptedColumn) == CellStatus.EMPTY) {
+			mGameBoard.setCellStatus(attemptedRow, attemptedColumn, mCurrentPlayer);
 			setMovesSoFar(getMovesSoFar() + 1);
 			setGameStatus(updateGameStatus());
 			swapThePlayers();
@@ -162,8 +129,8 @@ public class CurrentGame {
 
 	// Checks a single horizontal row
 	public char checkHorizontal(int row) {
-		int[] blockOfRowCoordinates = new int[mNumCellsPerRow * 2];
-		for (int col = 0; col < mNumCellsPerRow; col++) {
+		int[] blockOfRowCoordinates = new int[mGameBoard.getNumCellsPerRow() * 2];
+		for (int col = 0; col < mGameBoard.getNumCellsPerRow(); col++) {
 			blockOfRowCoordinates[(col * 2)] = row;
 			blockOfRowCoordinates[(col * 2) + 1] = col;
 		}
@@ -173,8 +140,8 @@ public class CurrentGame {
 	
 	// Checks a single vertical column
 	public char checkVertical(int col) {
-		int[] blockOfColumnCoordinates = new int[mNumCellsPerRow * 2];
-		for (int row = 0; row < mNumCellsPerRow; row++) {
+		int[] blockOfColumnCoordinates = new int[mGameBoard.getNumCellsPerRow() * 2];
+		for (int row = 0; row < mGameBoard.getNumCellsPerRow(); row++) {
 			blockOfColumnCoordinates[(row * 2)] = row;
 			blockOfColumnCoordinates[(row * 2) + 1] = col;
 		}
@@ -184,12 +151,12 @@ public class CurrentGame {
 	
 	// Checks a single top-left to bottom-right diagonal
 	public char checkDiagonalLeftToRight(int row, int col) {
-		int remainingRowLength = mNumCellsPerRow - row;
-		int remainingColLength = mNumCellsPerRow - col;
+		int remainingRowLength = mGameBoard.getNumCellsPerRow() - row;
+		int remainingColLength = mGameBoard.getNumCellsPerRow() - col;
 		int lengthOfDiagonal = Math.min(remainingRowLength, remainingColLength);
 		int[] blockOfCoordinates = new int[lengthOfDiagonal * 2];
 //		// Keep looping while the calculated row / column is less than the edge of the game board
-//		for (int x = 0; (mNumCellsPerRow < row + x) && (mNumCellsPerRow < col + x); x++) {
+//		for (int x = 0; (mGameBoard.getNumCellsPerRow() < row + x) && (mGameBoard.getNumCellsPerRow() < col + x); x++) {
 		for (int x = 0; x < lengthOfDiagonal; x++) {
 			blockOfCoordinates[(x * 2)] = row + x;
 			blockOfCoordinates[(x * 2) + 1] = col + x;
@@ -200,12 +167,12 @@ public class CurrentGame {
 	
 	// Checks a single top-right to bottom-left diagonal
 	public char checkDiagonalRightToLeft(int row, int col) {
-		int remainingRowLength = mNumCellsPerRow - row;
+		int remainingRowLength = mGameBoard.getNumCellsPerRow() - row;
 		int remainingColLength = col + 1;
 		int lengthOfDiagonal = Math.min(remainingRowLength, remainingColLength);
 		int[] blockOfCoordinates = new int[lengthOfDiagonal * 2];
 //		// Keep looping while the calculated row / column is less than the edge of the game board
-//		for (int x = 0; (mNumCellsPerRow < row + x) && (mNumCellsPerRow < col + x); x++) {
+//		for (int x = 0; (mGameBoard.getNumCellsPerRow() < row + x) && (mGameBoard.getNumCellsPerRow() < col + x); x++) {
 		for (int x = 0; x < lengthOfDiagonal; x++) {
 			blockOfCoordinates[(x * 2)] = row + x;
 			blockOfCoordinates[(x * 2) + 1] = col - x;
@@ -227,20 +194,20 @@ public class CurrentGame {
 			col = blockOfCoordinates[x + 1];
 			
 			// Adding one more of the player's pieces to the 'Winning Streak'
-			if (getCellStatus(row, col) == player) {
+			if (mGameBoard.getCellStatus(row, col) == player) {
 				mRoomForWinningMove++;
 				mCurrentStreak.add(row); // Add coordinates for current piece to the 'Winning Streak'
 				mCurrentStreak.add(col); // Add coordinates for current piece to the 'Winning Streak'
 			}
 			
 			// If we encounter a blank space, we reset the 'Winning Streak' but keep counting the 'Room for Winning Move'
-			if (getCellStatus(row, col) == CellStatus.EMPTY) {
+			if (mGameBoard.getCellStatus(row, col) == CellStatus.EMPTY) {
 				mRoomForWinningMove++;
 				mCurrentStreak.clear();
 			}
 			
 			// It's back to 0 if we detect a piece by the opposing player
-			if (isOpposingPlayerToThisPlayer(getCellStatus(row, col), player)) { // If current cell belongs to the opposing player...
+			if (isOpposingPlayerToThisPlayer(mGameBoard.getCellStatus(row, col), player)) { // If current cell belongs to the opposing player...
 				mRoomForWinningMove = 0; // Reset the mRoomForWinningMove counter
 				mCurrentStreak.clear();
 			}
@@ -270,12 +237,12 @@ public class CurrentGame {
 			col = blockOfCoordinates[x + 1];
 			
 			// We add to mRoomForWinningMove if we encounter either the player's pieces or a blank space
-			if ((getCellStatus(row, col) == player) || (getCellStatus(row, col) == CellStatus.EMPTY)) {
+			if ((mGameBoard.getCellStatus(row, col) == player) || (mGameBoard.getCellStatus(row, col) == CellStatus.EMPTY)) {
 				mRoomForWinningMove++;
 			}
 			
 			// It's back to 0 if we detect a piece by the opposing player
-			if (isOpposingPlayerToThisPlayer(getCellStatus(row, col), player)) { // If current cell belongs to the opposing player...
+			if (isOpposingPlayerToThisPlayer(mGameBoard.getCellStatus(row, col), player)) { // If current cell belongs to the opposing player...
 				mRoomForWinningMove = 0; // Reset the mRoomForWinningMove counter
 			}
 			
@@ -294,14 +261,14 @@ public class CurrentGame {
 			mWinningMovePossible = false;
 			
 			// Check all rows
-			for (int row = 0; row < mNumCellsPerRow; row++) {
+			for (int row = 0; row < mGameBoard.getNumCellsPerRow(); row++) {
 				char rowStatus = checkHorizontal(row);
 				if (rowStatus != GameStatus.GAME_IN_PLAY)
 					return rowStatus;
 			}
 			
 			// Check all columns
-			for (int col = 0; col < mNumCellsPerRow; col++) {
+			for (int col = 0; col < mGameBoard.getNumCellsPerRow(); col++) {
 				char colStatus = checkVertical(col);
 				if (colStatus != GameStatus.GAME_IN_PLAY)
 					return colStatus;
@@ -310,29 +277,29 @@ public class CurrentGame {
 		// Check diagonals (only the ones long enough to contain a possible winner)
 			
 			// Check the top-left to bottom-right diagonal, starting cell on the left wall.
-			for (int row = mNumCellsPerRow - mMovesNeededToWin; row >= 0; row--) { // Starting at the earliest diagonal that is long enough to have a winning move
+			for (int row = mGameBoard.getNumCellsPerRow() - mMovesNeededToWin; row >= 0; row--) { // Starting at the earliest diagonal that is long enough to have a winning move
 				char diagonalStatus = checkDiagonalLeftToRight(row, 0);
 				if (diagonalStatus != GameStatus.GAME_IN_PLAY)
 					return diagonalStatus;
 			}
 			
 			// Check the top-left to bottom-right diagonal, starting cell on the top wall.
-			for (int col = 0; col <= mNumCellsPerRow - mMovesNeededToWin; col++) { // Ending at the latest diagonal that is long enough to have a winning move
+			for (int col = 0; col <= mGameBoard.getNumCellsPerRow() - mMovesNeededToWin; col++) { // Ending at the latest diagonal that is long enough to have a winning move
 				char diagonalStatus = checkDiagonalLeftToRight(0, col);
 				if (diagonalStatus != GameStatus.GAME_IN_PLAY)
 					return diagonalStatus;
 			}
 			
 			// Check the top-right to bottom-left diagonal, starting cell on the top wall.
-			for (int col = mMovesNeededToWin - 1; col < mNumCellsPerRow; col++) { // Starting at the earliest diagonal that is long enough to have a winning move
+			for (int col = mMovesNeededToWin - 1; col < mGameBoard.getNumCellsPerRow(); col++) { // Starting at the earliest diagonal that is long enough to have a winning move
 				char diagonalStatus = checkDiagonalRightToLeft(0, col);
 				if (diagonalStatus != GameStatus.GAME_IN_PLAY)
 					return diagonalStatus;
 			}
 			
 			// Check the top-right to bottom-left diagonal, starting cell on the right wall.
-			for (int row = 0; row <= mNumCellsPerRow - mMovesNeededToWin; row++) { // Ending at the latest diagonal that is long enough to have a winning move
-				char diagonalStatus = checkDiagonalRightToLeft(row, mNumCellsPerRow - 1);
+			for (int row = 0; row <= mGameBoard.getNumCellsPerRow() - mMovesNeededToWin; row++) { // Ending at the latest diagonal that is long enough to have a winning move
+				char diagonalStatus = checkDiagonalRightToLeft(row, mGameBoard.getNumCellsPerRow() - 1);
 				if (diagonalStatus != GameStatus.GAME_IN_PLAY)
 					return diagonalStatus;
 			}
@@ -359,19 +326,6 @@ public class CurrentGame {
 		public static final char PLAYER_X_WINS = 'X';
 		public static final char PLAYER_O_WINS = 'O';
 		public static final char GAME_OVER_TIE = 'T';
-	}
-	
-	public static final class GameType {
-		public static final char GAME_3_X_3 = '3';
-		public static final char GAME_4_X_4 = '4';
-		public static final char GAME_6_X_6 = '6';
-		
-		public static final char getGameTypeFromString (String string) {
-			if (string.equals("GAME_6_X_6")) return GAME_6_X_6;
-			if (string.equals("GAME_4_X_4")) return GAME_4_X_4;
-			if (string.equals("GAME_3_X_3")) return GAME_3_X_3;
-			return 0;
-		}
 	}
 
 }

@@ -54,7 +54,7 @@ public class GameActivity extends Activity {
 
 		} else { // We have no saved game data. Starting from scratch
 			Intent intent = getIntent();
-			char gameType = CurrentGame.GameType.getGameTypeFromString((intent.getStringExtra(MainActivity.GAME_TYPE)));
+			char gameType = GameBoard.GameType.getGameTypeFromString((intent.getStringExtra(MainActivity.GAME_TYPE)));
 			currentGame = new CurrentGame(gameType); // Starting a new game by calling a constructor
 //			mp = MediaPlayer.create(this, R.raw.beat);
 //			mp.start();
