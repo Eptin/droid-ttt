@@ -2,7 +2,7 @@
 
 
   * Android SDK installation: [AndroidSDKsetup]
-  * Android Dashboard: [http://developer.android.com/about/dashboards/index.html]
+  * [http://developer.android.com/about/dashboards/index.html Android Dashboard] - market share information about screen sizes, android versions, etc.
 
 == General Coding ==
   * [http://equivalence.co.uk/archives/101 How to write beautiful code]
