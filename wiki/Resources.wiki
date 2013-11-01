@@ -1,8 +1,8 @@
 == A place to list the useful resources ==
 
 
-*Android SDK installation: [AndroidSDKsetup]*
-*Android Dashboard: [http://developer.android.com/about/dashboards/index.html]
+  * Android SDK installation: [AndroidSDKsetup]*
+  * Android Dashboard: [http://developer.android.com/about/dashboards/index.html]
 
 == General Coding ==
   * [http://equivalence.co.uk/archives/101 How to write beautiful code]
