@@ -1,0 +1,40 @@
+# Introduction #
+
+A page for everything related to graphic sizes, dimensions, or resolutions.
+
+**[DPI love ♥](http://dpi.lv/)** Easily find the DPI of any screen. Excellent tool, plus a **large list of device resolutions**.
+
+DPI is often used for the actual device pixels and Dots Per Pixel (dppx) for the amount of device pixels per CSS pixel (e.g. in Retina displays this will be 2).
+
+# Device Resolutions #
+
+## Tablets ##
+
+Kindle Fire	 7.0"	1024 ×  600 (close to 5:3)
+Kindle Fire HD	 7.0"	1280 ×  800 (8:5)
+Nexus 7		 7.0"	1280 ×  800 (8:5)
+Galaxy Tab 3	 7.0"	1024 ×  600 (close to 5:3)
+iPad Mini	 7.9"	1024 ×  768 (4:3)
+Galaxy Tab 3	 8.0"	1280 ×  800 (8:5)
+Kindle Fire HD	 8.9"	1920 × 1200 (8:5)
+iPad 		 9.7"	1024 ×  768 (4:3)
+iPad 3 		 9.7"	2048 × 1536 (4:3)
+Nexus 10	10.0"	2560 × 1600 (16:10)
+
+
+## Phones ##
+
+iPhone 4	 3.5"	 640 ×  960 (3:2)
+iPhone 5	 4.0"	 640 × 1136 (16:9)
+Galaxy S4	 5.0"	1920 × 1080 (16:9)
+Galaxy Nexus	 4.7"	1280 ×  720 (16:9)
+Nexus 4		 4.7"	1280 ×  768 (5:3)
+
+
+# Sprite Dimensions #
+  * X  (320², 256²)
+  * O  (160x160)
+  * Background (1280²)
+  * Footer (800x200?)
+  * Player stats (X:4  O:2)
+    * - Add glow to current player
